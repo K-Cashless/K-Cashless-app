@@ -3,13 +3,14 @@ const MainStyles = StyleSheet.create({
     container:{
         flex: 1,
         backgroundColor: 'rgb(40,40,40)',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'center',
     },
     head1Text:{
         fontSize: 30,
         color: 'rgb(246,136,12)',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
     bodyText:{
         fontSize: 20,

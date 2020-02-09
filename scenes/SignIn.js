@@ -12,7 +12,7 @@ const SignIn = ({ navigation }) => {
     return (
         <View style={MainStyles.container}>
             <View style={styles.signInContainer}>
-                <Text style={MainStyles.head1Text}>Sign in</Text>
+                <Text style={[MainStyles.head1Text,{textAlign: 'left'}]}>Sign in</Text>
                 <TextInput
                     multiline={false}
                     keyboardAppearance='dark'
@@ -50,10 +50,9 @@ const SignIn = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     signInContainer: {
-        position: "absolute",
-        top: 50,
-        margin: '10%',
-        width: '80%',
+        flex: 1,
+        top: 150,
+        marginHorizontal: 30,
     }
 });
 export default SignIn;

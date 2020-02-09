@@ -14,6 +14,7 @@ const GetStartButton = ({navigation}) =>{
 }
 const styles = StyleSheet.create({
     buttonContainer:{
+        flex: 1,
         height: 70,
         width: '100%',
         borderRadius: 5,
@@ -21,12 +22,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonAlign:{
-        position: 'absolute',
-        bottom: '10%',
-        width: '80%',
-        display: 'flex',
-        alignItems: 'center',
+        position:'absolute',
+        width: '100%',
         justifyContent: 'center',
+        bottom: 80
     },
     buttonText:{
         fontSize: 25,
