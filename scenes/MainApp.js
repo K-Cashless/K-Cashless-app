@@ -1,16 +1,20 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import MainStyles from '../styles/MainStyles';
+import * as colors from '../styles/Colors';
 
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
 import * as Icon from 'react-native-vector-icons';
+import KPointRect from '../components/KPointRect';
 
 const HomeScreen = () => {
   return (
     <View style={MainStyles.container}>
-      <View style={{ marginHorizontal: 20 }}>
-        <Text style={MainStyles.head1Text}>HOME</Text>
+      <View style={{ flex:1,marginHorizontal: 20, height: '100%'}}>
+        <View style={{top: 170}}>
+          <KPointRect/>
+        </View>
       </View>
     </View>
   );
@@ -71,7 +75,7 @@ const MainApp = createBottomTabNavigator(
       },
     }),
     tabBarOptions: {
-      activeTintColor: 'rgb(246,136,12)',
+      activeTintColor: colors.primary,
       inactiveTintColor: 'white',
       showLabel: true,
       labelStyle: {

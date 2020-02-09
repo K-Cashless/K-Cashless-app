@@ -1,14 +1,16 @@
 import { StyleSheet } from 'react-native';
+import * as colors from '../styles/Colors';
+
 const MainStyles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: 'rgb(40,40,40)',
+        backgroundColor: colors.background,
         alignItems: 'stretch',
         justifyContent: 'center',
     },
     head1Text:{
         fontSize: 30,
-        color: 'rgb(246,136,12)',
+        color: colors.primary,
         fontWeight: 'bold',
         textAlign: 'center'
     },
