@@ -3,12 +3,15 @@ import { createAppContainer } from 'react-navigation';
 import { createSwitchNavigator } from 'react-navigation';
 import { StyleSheet, Text, View } from 'react-native';
 import AuthNavigator from './AuthNavigator';
+import MainApp from '../scenes/MainApp';
 
-const Navigator = createSwitchNavigator({
+const Navigator = createSwitchNavigator(
+    {
         Auth: AuthNavigator,
-},
-{
-    initialRouteName: 'Auth'
-});
+        App: MainApp,
+    },
+    {
+        initialRouteName: 'Auth'
+    });
 
 export default createAppContainer(Navigator);

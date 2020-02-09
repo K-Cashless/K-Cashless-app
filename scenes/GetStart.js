@@ -14,26 +14,5 @@ export default function GetStarted({ navigation }){
 }
 
 const styles = StyleSheet.create({
-  buttonContainer:{
-      height: 70,
-      width: '100%',
-      borderRadius: 5,
-      backgroundColor: '#2AC062',
-      justifyContent: 'center',
-  },
-  buttonAlign:{
-      position: 'absolute',
-      bottom: '10%',
-      width: '80%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-  },
-  buttonText:{
-      fontSize: 25,
-      fontWeight: 'bold',
-      color: 'white',
-      textAlign: 'center',
-      textAlignVertical: 'center',
-  }
+    
 });

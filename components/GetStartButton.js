@@ -6,7 +6,7 @@ const GetStartButton = ({navigation}) =>{
         <View style = {styles.buttonAlign}>
                 <TouchableOpacity
                 style = {styles.buttonContainer}
-                onPress = {() => navigation.navigate('SignIn')}>
+                onPress = {() => navigation.replace('SignIn')}>
                     <Text style={styles.buttonText}>Get Start</Text>
                 </TouchableOpacity>
         </View>
