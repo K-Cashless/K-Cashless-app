@@ -56,13 +56,13 @@ const MainApp = createBottomTabNavigator(
     Home: {
       screen: HomeScreen,
       navigationOptions: () =>({
-        tabBarIcon: ({focused,tintColor}) => (<Icon.FontAwesome5 name='home' size={focused? 32:25} color={tintColor} />),
+        tabBarIcon: ({focused,tintColor}) => (<Icon.FontAwesome5 name='home' size={25} color={tintColor} />),
       })
     },
     Promotions: {
       screen: PromotionsScreen,
       navigationOptions: () =>({
-        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='tags' size={focused? 32:25} color={tintColor} />,
+        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='tags' size={25} color={tintColor} />,
         label: ({ tintColor, focused }) => (
           <Text style={{ color: focused? 'white': 'rgba(255,255,255,0.3)' }}>
             Promotions
@@ -71,26 +71,22 @@ const MainApp = createBottomTabNavigator(
       })
     },
     Scan: {
-      screen: ScanScreen,
+      screen: () => null,
       navigationOptions: () =>({
-        tabBarIcon: ({focused}) => <Icon.FontAwesome5 name='qrcode' size={focused? 32:25} color={focused? colors.primary: 'rgba(246,136,12,0.3)'} />,
-        tabBarLabel: ({ tintColor, focused }) => (
-          <Text style={{ color: focused? colors.primary: 'rgba(246,136,12,0.3)' }}>
-            Scan
-          </Text>
-        )
+        tabBarIcon: ({focused}) => <ScanButton/>,
+        tabBarLabel: () => null
       })
     },
     Library: {
       screen: LibraryScreen,
       navigationOptions: () =>({
-        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='book-reader' size={focused? 32:25} color={tintColor} />
+        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='book-reader' size={25} color={tintColor} />,
       })
     },
     More: {
       screen: MoreScreen,
       navigationOptions: () =>({
-        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='dot-circle' size={focused? 32:25} color={tintColor} />
+        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='dot-circle' size={25} color={tintColor} />
       })
     },
   },
