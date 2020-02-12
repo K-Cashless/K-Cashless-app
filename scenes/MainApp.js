@@ -1,11 +1,10 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import MainStyles from '../styles/MainStyles';
-import * as colors from '../styles/Colors';
 
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
-import * as Icon from 'react-native-vector-icons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import KPointRect from '../components/KPointRect';
 import ScanButton from '../components/ScanButton';
 
@@ -19,35 +18,29 @@ const HomeScreen = () => {
       </View>
     </View>
   );
-}
+};
 const PromotionsScreen = () => {
   return (
     <View style={MainStyles.container}>
       <Text style={MainStyles.head1Text}>Promotion</Text>
     </View>
   );
-}
-const ScanScreen = () => {
-  return (
-    <View style={MainStyles.container}>
-      <Text style={MainStyles.head1Text}>Scan</Text>
-    </View>
-  );
-}
+};
+
 const LibraryScreen = () => {
   return (
     <View style={MainStyles.container}>
       <Text style={MainStyles.head1Text}>Library</Text>
     </View>
   );
-}
+};
 const MoreScreen = () => {
   return (
     <View style={MainStyles.container}>
       <Text style={MainStyles.head1Text}>More</Text>
     </View>
   );
-}
+};
 
 
 
@@ -56,13 +49,13 @@ const MainApp = createBottomTabNavigator(
     Home: {
       screen: HomeScreen,
       navigationOptions: () =>({
-        tabBarIcon: ({focused,tintColor}) => (<Icon.FontAwesome5 name='home' size={25} color={tintColor} />),
+        tabBarIcon: ({focused,tintColor}) => (<Icon name='home' size={25} color={tintColor} />),
       })
     },
     Promotions: {
       screen: PromotionsScreen,
       navigationOptions: () =>({
-        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='tags' size={25} color={tintColor} />,
+        tabBarIcon: ({focused,tintColor}) => <Icon name='tags' size={25} color={tintColor} />,
         label: ({ tintColor, focused }) => (
           <Text style={{ color: focused? 'white': 'rgba(255,255,255,0.3)' }}>
             Promotions
@@ -80,13 +73,13 @@ const MainApp = createBottomTabNavigator(
     Library: {
       screen: LibraryScreen,
       navigationOptions: () =>({
-        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='book-reader' size={25} color={tintColor} />,
+        tabBarIcon: ({focused,tintColor}) => <Icon name='book-reader' size={25} color={tintColor} />,
       })
     },
     More: {
       screen: MoreScreen,
       navigationOptions: () =>({
-        tabBarIcon: ({focused,tintColor}) => <Icon.FontAwesome5 name='dot-circle' size={25} color={tintColor} />
+        tabBarIcon: ({focused,tintColor}) => <Icon name='dot-circle' size={25} color={tintColor} />
       })
     },
   },
@@ -107,6 +100,6 @@ const MainApp = createBottomTabNavigator(
       }
     },
   }
-)
+);
 
 export default createAppContainer(MainApp);

@@ -11,7 +11,7 @@ const GetStartButton = ({navigation}) =>{
                 </TouchableOpacity>
         </View>
     );
-}
+};
 const styles = StyleSheet.create({
     buttonContainer:{
         flex: 1,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         width: '100%',
         justifyContent: 'center',
-        bottom: 80
+        bottom: '10%',
     },
     buttonText:{
         fontSize: 25,

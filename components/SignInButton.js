@@ -11,9 +11,9 @@ const SignInButton = ({ navigation, userName, password }) => {
         console.log(userName);
         console.log(password);
         const routeName = 'App';
-        navigation.dispatch(SwitchActions.jumpTo({ routeName }))
+        navigation.dispatch(SwitchActions.jumpTo({ routeName }));
         isLoading = false;
-    }
+    };
     return (
         <View style={styles.buttonAlign}>
             <TouchableOpacity
@@ -25,13 +25,11 @@ const SignInButton = ({ navigation, userName, password }) => {
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator size='small' color='white' />
                     </View>
-                ):(
-                    null
-                )}
+                ):null}
             </TouchableOpacity>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     loadingContainer: {
@@ -59,6 +57,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center',
     }
-})
+});
 
 export default SignInButton;

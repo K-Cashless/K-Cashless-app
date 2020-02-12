@@ -29,6 +29,6 @@ const MainStyles = StyleSheet.create({
         height: 50,
         paddingLeft: 6,
     },
-})
+});
 
 export default MainStyles;
