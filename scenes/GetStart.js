@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text} from 'react-native';
 import MainStyles from '../styles/MainStyles';
-import GetStartButton from '../components/GetStartButton';
+import {GetStartButton} from '../components';
 
 export default function GetStarted({ navigation }) {
     return (
@@ -14,7 +14,3 @@ export default function GetStarted({ navigation }) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-
-});

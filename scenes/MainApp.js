@@ -1,33 +1,18 @@
 import React from 'react';
-import {Image, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import KPointRect from '../components/KPointRect';
-import ScanButton from '../components/ScanButton';
+import {KPointRect,ScanButton} from '../components';
 
 const HomeScreen = () => {
     return (
         <View style={MainStyles.container}>
             <View style={{flex: 1, marginHorizontal: 20, height: '100%'}}>
-                <View style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '20%',
-                    width: '100%',
-                }}>
-                    <Image style={{
-                        marginTop: 20,
-                        width: '50%',
-                        height: '50%'
-                    }}
-                source={require('../assets/logo.png')}/>
-                </View>
-                <View>
-                    <KPointRect/>
-                </View>
+
+                <KPointRect point={999}/>
             </View>
         </View>
     );

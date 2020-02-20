@@ -2,7 +2,7 @@ import React from 'react';
 import { View,Text } from 'react-native';
 import * as colors from '../styles/Colors';
 
-const KPointRect = () => {
+const KPointRect = ({point}) => {
     return (
         <View style={{
             backgroundColor: colors.primary,
@@ -18,21 +18,19 @@ const KPointRect = () => {
                 fontWeight: 'bold',
                 color:'white',
                 textAlign: 'left',
-            }}>K POINT</Text>
+            }}>K Point Balance</Text>
             <Text style={{
-                // flex: 1,
                 fontSize: 36,
                 fontWeight: 'bold',
                 color:'white',
                 textAlign: 'right',
-            }}>9999</Text>
+            }}>{point}</Text>
             <Text style={{
-                // flex: 1,
                 fontSize: 14,
                 color:'white',
                 textAlign: 'right',
             }}>POINTS</Text>
         </View>
     )
-}
+};
 export default KPointRect;

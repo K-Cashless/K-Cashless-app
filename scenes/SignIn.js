@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import MainStyles from '../styles/MainStyles';
-import SignInButton from '../components/SignInButton';
+import {SignInButton} from '../components';
 import * as colors from '../styles/Colors';
 
 const SignIn = ({navigation}) => {
@@ -10,6 +10,7 @@ const SignIn = ({navigation}) => {
     const [passwordBorderColor, setPasswordBorderColor] = useState(MainStyles.textInput.borderBottomColor);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+
     return (
         <View style={MainStyles.container}>
             <View style={styles.signInContainer}>
