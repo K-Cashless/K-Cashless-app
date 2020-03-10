@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         height: 50,
         width: '100%',
-        borderRadius: 5,
+        borderRadius: 3,
         backgroundColor: 'rgb(246,136,12)',
         justifyContent: 'center',
     },
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     buttonText: {
+        fontFamily: 'proxima-bold',
         fontSize: 25,
         fontWeight: 'bold',
         color: 'white',

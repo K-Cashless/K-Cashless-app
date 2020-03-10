@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 70,
         width: '100%',
-        borderRadius: 5,
+        borderRadius: 3,
         backgroundColor: '#2AC062',
         justifyContent: 'center',
     },
@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
         bottom: '10%',
     },
     buttonText:{
-        fontSize: 25,
+        fontFamily: 'proxima-bold',
+        fontSize: 30,
         fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',

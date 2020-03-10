@@ -9,18 +9,21 @@ const MainStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     head1Text:{
-        fontSize: 30,
+        fontFamily: 'proxima-extrabold',
+        fontSize: 35,
         color: Colors.primary,
         fontWeight: 'bold',
         textAlign: 'center'
     },
     bodyText:{
+        fontFamily: 'proxima-regular',
         fontSize: 20,
         color: 'white',
         fontWeight: 'normal'
     },
     textInput:{
-        fontSize: 20,
+        fontFamily: 'proxima-regular',
+        fontSize: 18,
         color: 'white',
         borderColor: 'rgba(0,0,0,0)',
         borderBottomColor: 'white',
@@ -29,6 +32,12 @@ const MainStyles = StyleSheet.create({
         height: 50,
         paddingLeft: 6,
     },
+    textButton:{
+        fontFamily: 'proxima-bold',
+        fontSize: 16,
+        color: 'white',
+        fontWeight: 'bold',
+    }
 });
 
 export default MainStyles;

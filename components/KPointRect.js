@@ -9,27 +9,29 @@ const KPointRect = ({point}) => {
             width: '100%',
             height: 130,
             padding: 20,
-            borderRadius: 10,
+            borderRadius: 3,
             justifyContent: 'flex-start'
         }}>
             <Text style={{
                 flex: 1,
+                fontFamily: 'proxima-bold',
                 fontSize: 24,
-                fontWeight: 'bold',
                 color:'white',
                 textAlign: 'left',
             }}>K Point Balance</Text>
             <Text style={{
+                fontFamily: 'proxima-bold',
                 fontSize: 36,
                 fontWeight: 'bold',
                 color:'white',
                 textAlign: 'right',
             }}>{point}</Text>
             <Text style={{
+                fontFamily: 'proxima-regular',
                 fontSize: 14,
                 color:'white',
                 textAlign: 'right',
-            }}>POINTS</Text>
+            }}>Points</Text>
         </View>
     )
 };

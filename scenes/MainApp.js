@@ -5,14 +5,14 @@ import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {KPointRect,ScanButton} from '../components';
+import {HomeHeaderRect, KPointRect, ScanButton} from '../components';
 
 const HomeScreen = () => {
     return (
         <View style={MainStyles.container}>
-            <View style={{flex: 1, marginHorizontal: 20, height: '100%'}}>
-
-                <KPointRect point={999}/>
+            <HomeHeaderRect name={'poramee'}/>
+            <View style={{flex: 1, marginHorizontal: 20,marginTop: 20, height: '100%'}}>
+                <KPointRect point={9999999}/>
             </View>
         </View>
     );

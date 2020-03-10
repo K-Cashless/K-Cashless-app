@@ -34,6 +34,7 @@ const SignIn = ({navigation}) => {
                     value={userName}
                     autoCapitalize='none'
                 />
+                
                 {/*Password Input*/}
                 <TextInput
                     multiline={false}
@@ -65,11 +66,7 @@ const SignIn = ({navigation}) => {
                 <TouchableOpacity style={{
                     paddingTop: 20,
                 }}>
-                    <Text style={{
-                        fontSize: 16,
-                        color: 'white',
-                        fontWeight: 'bold',
-                    }}>Forget Password?</Text>
+                    <Text style={MainStyles.textButton}>Forget Password?</Text>
                 </TouchableOpacity>
 
                 {/*Sign Up Section with Button*/}
@@ -80,18 +77,9 @@ const SignIn = ({navigation}) => {
                     alignContent: 'center',
                     bottom: '25%',
                 }}>
-                    <Text style={{
-                        color: 'white',
-                        textAlign: 'center',
-                        fontSize: 16,
-                    }}>Don't have an account?</Text>
+                    <Text style={[MainStyles.bodyText,{fontSize: 16,textAlign: 'center'}]}>Don't have an account?</Text>
                     <TouchableOpacity>
-                        <Text style={{
-                            fontSize: 18,
-                            color: colors.primary,
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                        }}>Sign Up Now</Text>
+                        <Text style={[MainStyles.textButton,{textAlign: 'center',color: colors.primary}]}>Sign Up Now</Text>
                     </TouchableOpacity>
                 </View>
 
