@@ -5,12 +5,12 @@ import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {HomeHeaderRect, KPointRect, ScanButton} from '../components';
+import {HomeHeader, KPointRect, ScanButton} from '../components';
 
 const HomeScreen = () => {
     return (
         <View style={MainStyles.container}>
-            <HomeHeaderRect name={'poramee'}/>
+            <HomeHeader name={'poramee'}/>
             <View style={{flex: 1, marginHorizontal: 20,marginTop: 20, height: '100%'}}>
                 <KPointRect point={9999999}/>
             </View>

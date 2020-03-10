@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import * as colors from '../styles/Colors';
 import * as Icon from 'react-native-vector-icons';
 
-const HomeHeaderRect = ({name,balance}) => {
+const HomeHeader = ({name,balance}) => {
     return (
         <View style={styles.header}>
             <View style={{flexDirection: 'row' ,marginTop: 50, marginHorizontal: 20,height:'100%'}}>
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
         borderRadius:3,
     }
 });
-export default HomeHeaderRect;
+export default HomeHeader;
