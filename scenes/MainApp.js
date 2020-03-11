@@ -22,6 +22,7 @@ const HomeScreen = () => {
                     <KPointRect point={100}/>
                 </View>
             </View>
+
         </View>
     );
 };

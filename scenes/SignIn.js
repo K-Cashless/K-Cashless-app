@@ -75,9 +75,9 @@ const SignIn = ({navigation}) => {
                     width: '100%',
                     justifyContent: 'center',
                     alignContent: 'center',
-                    bottom: '25%',
+                    bottom: '20%',
                 }}>
-                    <Text style={[MainStyles.bodyText,{fontSize: 16,textAlign: 'center'}]}>Don't have an account?</Text>
+                    <Text style={[MainStyles.bodyText,{textAlign: 'center'}]}>Don't have an account?</Text>
                     <TouchableOpacity>
                         <Text style={[MainStyles.textButton,{textAlign: 'center',color: colors.primary}]}>Sign Up Now</Text>
                     </TouchableOpacity>

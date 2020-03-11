@@ -6,7 +6,9 @@ const SignInButton = ({ navigation, userName, password }) => {
     var isLoading = false;
     const onPressAction = () => {  
         isLoading = true;
+
         // WIP Authentication
+
         console.log("Signed in");
         console.log(userName);
         console.log(password);

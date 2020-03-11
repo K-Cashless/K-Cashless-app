@@ -34,7 +34,7 @@ const MainStyles = StyleSheet.create({
     },
     textButton:{
         fontFamily: 'proxima-bold',
-        fontSize: 16,
+        fontSize: 18,
         color: 'white',
         fontWeight: 'bold',
     },

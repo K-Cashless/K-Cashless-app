@@ -6,7 +6,7 @@ const UserProfilePic = () => {
     return (
         <TouchableOpacity
             onPress = {() => {console.log("PRESS" + cnt);setCnt(cnt+1)}}>
-            <Image source = {require('../assets/demoPic.png')} style = {{ width: 40,height: 40, borderRadius: 3 }} resizeMode = 'cover'/>
+            <Image source = {require('../assets/demoPic.png')} style = {{ width: 40,height: 40, borderRadius: 40 }} resizeMode = 'cover'/>
         </TouchableOpacity>
     );
 };

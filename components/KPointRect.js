@@ -11,7 +11,7 @@ const KPointRect = ({point}) => {
                 width: '100%',
                 height: 130,
                 padding: 20,
-                borderRadius: 10,
+                borderRadius: 5,
                 justifyContent: 'center',
             }}>
                 <Text style={{
