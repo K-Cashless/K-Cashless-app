@@ -91,7 +91,7 @@ const SignIn = ({navigation}) => {
 const styles = StyleSheet.create({
     signInContainer: {
         flex: 1,
-        top: 150,
+        top: '10%',
         marginHorizontal: 30,
     }
 });
