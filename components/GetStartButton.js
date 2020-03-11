@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         width: '100%',
         justifyContent: 'center',
-        bottom: '10%',
+        bottom: '3%',
     },
     buttonText:{
         fontFamily: 'proxima-bold',

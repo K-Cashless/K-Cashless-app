@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import * as colors from '../styles/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const ScanButton = () => {
     return(
         <View>
-            <TouchableHighlight style={{
+            <TouchableOpacity style={{
                 width: 80,
                 height: 80,
                 borderRadius: 60,
@@ -18,9 +18,9 @@ const ScanButton = () => {
                 console.log('scan');
             }}>
                 <Icon name='qrcode' size={35} color='white'/>
-            </TouchableHighlight>
+            </TouchableOpacity>
         </View>
-    )
-}
+    );
+};
 
 export default ScanButton;

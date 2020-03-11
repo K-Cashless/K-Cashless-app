@@ -9,10 +9,18 @@ import {HomeHeader, KPointRect, ScanButton} from '../components';
 
 const HomeScreen = () => {
     return (
-        <View style={MainStyles.container}>
-            <HomeHeader name={'poramee'}/>
-            <View style={{flex: 1, marginHorizontal: 20,marginTop: 20, height: '100%'}}>
-                <KPointRect point={9999999}/>
+        <View style={[MainStyles.container,{justifyContent: 'flex-start'}]}>
+            <View style={{
+                marginHorizontal: 20,
+                top: '5%'
+            }}>
+                <HomeHeader name={'Mickey Mouse'} balance={125.25}/>
+            </View>
+            <View style={{marginHorizontal: 20, marginTop: 40}}>
+                <View style={{marginTop: 30}}/>
+                <View style={{flex: 1, height: '100%'}}>
+                    <KPointRect point={100}/>
+                </View>
             </View>
         </View>
     );

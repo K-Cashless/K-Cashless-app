@@ -37,6 +37,13 @@ const MainStyles = StyleSheet.create({
         fontSize: 16,
         color: 'white',
         fontWeight: 'bold',
+    },
+    mainAppHeaderLabel:{
+        fontFamily: 'proxima-extrabold',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 30,
+        textAlign:'left',
     }
 });
 
