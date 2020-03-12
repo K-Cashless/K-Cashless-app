@@ -3,17 +3,19 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'rea
 import { SwitchActions } from 'react-navigation';
 
 const SignInButton = ({ navigation, userName, password }) => {
-    var isLoading = false;
-    const onPressAction = () => {  
+    let isLoading = false;
+    const onPressAction = () => {
         isLoading = true;
+
         // WIP Authentication
+
         console.log("Signed in");
         console.log(userName);
         console.log(password);
         const routeName = 'App';
-        navigation.dispatch(SwitchActions.jumpTo({ routeName }))
+        navigation.dispatch(SwitchActions.jumpTo({routeName}));
         isLoading = false;
-    }
+    };
     return (
         <View style={styles.buttonAlign}>
             <TouchableOpacity
@@ -25,13 +27,11 @@ const SignInButton = ({ navigation, userName, password }) => {
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator size='small' color='white' />
                     </View>
-                ):(
-                    null
-                )}
+                ):null}
             </TouchableOpacity>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     loadingContainer: {
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         height: 50,
         width: '100%',
-        borderRadius: 5,
+        borderRadius: 3,
         backgroundColor: 'rgb(246,136,12)',
         justifyContent: 'center',
     },
@@ -53,12 +53,13 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     buttonText: {
+        fontFamily: 'proxima-bold',
         fontSize: 25,
         fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',
         textAlignVertical: 'center',
     }
-})
+});
 
 export default SignInButton;

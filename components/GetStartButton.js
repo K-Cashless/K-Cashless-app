@@ -11,25 +11,25 @@ const GetStartButton = ({navigation}) =>{
                 </TouchableOpacity>
         </View>
     );
-}
+};
 const styles = StyleSheet.create({
     buttonContainer:{
+        flex: 1,
         height: 70,
         width: '100%',
-        borderRadius: 5,
+        borderRadius: 3,
         backgroundColor: '#2AC062',
         justifyContent: 'center',
     },
     buttonAlign:{
-        position: 'absolute',
-        bottom: '10%',
-        width: '80%',
-        display: 'flex',
-        alignItems: 'center',
+        position:'absolute',
+        width: '100%',
         justifyContent: 'center',
+        bottom: '3%',
     },
     buttonText:{
-        fontSize: 25,
+        fontFamily: 'proxima-bold',
+        fontSize: 30,
         fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',

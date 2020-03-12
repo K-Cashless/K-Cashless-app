@@ -10,7 +10,7 @@ const AuthNavigator = createStackNavigator(
             screen: GetStart
         },
         SignIn:{
-            screen:SignIn
+            screen: SignIn
         },
     },
     {
