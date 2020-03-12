@@ -1,33 +1,44 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { SwitchActions } from 'react-navigation';
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
+import {SwitchActions} from 'react-navigation';
+import * as firebase from 'firebase';
 
-const SignInButton = ({ navigation, userName, password }) => {
-    let isLoading = false;
+const SignInButton = ({navigation, userName, password}) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    function signIn(userName, password) {
+        try {
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(userName, password)
+                .then(res => {
+                    console.log(res.user.email);
+                    setIsLoading(false);
+                })
+                .then(res => {
+                    const routeName = 'App';
+                    navigation.dispatch(SwitchActions.jumpTo({routeName}));
+                });
+        } catch (error) {
+            console.log(error.toString());
+            setIsLoading(false);
+        }
+    }
+
     const onPressAction = () => {
-        isLoading = true;
-
-        // WIP Authentication
-
-        console.log("Signed in");
-        console.log(userName);
-        console.log(password);
-        const routeName = 'App';
-        navigation.dispatch(SwitchActions.jumpTo({routeName}));
-        isLoading = false;
+        setIsLoading(true);
+        signIn(userName, password);
     };
+
     return (
         <View style={styles.buttonAlign}>
             <TouchableOpacity
-                style={styles.buttonContainer}
+                style={[styles.buttonContainer]}
                 onPress={onPressAction}
-                disabled = {isLoading}>
-                <Text style={styles.buttonText}>Sign in</Text>
-                {isLoading ? (
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator size='small' color='white' />
-                    </View>
-                ):null}
+                disabled={isLoading}>
+                <Text style={styles.buttonText}>
+                    {isLoading ? 'Signing In' : 'Sign In'}
+                </Text>
             </TouchableOpacity>
         </View>
     );

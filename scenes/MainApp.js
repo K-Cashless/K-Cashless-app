@@ -6,7 +6,7 @@ import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {PromotionHeader, HomeHeader, KPointRect, ScanButton} from '../components';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             {/*Header*/}
@@ -14,7 +14,7 @@ const HomeScreen = () => {
                 marginHorizontal: 20,
                 top: '5%'
             }}>
-                <HomeHeader name={'Mickey Mouse'} balance={125.25}/>
+                <HomeHeader name={'Mickey Mouse'} balance={125.25} navigation={navigation}/>
             </View>
             {/*K Point Balance*/}
             <View style={{marginHorizontal: 20, marginTop: '13%'}}>

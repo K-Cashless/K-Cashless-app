@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
+import {SwitchActions} from 'react-navigation';
 
-const UserProfilePic = () => {
+
+const UserProfilePic = ({navigation}) => {
     const [cnt, setCnt] = useState(0);
     return (
         <View>
             <TouchableOpacity
                 onPress={() => {
                     console.log("PRESS" + cnt);
-                    setCnt(cnt + 1)
+                    setCnt(cnt + 1);
+                    const routeName = 'Auth';
+                    navigation.dispatch(SwitchActions.jumpTo({routeName}));
                 }}>
                 <Image source={require('../assets/demoPic.png')} style={{width: 40, height: 40, borderRadius: 40}}
                        resizeMode='cover'/>

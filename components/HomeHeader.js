@@ -5,7 +5,7 @@ import * as Icon from 'react-native-vector-icons';
 import MainStyles from "../styles/MainStyles";
 import UserProfilePic from "./UserProfilePic";
 
-const HomeHeader = ({name,balance}) => {
+const HomeHeader = ({navigation, name, balance}) => {
     return (
         <View style={{
             flexDirection: 'row',
@@ -23,11 +23,11 @@ const HomeHeader = ({name,balance}) => {
                 <Text style={{
                     fontFamily: 'proxima-bold',
                     fontSize: 16,
-                    color:'white',
+                    color: 'white',
                     right: 10,
                     textAlign: 'right'
                 }}>{'\u0E3F'} {balance}</Text>
-                <UserProfilePic/>
+                <UserProfilePic navigation={navigation}/>
             </View>
         </View>
     );
