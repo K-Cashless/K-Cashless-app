@@ -2,16 +2,42 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { SwitchActions } from 'react-navigation';
 
+import * as firebase from 'firebase';
+
 const SignInButton = ({ navigation, userName, password }) => {
     let isLoading = false;
+    state = { userName:'tester@gmail.com' , password:'123456'};
     const onPressAction = () => {
         isLoading = true;
+        
 
         // WIP Authentication
 
+        //Login Test
+            //UserName:tester@example.com
+            //Password:123456
+        firebase.auth()
+            .signInWithEmailAndPassword(userName,password)
+            .then(()=>{ alert("Successful"); })
+            .catch((msgError)=>{ alert(msgError.message);});
+        
+
+        //Sign Up test
+        /*firebase.auth()
+        .createUserWithEmailAndPassword(userName,password)
+        .then(userCredential => {
+            return userCredential.user.updateProfile({
+                displayName: this.state.userName
+            });
+        }) 
+        .catch(error => this.setState({errorMessage: error.message}));*/
+
+        //front - sign in noti
         console.log("Signed in");
         console.log(userName);
         console.log(password);
+        //back - sign in noti
+
         const routeName = 'App';
         navigation.dispatch(SwitchActions.jumpTo({routeName}));
         isLoading = false;
@@ -57,6 +83,14 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         color: 'white',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+    },
+    error:{
+        fontFamily: 'proxima-bold',
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'red',
         textAlign: 'center',
         textAlignVertical: 'center',
     }

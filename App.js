@@ -5,6 +5,23 @@ import Navigator from './navigations/Navigator';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 
+import * as firebase from 'firebase';
+
+var firebaseConfig = {
+  apiKey: "AIzaSyC9irtT3viSOvH3gLArcEbkgjrYzPEgEBU",
+  authDomain: "k-cashless-6525b.firebaseapp.com",
+  databaseURL: "https://k-cashless-6525b.firebaseio.com",
+  projectId: "k-cashless-6525b",
+  storageBucket: "k-cashless-6525b.appspot.com",
+  messagingSenderId: "1066265984682",
+  appId: "1:1066265984682:web:993f89a697d3c4270d5ad3",
+  measurementId: "G-FHD4GXP61L"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+//firebase.analytics();
+
+
 const AppContainer = createAppContainer(Navigator);
 const fetchFonts = () =>{
   return Font.loadAsync({
