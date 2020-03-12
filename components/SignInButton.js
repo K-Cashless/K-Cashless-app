@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {SwitchActions} from 'react-navigation';
 import * as firebase from 'firebase';
 
-const SignInButton = ({navigation, userName, password}) => {
+const SignInButton = ({navigation, userName, password, setError}) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
 
-    function signIn(userName, password) {
+    async function signIn(userName, password) {
         try {
-            firebase
+            await firebase
                 .auth()
                 .signInWithEmailAndPassword(userName, password)
                 .then(res => {
@@ -21,19 +22,22 @@ const SignInButton = ({navigation, userName, password}) => {
                 });
         } catch (error) {
             console.log(error.toString());
+            setError(error.toString());
             setIsLoading(false);
+            setButtonStyle(styles.buttonContainer);
         }
     }
 
     const onPressAction = () => {
         setIsLoading(true);
-        signIn(userName, password);
+        setButtonStyle(styles.buttonContainerOutline);
+        signIn(userName, password).then(null);
     };
 
     return (
         <View style={styles.buttonAlign}>
             <TouchableOpacity
-                style={[styles.buttonContainer]}
+                style={buttonStyle}
                 onPress={onPressAction}
                 disabled={isLoading}>
                 <Text style={styles.buttonText}>
@@ -54,6 +58,24 @@ const styles = StyleSheet.create({
         width: '100%',
         borderRadius: 3,
         backgroundColor: 'rgb(246,136,12)',
+        justifyContent: 'center',
+    },
+    buttonContainerOutline: {
+        height: 50,
+        width: '100%',
+        borderRadius: 3,
+        borderWidth: 5,
+        borderColor: 'rgb(246,136,12)',
+        backgroundColor: 'rgba(0,0,0,0)',
+        justifyContent: 'center',
+    },
+    buttonContainerFailedOutline: {
+        height: 50,
+        width: '100%',
+        borderRadius: 3,
+        borderWidth: 5,
+        borderColor: 'red',
+        backgroundColor: 'rgba(0,0,0,0)',
         justifyContent: 'center',
     },
     buttonAlign: {
