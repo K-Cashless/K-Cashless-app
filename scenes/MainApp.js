@@ -33,14 +33,36 @@ const HomeScreen = () => {
                         <TouchableOpacity style={{
                             flex: 1,
                             backgroundColor: 'red',
-                            borderRadius: 5,
+                            justifyContent: 'center',
                         }}>
-
+                            <View style={{
+                                flex: 3,
+                                justifyContent:'center',
+                                backgroundColor: 'grey',
+                            }}>
+                                <Text style={{
+                                    fontFamily: 'proxima-bold',
+                                    fontSize: 18,
+                                    color: 'white',
+                                    alignSelf: 'center',
+                                }}>ICON</Text>
+                            </View>
+                            <View style={{
+                                flex: 1,
+                                justifyContent:'center',
+                                backgroundColor: 'green',
+                            }}>
+                                <Text style={{
+                                    fontFamily: 'proxima-bold',
+                                    fontSize: 18,
+                                    color: 'white',
+                                    alignSelf: 'center',
+                                }}>Add Money</Text>
+                            </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={{
                             flex: 1,
                             backgroundColor: 'red',
-                            borderRadius: 5,
                         }}>
 
                         </TouchableOpacity>
@@ -52,14 +74,12 @@ const HomeScreen = () => {
                         <TouchableOpacity style={{
                             flex: 1,
                             backgroundColor: 'red',
-                            borderRadius: 5,
                         }}>
 
                         </TouchableOpacity>
                         <TouchableOpacity style={{
                             flex: 1,
                             backgroundColor: 'red',
-                            borderRadius: 5,
                         }}>
 
                         </TouchableOpacity>
