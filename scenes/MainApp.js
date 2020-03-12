@@ -1,35 +1,83 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import MainStyles from '../styles/MainStyles';
-
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {HomeHeader, KPointRect, ScanButton} from '../components';
+import {PromotionHeader, HomeHeader, KPointRect, ScanButton} from '../components';
 
 const HomeScreen = () => {
     return (
-        <View style={[MainStyles.container,{justifyContent: 'flex-start'}]}>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            {/*Header*/}
             <View style={{
                 marginHorizontal: 20,
                 top: '5%'
             }}>
                 <HomeHeader name={'Mickey Mouse'} balance={125.25}/>
             </View>
-            <View style={{marginHorizontal: 20, marginTop: 40}}>
-                <View style={{marginTop: 30}}/>
-                <View style={{flex: 1, height: '100%'}}>
-                    <KPointRect point={100}/>
+            {/*K Point Balance*/}
+            <View style={{marginHorizontal: 20, marginTop: '13%'}}>
+                <KPointRect point={100}/>
+            </View>
+            {/*Quick Actions*/}
+            <View style={{marginHorizontal: 20, top: '5%'}}>
+                <View style={{
+                    width: '100%',
+                    height: '70%',
+                }}>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                    }}>
+                        <TouchableOpacity style={{
+                            flex: 1,
+                            backgroundColor: 'red',
+                            borderRadius: 5,
+                        }}>
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{
+                            flex: 1,
+                            backgroundColor: 'red',
+                            borderRadius: 5,
+                        }}>
+
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                    }}>
+                        <TouchableOpacity style={{
+                            flex: 1,
+                            backgroundColor: 'red',
+                            borderRadius: 5,
+                        }}>
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{
+                            flex: 1,
+                            backgroundColor: 'red',
+                            borderRadius: 5,
+                        }}>
+
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-
         </View>
     );
 };
 const PromotionsScreen = () => {
     return (
-        <View style={MainStyles.container}>
-            <Text style={MainStyles.head1Text}>Promotion</Text>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <View style={{
+                marginHorizontal: 20,
+                top: '5%'
+            }}>
+                <PromotionHeader/>
+            </View>
         </View>
     );
 };

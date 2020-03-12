@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'rea
 import { SwitchActions } from 'react-navigation';
 
 const SignInButton = ({ navigation, userName, password }) => {
-    var isLoading = false;
-    const onPressAction = () => {  
+    let isLoading = false;
+    const onPressAction = () => {
         isLoading = true;
 
         // WIP Authentication
@@ -13,7 +13,7 @@ const SignInButton = ({ navigation, userName, password }) => {
         console.log(userName);
         console.log(password);
         const routeName = 'App';
-        navigation.dispatch(SwitchActions.jumpTo({ routeName }));
+        navigation.dispatch(SwitchActions.jumpTo({routeName}));
         isLoading = false;
     };
     return (
