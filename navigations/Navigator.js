@@ -1,14 +1,15 @@
-import React, { createElement } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createSwitchNavigator } from 'react-navigation';
-import { StyleSheet, Text, View } from 'react-native';
 import AuthNavigator from './AuthNavigator';
+import AppNavigator from './AppNavigator';
 
-const Navigator = createSwitchNavigator({
+const Navigator = createSwitchNavigator(
+    {
         Auth: AuthNavigator,
-},
-{
-    initialRouteName: 'Auth'
-});
+        App: AppNavigator,
+    },
+    {
+        initialRouteName: 'Auth'
+    });
 
 export default createAppContainer(Navigator);

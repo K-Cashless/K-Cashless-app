@@ -1,39 +1,16 @@
 import React from 'react';
-import { View, Text ,Button, TouchableOpacity , StyleSheet} from 'react-native';
+import { View, Text} from 'react-native';
 import MainStyles from '../styles/MainStyles';
-import GetStartButton from '../components/GetStartButton';
+import {GetStartButton} from '../components';
 
-export default function GetStarted({ navigation }){
-    return(
-        <View style = {MainStyles.container}>
-            <Text style = {MainStyles.head1Text}>KMITL CASHLESS</Text>
-            <Text style = {MainStyles.bodyText}>Cashless Society for Everyone!</Text>
-            <GetStartButton navigation={navigation}/>
+export default function GetStarted({ navigation }) {
+    return (
+        <View style={MainStyles.container}>
+            <View style={{ marginHorizontal: 20 ,height:'100%',alignItems:'center',justifyContent:'center'}}>
+                <Text style={[MainStyles.head1Text]}>KMITL CASHLESS</Text>
+                <Text style={[MainStyles.bodyText]}>Cashless Society for Everyone!</Text>
+                <GetStartButton navigation={navigation} />
+            </View>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-  buttonContainer:{
-      height: 70,
-      width: '100%',
-      borderRadius: 5,
-      backgroundColor: '#2AC062',
-      justifyContent: 'center',
-  },
-  buttonAlign:{
-      position: 'absolute',
-      bottom: '10%',
-      width: '80%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-  },
-  buttonText:{
-      fontSize: 25,
-      fontWeight: 'bold',
-      color: 'white',
-      textAlign: 'center',
-      textAlignVertical: 'center',
-  }
-});

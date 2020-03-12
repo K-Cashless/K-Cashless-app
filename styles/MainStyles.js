@@ -1,23 +1,29 @@
 import { StyleSheet } from 'react-native';
+import * as Colors from '../styles/Colors';
+
 const MainStyles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: 'rgb(40,40,40)',
-        alignItems: 'center',
+        backgroundColor: Colors.background,
+        alignItems: 'stretch',
         justifyContent: 'center',
     },
     head1Text:{
-        fontSize: 30,
-        color: 'rgb(246,136,12)',
-        fontWeight: 'bold'
+        fontFamily: 'proxima-extrabold',
+        fontSize: 35,
+        color: Colors.primary,
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
     bodyText:{
+        fontFamily: 'proxima-regular',
         fontSize: 20,
         color: 'white',
         fontWeight: 'normal'
     },
     textInput:{
-        fontSize: 20,
+        fontFamily: 'proxima-regular',
+        fontSize: 18,
         color: 'white',
         borderColor: 'rgba(0,0,0,0)',
         borderBottomColor: 'white',
@@ -26,6 +32,19 @@ const MainStyles = StyleSheet.create({
         height: 50,
         paddingLeft: 6,
     },
-})
+    textButton:{
+        fontFamily: 'proxima-bold',
+        fontSize: 18,
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    mainAppHeaderLabel:{
+        fontFamily: 'proxima-extrabold',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 30,
+        textAlign:'left',
+    }
+});
 
 export default MainStyles;
