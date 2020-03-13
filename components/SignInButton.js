@@ -22,7 +22,7 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
                 });
         } catch (error) {
             console.log(error.toString());
-            setErrorMsg(error.toString());
+            setErrorMsg(error.message);
             setIsLoading(false);
             setButtonStyle(styles.buttonContainer);
         }
