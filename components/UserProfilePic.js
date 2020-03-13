@@ -16,7 +16,7 @@ const UserProfilePic = ({navigation}) => {
                 }}>
                 <Image source={require('../assets/demoPic.png')} style={{width: 40, height: 40, borderRadius: 40}}
                        resizeMode='cover'/>
-                {(cnt % 2 == 0) ? (
+                {(cnt % 2 === 0) ? (
                     <View style={{
                         position: 'absolute',
                         width: 15,

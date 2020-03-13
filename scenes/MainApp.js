@@ -20,6 +20,7 @@ const HomeScreen = ({navigation}) => {
             <View style={{marginHorizontal: 20, marginTop: '13%'}}>
                 <KPointRect point={100}/>
             </View>
+
             {/*Quick Actions*/}
             <View style={{marginHorizontal: 20, top: '5%'}}>
                 <View style={{

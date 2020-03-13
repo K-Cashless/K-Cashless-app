@@ -67,7 +67,7 @@ const SignIn = ({navigation}) => {
                 {/*Sign in Button*/}
                 <SignInButton
                     navigation={navigation}
-                    setError={setErrorMsg}
+                    setErrorMsg={setErrorMsg}
                     userName={userName}
                     password={password}
                 />

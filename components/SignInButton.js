@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {SwitchActions} from 'react-navigation';
 import * as firebase from 'firebase';
 
-const SignInButton = ({navigation, userName, password, setError}) => {
+const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
 
@@ -22,7 +22,7 @@ const SignInButton = ({navigation, userName, password, setError}) => {
                 });
         } catch (error) {
             console.log(error.toString());
-            setError(error.toString());
+            setErrorMsg(error.toString());
             setIsLoading(false);
             setButtonStyle(styles.buttonContainer);
         }
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         height: 50,
         width: '100%',
         borderRadius: 3,
-        borderWidth: 5,
+        borderWidth: 3,
         borderColor: 'rgb(246,136,12)',
         backgroundColor: 'rgba(0,0,0,0)',
         justifyContent: 'center',
