@@ -1,59 +1,48 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { SwitchActions } from 'react-navigation';
-
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {SwitchActions} from 'react-navigation';
 import * as firebase from 'firebase';
 
-const SignInButton = ({ navigation, userName, password }) => {
-    let isLoading = false;
-    state = { userName:'tester@gmail.com' , password:'123456'};
+const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
+
+    async function signIn(userName, password) {
+        try {
+            await firebase
+                .auth()
+                .signInWithEmailAndPassword(userName, password)
+                .then(res => {
+                    console.log(res.user.email);
+                    setIsLoading(false);
+                })
+                .then(res => {
+                    const routeName = 'App';
+                    navigation.dispatch(SwitchActions.jumpTo({routeName}));
+                });
+        } catch (error) {
+            console.log(error.toString());
+            setErrorMsg(error.message);
+            setIsLoading(false);
+            setButtonStyle(styles.buttonContainer);
+        }
+    }
+
     const onPressAction = () => {
-        isLoading = true;
-        
-
-        // WIP Authentication
-
-        //Login Test
-            //UserName:tester@example.com
-            //Password:123456
-        firebase.auth()
-            .signInWithEmailAndPassword(userName,password)
-            .then(()=>{ alert("Successful"); })
-            .catch((msgError)=>{ alert(msgError.message);});
-        
-
-        //Sign Up test
-        /*firebase.auth()
-        .createUserWithEmailAndPassword(userName,password)
-        .then(userCredential => {
-            return userCredential.user.updateProfile({
-                displayName: this.state.userName
-            });
-        }) 
-        .catch(error => this.setState({errorMessage: error.message}));*/
-
-        //front - sign in noti
-        console.log("Signed in");
-        console.log(userName);
-        console.log(password);
-        //back - sign in noti
-
-        const routeName = 'App';
-        navigation.dispatch(SwitchActions.jumpTo({routeName}));
-        isLoading = false;
+        setIsLoading(true);
+        setButtonStyle(styles.buttonContainerOutline);
+        signIn(userName, password).then(null);
     };
+
     return (
         <View style={styles.buttonAlign}>
             <TouchableOpacity
-                style={styles.buttonContainer}
+                style={buttonStyle}
                 onPress={onPressAction}
-                disabled = {isLoading}>
-                <Text style={styles.buttonText}>Sign in</Text>
-                {isLoading ? (
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator size='small' color='white' />
-                    </View>
-                ):null}
+                disabled={isLoading}>
+                <Text style={styles.buttonText}>
+                    {isLoading ? 'Signing In' : 'Sign In'}
+                </Text>
             </TouchableOpacity>
         </View>
     );
@@ -69,6 +58,24 @@ const styles = StyleSheet.create({
         width: '100%',
         borderRadius: 3,
         backgroundColor: 'rgb(246,136,12)',
+        justifyContent: 'center',
+    },
+    buttonContainerOutline: {
+        height: 50,
+        width: '100%',
+        borderRadius: 3,
+        borderWidth: 3,
+        borderColor: 'rgb(246,136,12)',
+        backgroundColor: 'rgba(0,0,0,0)',
+        justifyContent: 'center',
+    },
+    buttonContainerFailedOutline: {
+        height: 50,
+        width: '100%',
+        borderRadius: 3,
+        borderWidth: 5,
+        borderColor: 'red',
+        backgroundColor: 'rgba(0,0,0,0)',
         justifyContent: 'center',
     },
     buttonAlign: {

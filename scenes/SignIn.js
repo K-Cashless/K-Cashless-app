@@ -10,11 +10,18 @@ const SignIn = ({navigation}) => {
     const [passwordBorderColor, setPasswordBorderColor] = useState(MainStyles.textInput.borderBottomColor);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
 
     return (
         <View style={MainStyles.container}>
             <View style={styles.signInContainer}>
                 <Text style={[MainStyles.head1Text, {textAlign: 'left'}]}>Sign in</Text>
+                <Text style={{
+                    position: 'absolute',
+                    top: '5%',
+                    fontFamily: 'proxima-bold',
+                    color: 'red',
+                }}>{errorMsg}</Text>
                 {/*Username Input*/}
                 <TextInput
                     multiline={false}
@@ -29,7 +36,8 @@ const SignIn = ({navigation}) => {
                         setUserNameBorderColor('white');
                     }}
                     onChangeText={(text) => {
-                        setUserName(text)
+                        setErrorMsg('');
+                        setUserName(text);
                     }}
                     value={userName}
                     autoCapitalize='none'
@@ -50,7 +58,8 @@ const SignIn = ({navigation}) => {
                         setPasswordBorderColor('white');
                     }}
                     onChangeText={(text) => {
-                        setPassword(text)
+                        setErrorMsg('');
+                        setPassword(text);
                     }}
                     value={password}
                     autoCapitalize='none'
@@ -58,6 +67,7 @@ const SignIn = ({navigation}) => {
                 {/*Sign in Button*/}
                 <SignInButton
                     navigation={navigation}
+                    setErrorMsg={setErrorMsg}
                     userName={userName}
                     password={password}
                 />
