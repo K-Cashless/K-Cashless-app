@@ -5,6 +5,7 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {PromotionHeader, HomeHeader, KPointRect, ScanButton} from '../components';
+import * as colors from '../styles/Colors';
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -131,11 +132,6 @@ const MainApp = createBottomTabNavigator(
             screen: PromotionsScreen,
             navigationOptions: () => ({
                 tabBarIcon: ({focused, tintColor}) => <Icon name='tags' size={25} color={tintColor}/>,
-                label: ({tintColor, focused}) => (
-                    <Text style={{color: focused ? 'white' : 'rgba(255,255,255,0.3)'}}>
-                        Promotions
-                    </Text>
-                )
             })
         },
         Scan: {
@@ -161,9 +157,10 @@ const MainApp = createBottomTabNavigator(
     {
         tabBarOptions: {
             activeTintColor: 'white',
-            inactiveTintColor: 'rgba(255,255,255,0.3)',
+            inactiveTintColor: 'rgba(255,255,255,0.5)',
             showLabel: true,
             labelStyle: {
+                fontFamily: 'proxima-regular',
                 fontSize: 12
             },
             style: {
@@ -171,7 +168,7 @@ const MainApp = createBottomTabNavigator(
                 width: '100%',
                 height: 60,
                 alignItems: 'center',
-                backgroundColor: 'rgb(50,50,50)',
+                backgroundColor: colors.primary,
             }
         },
     }

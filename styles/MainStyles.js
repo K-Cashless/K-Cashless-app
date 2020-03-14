@@ -17,7 +17,7 @@ const MainStyles = StyleSheet.create({
     },
     bodyText:{
         fontFamily: 'proxima-regular',
-        fontSize: 20,
+        fontSize: 18,
         color: 'white',
         fontWeight: 'normal'
     },

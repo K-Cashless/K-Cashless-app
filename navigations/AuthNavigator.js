@@ -16,7 +16,6 @@ const AuthNavigator = createStackNavigator(
     {
         initialRouteName: 'GetStart',
         headerMode: 'none',
-        
     }
 );
 
