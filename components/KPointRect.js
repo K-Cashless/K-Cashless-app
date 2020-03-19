@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {Text, View} from 'react-native';
 import * as colors from '../styles/Colors';
 import RedeemButton from './RedeemButton';
 
-const KPointRect = ({point}) => {
+const KPointRect = ({point, navigation}) => {
     return (
         <View>
             <View style={{
@@ -42,7 +42,7 @@ const KPointRect = ({point}) => {
                 width: '100%',
                 alignItems: 'center',
             }}>
-                <RedeemButton/>
+                <RedeemButton navigation={navigation}/>
             </View>
         </View>
     )

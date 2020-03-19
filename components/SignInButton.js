@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import * as firebase from 'firebase';
+import {BallIndicator} from "react-native-indicators";
 
 const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -14,9 +15,10 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
                 .then(res => {
                     console.log(res.user.email);
                     setIsLoading(false);
+                    setButtonStyle(styles.buttonContainer);
                 })
                 .then(res => {
-                    navigation.navigate('App');
+                    navigation.navigate('App')
                 });
         } catch (error) {
             console.log(error.toString());
@@ -42,14 +44,14 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
                     {isLoading ? 'Signing In' : 'Sign In'}
                 </Text>
             </TouchableOpacity>
-            {isLoading?(
-              <View style={{
-                position:'absolute',
-                right: 30,
-            }}>
-                <BallIndicator color={'white'} size={20}/>
-            </View>
-            ):null}
+            {isLoading ? (
+                <View style={{
+                    position: 'absolute',
+                    right: 30,
+                }}>
+                    <BallIndicator color={'white'} size={20}/>
+                </View>
+            ) : null}
         </View>
     );
 };
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center',
     },
-    error:{
+    error: {
         fontFamily: 'proxima-bold',
         fontSize: 25,
         fontWeight: 'bold',
