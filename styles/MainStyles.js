@@ -34,6 +34,7 @@ const MainStyles = StyleSheet.create({
     },
     textButton:{
         fontFamily: 'proxima-bold',
+        textDecorationLine: 'underline',
         fontSize: 18,
         color: 'white',
         fontWeight: 'bold',

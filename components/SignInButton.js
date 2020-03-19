@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {SwitchActions} from 'react-navigation';
 import * as firebase from 'firebase';
 
 const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
@@ -17,8 +16,7 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
                     setIsLoading(false);
                 })
                 .then(res => {
-                    const routeName = 'App';
-                    navigation.dispatch(SwitchActions.jumpTo({routeName}));
+                    navigation.navigate('App');
                 });
         } catch (error) {
             console.log(error.toString());
@@ -44,6 +42,14 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
                     {isLoading ? 'Signing In' : 'Sign In'}
                 </Text>
             </TouchableOpacity>
+            {isLoading?(
+              <View style={{
+                position:'absolute',
+                right: 30,
+            }}>
+                <BallIndicator color={'white'} size={20}/>
+            </View>
+            ):null}
         </View>
     );
 };

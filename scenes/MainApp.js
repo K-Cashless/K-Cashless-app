@@ -66,7 +66,6 @@ const HomeScreen = ({navigation}) => {
                             flex: 1,
                             backgroundColor: 'red',
                         }}>
-
                         </TouchableOpacity>
                     </View>
                     <View style={{
