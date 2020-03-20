@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {SignInButton} from '../components';
 import NormalTextInput from '../components/NormalTextInput';
@@ -11,68 +11,72 @@ const SignIn = ({navigation}) => {
     const [errorMsg, setErrorMsg] = useState("");
 
     return (
-        <View style={MainStyles.container}>
-            <View style={styles.signInContainer}>
-                <Text style={[MainStyles.head1Text, {textAlign: 'left', paddingBottom: 50}]}>Sign in</Text>
-                <Text style={{
-                    position: 'absolute',
-                    top: '7%',
-                    fontFamily: 'proxima-bold',
-                    color: 'red',
-                }}>{errorMsg}</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={MainStyles.container}>
+                <View style={styles.signInContainer}>
+                    <Text style={[MainStyles.head1Text, {textAlign: 'left', paddingBottom: 50}]}>Sign in</Text>
+                    <Text style={{
+                        position: 'absolute',
+                        top: '7%',
+                        fontFamily: 'proxima-bold',
+                        color: 'red',
+                    }}>{errorMsg}</Text>
 
-                {/*Username Input*/}
-                <NormalTextInput
-                    placeholder={'Email'}
-                    onChangeText={(text) => {
-                        setErrorMsg('');
-                        setUserName(text);
-                    }}
-                    value={userName}
-                />
+                    {/*Username Input*/}
+                    <NormalTextInput
+                        placeholder={'Email'}
+                        onChangeText={(text) => {
+                            setErrorMsg('');
+                            setUserName(text);
+                        }}
+                        value={userName}
+                    />
 
-                {/*Password Input*/}
-                <NormalTextInput
-                    placeholder={'Password'}
-                    secureTextEntry={true}
-                    onChangeText={(text) => {
-                        setErrorMsg('');
-                        setPassword(text);
-                    }}
-                    value={password}
-                />
+                    {/*Password Input*/}
+                    <NormalTextInput
+                        placeholder={'Password'}
+                        secureTextEntry={true}
+                        onChangeText={(text) => {
+                            setErrorMsg('');
+                            setPassword(text);
+                        }}
+                        value={password}
+                    />
 
-                {/*Sign in Button*/}
-                <SignInButton
-                    navigation={navigation}
-                    setErrorMsg={setErrorMsg}
-                    userName={userName}
-                    password={password}
-                />
+                    {/*Sign in Button*/}
+                    <SignInButton
+                        navigation={navigation}
+                        setErrorMsg={setErrorMsg}
+                        userName={userName}
+                        password={password}
+                    />
 
-                {/*Forget Password Button*/}
-                <TouchableOpacity style={{
-                    paddingTop: 20,
-                }}>
-                    <Text style={MainStyles.textButton}>Forget Password?</Text>
-                </TouchableOpacity>
-
-                {/*Sign Up Section with Button*/}
-                <View style={{
-                    position: 'absolute',
-                    width: '100%',
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    bottom: '20%',
-                }}>
-                    <Text style={[MainStyles.bodyText,{textAlign: 'center'}]}>Don't have an account?</Text>
-                    <TouchableOpacity>
-                        <Text style={[MainStyles.textButton,{textAlign: 'center',color: colors.primary}]}>Sign Up Now</Text>
+                    {/*Forget Password Button*/}
+                    <TouchableOpacity style={{
+                        paddingTop: 20,
+                    }}>
+                        <Text style={MainStyles.textButton}>Forget Password?</Text>
                     </TouchableOpacity>
-                </View>
 
+                    {/*Sign Up Section with Button*/}
+                    <View style={{
+                        position: 'absolute',
+                        width: '100%',
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                        bottom: '20%',
+                    }}>
+                        <Text style={[MainStyles.bodyText, {textAlign: 'center'}]}>Don't have an account?</Text>
+                        <TouchableOpacity>
+                            <Text style={[MainStyles.textButton, {textAlign: 'center', color: colors.primary}]}>Sign Up
+                                Now</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
+
     );
 };
 

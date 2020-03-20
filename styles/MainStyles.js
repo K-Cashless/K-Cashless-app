@@ -8,20 +8,26 @@ const MainStyles = StyleSheet.create({
         alignItems: 'stretch',
         justifyContent: 'center',
     },
-    head1Text:{
+    head1Text: {
         fontFamily: 'proxima-extrabold',
         fontSize: 35,
         color: Colors.primary,
         fontWeight: 'bold',
         textAlign: 'center'
     },
-    bodyText:{
+    head2Text: {
+        fontFamily: 'proxima-bold',
+        fontSize: 20,
+        color: 'white',
+        fontWeight: 'normal'
+    },
+    bodyText: {
         fontFamily: 'proxima-regular',
         fontSize: 18,
         color: 'white',
         fontWeight: 'normal'
     },
-    textInput:{
+    textInput: {
         fontFamily: 'proxima-regular',
         fontSize: 18,
         color: 'white',

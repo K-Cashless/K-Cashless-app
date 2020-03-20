@@ -4,7 +4,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import MainStyles from '../styles/MainStyles';
 import * as colors from '../styles/Colors';
 
-const NormalTextInput = ({placeholder, onChangeText, value, secureTextEntry, style}) => {
+const NumberTextInput = ({placeholder, onChangeText, value, secureTextEntry, style}) => {
     const [borderColor, setBorderColor] = useState(MainStyles.textInput.borderBottomColor);
     return (
         <View>
@@ -24,10 +24,11 @@ const NormalTextInput = ({placeholder, onChangeText, value, secureTextEntry, sty
                 onChangeText={onChangeText}
                 value={value}
                 autoCapitalize='none'
+                keyboardType={'numeric'}
             />
         </View>
 
     );
 };
 
-export default NormalTextInput;
+export default NumberTextInput;

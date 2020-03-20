@@ -11,7 +11,10 @@ const SubScreenHeader = ({navigation, title, backButton}) => {
             justifyItems: 'center',
         }}>
             {backButton ? (
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.goBack()
+                    }}>
                     <Icon.FontAwesome5 name={'arrow-circle-left'} size={20} color={'white'}/>
                 </TouchableOpacity>
             ) : null}

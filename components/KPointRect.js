@@ -3,9 +3,9 @@ import {Text, View} from 'react-native';
 import * as colors from '../styles/Colors';
 import RedeemButton from './RedeemButton';
 
-const KPointRect = ({point, navigation, redeemButton}) => {
+const KPointRect = ({point, style, navigation, redeemButton}) => {
     return (
-        <View>
+        <View style={style}>
             <View style={{
                 backgroundColor: colors.primary,
                 width: '100%',
