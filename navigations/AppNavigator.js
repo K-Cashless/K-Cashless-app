@@ -13,7 +13,8 @@ const AppNavigator = createStackNavigator(
         },
     },
     {
-        initialRouteName: 'MainApp',
+        // initialRouteName: 'MainApp',
+        initialRouteName: 'RedeemPoint', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }

@@ -8,7 +8,8 @@ const Navigator = createSwitchNavigator(
         App: AppNavigator,
     },
     {
-        initialRouteName: 'Auth',
+        // initialRouteName: 'Auth',
+        initialRouteName: 'App', // for Development Only
         headerMode: 'none',
     });
 

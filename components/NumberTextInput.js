@@ -4,7 +4,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import MainStyles from '../styles/MainStyles';
 import * as colors from '../styles/Colors';
 
-const NumberTextInput = ({placeholder, onChangeText, value, secureTextEntry, style}) => {
+const NumberTextInput = ({placeholder, onChangeText, value, secureTextEntry, style, error}) => {
     const [borderColor, setBorderColor] = useState(MainStyles.textInput.borderBottomColor);
     return (
         <View>
@@ -19,7 +19,8 @@ const NumberTextInput = ({placeholder, onChangeText, value, secureTextEntry, sty
                     setBorderColor(colors.primary);
                 }}
                 onBlur={() => {
-                    setBorderColor('white');
+                    if (error) setBorderColor('red');
+                    else setBorderColor('white');
                 }}
                 onChangeText={onChangeText}
                 value={value}
