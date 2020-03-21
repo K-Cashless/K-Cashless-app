@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import * as Icon from 'react-native-vector-icons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const QuickActionsGrid = ({navigation}) => {
     return (
@@ -9,18 +9,12 @@ const QuickActionsGrid = ({navigation}) => {
             height: '70%',
         }}>
             {/*ROW 1*/}
-            <View style={{
-                flex: 1,
-                flexDirection: 'row',
-            }}>
+            <View style={style.gridRowContainer}>
                 <GridButton text={'Add Money'} iconName={'money-bill-wave'}/>
                 <GridButton text={'History'} iconName={'hourglass-half'}/>
             </View>
             {/*ROW 2*/}
-            <View style={{
-                flex: 1,
-                flexDirection: 'row',
-            }}>
+            <View style={style.gridRowContainer}>
                 <GridButton text={'Library'} iconName={'book-reader'}/>
             </View>
         </View>
@@ -31,7 +25,7 @@ const GridButton = ({iconName, text, onPress}) => {
     return (
         <TouchableOpacity style={style.gridButton}>
             <View style={style.iconContainer}>
-                <Icon.FontAwesome5 name={iconName} color={'white'} size={60}/>
+                <Icon name={iconName} color={'white'} size={60}/>
             </View>
             <View style={style.descriptionContainer}>
                 <Text style={style.descriptionText}>{text}</Text>
@@ -59,6 +53,10 @@ const style = StyleSheet.create({
         fontSize: 18,
         color: 'white',
         alignSelf: 'center',
+    },
+    gridRowContainer: {
+        flex: 1,
+        flexDirection: 'row',
     }
 });
 export default QuickActionsGrid;
