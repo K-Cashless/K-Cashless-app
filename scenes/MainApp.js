@@ -1,10 +1,11 @@
 import React from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {PromotionHeader, HomeHeader, KPointRect, ScanButton} from '../components';
+import {HomeHeader, KPointRect, PromotionHeader, QuickActionsGrid, ScanButton} from '../components';
+import * as colors from '../styles/Colors';
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -14,78 +15,17 @@ const HomeScreen = ({navigation}) => {
                 marginHorizontal: 20,
                 top: '5%'
             }}>
-                <HomeHeader name={'Mickey Mouse'} balance={125.25} navigation={navigation}/>
+                <HomeHeader navigation={navigation}/>
             </View>
+
             {/*K Point Balance*/}
             <View style={{marginHorizontal: 20, marginTop: '13%'}}>
-                <KPointRect point={100}/>
+                <KPointRect navigation={navigation} point={100} redeemButton={true}/>
             </View>
 
             {/*Quick Actions*/}
             <View style={{marginHorizontal: 20, top: '5%'}}>
-                <View style={{
-                    width: '100%',
-                    height: '70%',
-                }}>
-                    <View style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                    }}>
-                        <TouchableOpacity style={{
-                            flex: 1,
-                            backgroundColor: 'red',
-                            justifyContent: 'center',
-                        }}>
-                            <View style={{
-                                flex: 3,
-                                justifyContent:'center',
-                                backgroundColor: 'grey',
-                            }}>
-                                <Text style={{
-                                    fontFamily: 'proxima-bold',
-                                    fontSize: 18,
-                                    color: 'white',
-                                    alignSelf: 'center',
-                                }}>ICON</Text>
-                            </View>
-                            <View style={{
-                                flex: 1,
-                                justifyContent:'center',
-                                backgroundColor: 'green',
-                            }}>
-                                <Text style={{
-                                    fontFamily: 'proxima-bold',
-                                    fontSize: 18,
-                                    color: 'white',
-                                    alignSelf: 'center',
-                                }}>Add Money</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            flex: 1,
-                            backgroundColor: 'red',
-                        }}>
-
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                    }}>
-                        <TouchableOpacity style={{
-                            flex: 1,
-                            backgroundColor: 'red',
-                        }}>
-
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            flex: 1,
-                            backgroundColor: 'red',
-                        }}>
-
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <QuickActionsGrid navigation={navigation}/>
             </View>
         </View>
     );
@@ -131,11 +71,6 @@ const MainApp = createBottomTabNavigator(
             screen: PromotionsScreen,
             navigationOptions: () => ({
                 tabBarIcon: ({focused, tintColor}) => <Icon name='tags' size={25} color={tintColor}/>,
-                label: ({tintColor, focused}) => (
-                    <Text style={{color: focused ? 'white' : 'rgba(255,255,255,0.3)'}}>
-                        Promotions
-                    </Text>
-                )
             })
         },
         Scan: {
@@ -161,9 +96,10 @@ const MainApp = createBottomTabNavigator(
     {
         tabBarOptions: {
             activeTintColor: 'white',
-            inactiveTintColor: 'rgba(255,255,255,0.3)',
+            inactiveTintColor: 'rgba(255,255,255,0.5)',
             showLabel: true,
             labelStyle: {
+                fontFamily: 'proxima-regular',
                 fontSize: 12
             },
             style: {
@@ -171,7 +107,7 @@ const MainApp = createBottomTabNavigator(
                 width: '100%',
                 height: 60,
                 alignItems: 'center',
-                backgroundColor: 'rgb(50,50,50)',
+                backgroundColor: colors.primary,
             }
         },
     }

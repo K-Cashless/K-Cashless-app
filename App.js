@@ -27,16 +27,11 @@ const fetchFonts = () => {
     });
 };
 
-let state = {
-    isLoadingComplete: false,
-    isAuthenticationReady: false,
-    isAuthenticated: false,
-};
+firebase.initializeApp(firebaseConfig);
 
 export default function App() {
     const [dataLoaded, setDataLoaded] = useState(false);
     if (!dataLoaded) {
-        firebase.initializeApp(firebaseConfig);
         return (
             <AppLoading
                 startAsync={fetchFonts}

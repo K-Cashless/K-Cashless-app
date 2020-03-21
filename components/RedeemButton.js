@@ -1,16 +1,19 @@
 import React from 'react';
-import { Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 
-const RedeemButton = () =>{
-    return(
+const RedeemButton = ({navigation}) => {
+    return (
         <TouchableOpacity
             style={{
-            backgroundColor: 'white',
-            width: '50%',
-            height: 50,
-            justifyContent: 'center',
-            borderRadius: 3,}}
-            onPress = {() => {alert('Redeem Points')}}
+                backgroundColor: 'white',
+                width: '50%',
+                height: 50,
+                justifyContent: 'center',
+                borderRadius: 3,
+            }}
+            onPress={() => {
+                navigation.navigate('RedeemPoint');
+            }}
         >
             <Text style={{
                 fontFamily: 'proxima-bold',
