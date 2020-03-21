@@ -55,14 +55,14 @@ const RedeemPoint = ({navigation}) => {
                             }]}>{value()} <Text style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
                         </View>
                     </View>
-                    <RedeemButton value={redeemValue} disable={redeemValueError || !isChanged}/>
+                    <RedeemButton value={redeemValue} disable={redeemValueError || !isChanged} navigation={navigation}/>
                 </View>
             </View>
         </TouchableWithoutFeedback>
     );
 };
 
-const RedeemButton = ({value, disable}) => {
+const RedeemButton = ({value, disable, navigation}) => {
     const styles = StyleSheet.create({
         buttonContainer: {
             height: 70,
@@ -118,6 +118,7 @@ const RedeemButton = ({value, disable}) => {
                 style={buttonStyle}
                 onPress={() => {
                     setIsLoading(true);
+                    navigation.navigate('RedeemPointComplete');
                 }}
                 disabled={disable}>
                 <Text style={[styles.buttonText, {color: buttonTextColor}]}>
