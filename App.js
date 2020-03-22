@@ -18,7 +18,7 @@ const firebaseConfig = {
     measurementId: "G-6B246S53K3"
 };
 
-const fetchFonts = () => {
+const fetchFonts = async () => {
     return Font.loadAsync({
         'proxima-regular': require('./assets/fonts/proxima/Proxima-Nova-Regular.otf'),
         'proxima-bold': require('./assets/fonts/proxima/Proxima-Nova-Bold.otf'),

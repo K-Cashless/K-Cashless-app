@@ -10,7 +10,7 @@ const QuickActionsGrid = ({navigation}) => {
         }}>
             {/*ROW 1*/}
             <View style={style.gridRowContainer}>
-                <GridButton text={'Add Money'} iconName={'money-bill-wave'}/>
+                <GridButton text={'Top Up'} iconName={'money-bill-wave'}/>
                 <GridButton text={'History'} iconName={'hourglass-half'}/>
             </View>
             {/*ROW 2*/}
