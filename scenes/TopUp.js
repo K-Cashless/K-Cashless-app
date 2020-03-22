@@ -29,7 +29,7 @@ const TopUp = ({navigation}) => {
                         placeholder={'Enter top up code'}
                     />
                     <BlueButton text={'Top Up'} onPress={() => {
-                        navigation.replace('RedeemPointComplete')
+                        navigation.replace('TopUpConfirm')
                     }} disable={topUpCode.length === 0}/>
                 </View>
             </View>
