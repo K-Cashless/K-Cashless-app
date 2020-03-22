@@ -11,7 +11,9 @@ const SignIn = ({navigation}) => {
     const [errorMsg, setErrorMsg] = useState("");
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={() => {
+            Keyboard.dismiss
+        }}>
             <View style={MainStyles.container}>
                 <View style={styles.signInContainer}>
                     <Text style={[MainStyles.head1Text, {textAlign: 'left', paddingBottom: 50}]}>Sign in</Text>
@@ -52,11 +54,16 @@ const SignIn = ({navigation}) => {
                     />
 
                     {/*Forget Password Button*/}
-                    <TouchableOpacity style={{
-                        paddingTop: 20,
-                    }}>
-                        <Text style={MainStyles.textButton}>Forget Password?</Text>
-                    </TouchableOpacity>
+                    <View style={{paddingTop: 20, flexWrap: 'wrap'}}>
+                        <TouchableOpacity style={{
+                            justifyContent: 'left',
+                            flexWrap: 'wrap',
+                        }}>
+                            <Text style={[MainStyles.textButton, {textAlign: 'left'}]}>Forget
+                                Password?</Text>
+                        </TouchableOpacity>
+                    </View>
+
 
                     {/*Sign Up Section with Button*/}
                     <View style={{
@@ -67,10 +74,14 @@ const SignIn = ({navigation}) => {
                         bottom: '20%',
                     }}>
                         <Text style={[MainStyles.bodyText, {textAlign: 'center'}]}>Don't have an account?</Text>
-                        <TouchableOpacity>
-                            <Text style={[MainStyles.textButton, {textAlign: 'center', color: colors.primary}]}>Sign Up
-                                Now</Text>
-                        </TouchableOpacity>
+                        <View style={{flexWrap: 'wrap', alignSelf: 'center'}}>
+                            <TouchableOpacity>
+                                <Text style={[MainStyles.textButton, {textAlign: 'center', color: colors.primary}]}>Sign
+                                    Up
+                                    Now</Text>
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
 
                 </View>
