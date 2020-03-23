@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {Text, View} from 'react-native';
 import * as colors from '../styles/Colors';
 import RedeemButton from './RedeemButton';
 
-const KPointRect = ({point}) => {
+const KPointRect = ({point, style, navigation, redeemButton}) => {
     return (
-        <View>
+        <View style={style}>
             <View style={{
                 backgroundColor: colors.primary,
                 width: '100%',
@@ -35,15 +35,18 @@ const KPointRect = ({point}) => {
                     textAlign: 'right',
                 }}>Points</Text>
             </View>
-            <View style={{
-                position: 'absolute',
-                alignSelf: 'center',
-                top: 105,
-                width: '100%',
-                alignItems: 'center',
-            }}>
-                <RedeemButton/>
-            </View>
+            {redeemButton ? (
+                <View style={{
+                    position: 'absolute',
+                    alignSelf: 'center',
+                    top: 105,
+                    width: '100%',
+                    alignItems: 'center',
+                }}>
+                    <RedeemButton navigation={navigation}/>
+                </View>
+            ) : null}
+
         </View>
     )
 };

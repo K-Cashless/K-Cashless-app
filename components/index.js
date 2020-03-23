@@ -6,6 +6,7 @@ import SignInButton from './SignInButton';
 import UserProfilePic from './UserProfilePic';
 import PromotionHeader from './PromotionHeader';
 import RedeemButton from './RedeemButton';
+import QuickActionsGrid from './QuickActionsGrid';
 
 export {GetStartButton as GetStartButton};
 export {HomeHeader as HomeHeader};
@@ -15,3 +16,4 @@ export {SignInButton as SignInButton};
 export {UserProfilePic as UserProfilePic};
 export {PromotionHeader as PromotionHeader};
 export {RedeemButton as RedeemButton};
+export {QuickActionsGrid as QuickActionsGrid};

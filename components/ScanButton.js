@@ -7,17 +7,20 @@ const ScanButton = () => {
     return(
         <View>
             <TouchableOpacity style={{
-                width: 80,
-                height: 80,
+                width: 90,
+                height: 90,
                 borderRadius: 60,
                 backgroundColor: colors.primary,
                 alignItems: 'center',
-                justifyContent:'center',
+                justifyContent: 'center',
+                borderColor: 'white',
+                borderWidth: 5,
+                top: -15,
             }}
             onPress= {()=>{
                 console.log('scan');
             }}>
-                <Icon name='qrcode' size={35} color='white'/>
+                <Icon name='qrcode' size={40} color='white'/>
             </TouchableOpacity>
         </View>
     );

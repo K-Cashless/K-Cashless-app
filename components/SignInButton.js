@@ -1,34 +1,57 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { SwitchActions } from 'react-navigation';
+import React, {useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import * as firebase from 'firebase';
+import {BallIndicator} from "react-native-indicators";
 
-const SignInButton = ({ navigation, userName, password }) => {
-    let isLoading = false;
+const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
+
+    async function signIn(userName, password) {
+        try {
+            await firebase
+                .auth()
+                .signInWithEmailAndPassword(userName, password)
+                .then(res => {
+                    console.log(res.user.email);
+                    setIsLoading(false);
+                    setButtonStyle(styles.buttonContainer);
+                })
+                .then(res => {
+                    navigation.navigate('App')
+                });
+        } catch (error) {
+            console.log(error.toString());
+            setErrorMsg(error.message);
+            setIsLoading(false);
+            setButtonStyle(styles.buttonContainer);
+        }
+    }
+
     const onPressAction = () => {
-        isLoading = true;
-
-        // WIP Authentication
-
-        console.log("Signed in");
-        console.log(userName);
-        console.log(password);
-        const routeName = 'App';
-        navigation.dispatch(SwitchActions.jumpTo({routeName}));
-        isLoading = false;
+        setIsLoading(true);
+        setButtonStyle(styles.buttonContainerOutline);
+        signIn(userName, password).then(null);
     };
+
     return (
         <View style={styles.buttonAlign}>
             <TouchableOpacity
-                style={styles.buttonContainer}
+                style={buttonStyle}
                 onPress={onPressAction}
-                disabled = {isLoading}>
-                <Text style={styles.buttonText}>Sign in</Text>
-                {isLoading ? (
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator size='small' color='white' />
-                    </View>
-                ):null}
+                disabled={isLoading}>
+                <Text style={styles.buttonText}>
+                    {isLoading ? 'Signing In' : 'Sign In'}
+                </Text>
             </TouchableOpacity>
+            {isLoading ? (
+                <View style={{
+                    position: 'absolute',
+                    right: 30,
+                }}>
+                    <BallIndicator color={'white'} size={20}/>
+                </View>
+            ) : null}
         </View>
     );
 };
@@ -45,6 +68,24 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(246,136,12)',
         justifyContent: 'center',
     },
+    buttonContainerOutline: {
+        height: 50,
+        width: '100%',
+        borderRadius: 3,
+        borderWidth: 3,
+        borderColor: 'rgb(246,136,12)',
+        backgroundColor: 'rgba(0,0,0,0)',
+        justifyContent: 'center',
+    },
+    buttonContainerFailedOutline: {
+        height: 50,
+        width: '100%',
+        borderRadius: 3,
+        borderWidth: 5,
+        borderColor: 'red',
+        backgroundColor: 'rgba(0,0,0,0)',
+        justifyContent: 'center',
+    },
     buttonAlign: {
         width: '100%',
         display: 'flex',
@@ -57,6 +98,14 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         color: 'white',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+    },
+    error: {
+        fontFamily: 'proxima-bold',
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'red',
         textAlign: 'center',
         textAlignVertical: 'center',
     }
