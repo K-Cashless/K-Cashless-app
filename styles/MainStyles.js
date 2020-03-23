@@ -63,6 +63,7 @@ export const BlueButton = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonContainerDisable: {
+        flex: 1,
         height: 70,
         width: '100%',
         borderRadius: 3,
@@ -73,7 +74,7 @@ export const BlueButton = StyleSheet.create({
         position: 'absolute',
         width: '100%',
         justifyContent: 'center',
-        bottom: 55,
+        bottom: '8%',
     },
     buttonText: {
         fontFamily: 'proxima-bold',

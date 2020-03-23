@@ -10,8 +10,8 @@ const TopUpComplete = ({navigation}) => {
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
                 <View style={{flex: 1, width: '100%', top: 50}}>
                     <View style={{flex: 1, width: '100%'}}>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Icon name={'check-circle'} size={100} color={'#2AC062'}/>
+                        <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
+                            <Icon name={'money-check-alt'} size={100} color={'#2AC062'}/>
                         </View>
                         <Text style={[MainStyles.head2Text, {
                             fontSize: 30,
@@ -20,16 +20,8 @@ const TopUpComplete = ({navigation}) => {
                             flex: 0.5
                         }]}>Top Up Successful</Text>
                     </View>
-
-                    <View style={{flex: 2, width: '100%', top: 50}}>
-                        <Text style={MainStyles.head2Text}>YOUR NEW BALANCE IS</Text>
-                        <Text style={[MainStyles.head2Text, {
-                            fontSize: 50,
-                            textAlign: 'right',
-                            justifyContent: 'center',
-                            paddingBottom: 20,
-                        }]}>123 <Text style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
-                    </View>
+                    <Text style={[MainStyles.bodyText, {flex: 1, textAlign: 'center'}]}>Your account has been topped up
+                        with 100 {'\u0E3F'}. Your new balance is 123 {'\u0E3F'}.</Text>
                 </View>
                 <View style={{width: '100%', bottom: 20}}>
                     <DoneButton navigation={navigation}/>

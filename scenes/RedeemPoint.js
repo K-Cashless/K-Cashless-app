@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Text, View, TouchableWithoutFeedback, TouchableOpacity, Keyboard} from 'react-native';
-import MainStyles from "../styles/MainStyles";
+import MainStyles, {BlueButton} from "../styles/MainStyles";
 import SubScreenHeader from "../components/SubScreenHeader";
 import KPointRect from "../components/KPointRect";
 import NumberTextInput from "../components/NumberTextInput";
@@ -69,16 +69,16 @@ const RedeemPoint = ({navigation}) => {
 const RedeemButton = ({value, disable, navigation}) => {
 
     const [isLoading, setIsLoading] = useState(false);
-    let buttonStyle = styles.buttonContainer;
+    let buttonStyle = BlueButton.buttonContainer;
     let buttonTextColor = 'white';
     if (disable) {
-        buttonStyle = styles.buttonContainerDisable;
+        buttonStyle = BlueButton.buttonContainerDisable;
         buttonTextColor = 'rgba(255,255,255,0.5)';
     } else if (isLoading) {
-        buttonStyle = styles.buttonContainerOutline;
+        buttonStyle = BlueButton.buttonContainerOutline;
     }
     return (
-        <View style={styles.buttonAlign}>
+        <View style={BlueButton.buttonAlign}>
             <TouchableOpacity
                 style={buttonStyle}
                 onPress={() => {
@@ -86,8 +86,8 @@ const RedeemButton = ({value, disable, navigation}) => {
                     navigation.replace('RedeemPointComplete');
                 }}
                 disabled={disable}>
-                <Text style={[styles.buttonText, {color: buttonTextColor}]}>
-                    {isLoading ? ('Processing...') : ('Redeem ' + value + ' ' + 'Points')}
+                <Text style={[BlueButton.buttonText, {color: buttonTextColor}]}>
+                    {isLoading ? ('Processing...') : ('Redeem ' + value + ' Points')}
                 </Text>
             </TouchableOpacity>
             {isLoading ? (

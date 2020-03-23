@@ -4,7 +4,6 @@ import MainApp from '../scenes/MainApp';
 import RedeemPoint from '../scenes/RedeemPoint';
 import RedeemPointComplete from '../scenes/RedeemPointComplete';
 import TopUp from '../scenes/TopUp';
-import TopUpConfirm from '../scenes/TopUpConfirm';
 import TopUpComplete from '../scenes/TopUpComplete';
 
 const AppNavigator = createStackNavigator(
@@ -20,9 +19,6 @@ const AppNavigator = createStackNavigator(
         },
         TopUp: {
             screen: TopUp
-        },
-        TopUpConfirm: {
-            screen: TopUpConfirm
         },
         TopUpComplete: {
             screen: TopUpComplete
