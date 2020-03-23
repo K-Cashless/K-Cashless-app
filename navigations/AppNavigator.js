@@ -3,6 +3,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 import MainApp from '../scenes/MainApp';
 import RedeemPoint from '../scenes/RedeemPoint';
 import RedeemPointComplete from '../scenes/RedeemPointComplete';
+import TopUp from '../scenes/TopUp';
+import TopUpComplete from '../scenes/TopUpComplete';
 
 const AppNavigator = createStackNavigator(
     {
@@ -14,11 +16,17 @@ const AppNavigator = createStackNavigator(
         },
         RedeemPointComplete: {
             screen: RedeemPointComplete
+        },
+        TopUp: {
+            screen: TopUp
+        },
+        TopUpComplete: {
+            screen: TopUpComplete
         }
     },
     {
         initialRouteName: 'MainApp',
-        // initialRouteName: 'RedeemPointComplete', // for Development Only
+        // initialRouteName: 'TopUp', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }

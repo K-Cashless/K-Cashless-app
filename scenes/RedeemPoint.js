@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {Text, View, TouchableWithoutFeedback, TouchableOpacity, Keyboard, StyleSheet} from 'react-native';
-import MainStyles from "../styles/MainStyles";
+import {Text, View, TouchableWithoutFeedback, TouchableOpacity, Keyboard} from 'react-native';
+import MainStyles, {BlueButton} from "../styles/MainStyles";
 import SubScreenHeader from "../components/SubScreenHeader";
 import KPointRect from "../components/KPointRect";
 import NumberTextInput from "../components/NumberTextInput";
@@ -67,66 +67,27 @@ const RedeemPoint = ({navigation}) => {
 };
 
 const RedeemButton = ({value, disable, navigation}) => {
-    const styles = StyleSheet.create({
-        buttonContainer: {
-            height: 70,
-            width: '100%',
-            borderRadius: 3,
-            backgroundColor: 'rgb(38,115,226)',
-            justifyContent: 'center',
-        },
-        buttonContainerDisable: {
-            height: 70,
-            width: '100%',
-            borderRadius: 3,
-            backgroundColor: 'rgba(38,115,226,0.5)',
-            justifyContent: 'center',
-        },
-        buttonAlign: {
-            position: 'absolute',
-            width: '100%',
-            justifyContent: 'center',
-            bottom: 55,
-        },
-        buttonText: {
-            fontFamily: 'proxima-bold',
-            fontSize: 25,
-            fontWeight: 'bold',
-            color: 'white',
-            textAlign: 'center',
-            textAlignVertical: 'center',
-        },
-        buttonContainerOutline: {
-            height: 70,
-            width: '100%',
-            borderRadius: 3,
-            borderWidth: 3,
-            borderColor: 'rgb(38,115,226)',
-            backgroundColor: 'rgba(0,0,0,0)',
-            justifyContent: 'center',
-        },
-    });
 
     const [isLoading, setIsLoading] = useState(false);
-    let buttonStyle = styles.buttonContainer;
+    let buttonStyle = BlueButton.buttonContainer;
     let buttonTextColor = 'white';
     if (disable) {
-        buttonStyle = styles.buttonContainerDisable;
+        buttonStyle = BlueButton.buttonContainerDisable;
         buttonTextColor = 'rgba(255,255,255,0.5)';
     } else if (isLoading) {
-        buttonStyle = styles.buttonContainerOutline;
+        buttonStyle = BlueButton.buttonContainerOutline;
     }
     return (
-        <View style={styles.buttonAlign}>
+        <View style={BlueButton.buttonAlign}>
             <TouchableOpacity
                 style={buttonStyle}
                 onPress={() => {
                     setIsLoading(true);
-                    navigation.navigate('RedeemPointComplete');
+                    navigation.replace('RedeemPointComplete');
                 }}
                 disabled={disable}>
-                <Text style={[styles.buttonText, {color: buttonTextColor}]}>
-                    {isLoading ? ('Processing...') : ('Redeem ' + value + ' ' + 'Points')}
+                <Text style={[BlueButton.buttonText, {color: buttonTextColor}]}>
+                    {isLoading ? ('Processing...') : ('Redeem ' + value + ' Points')}
                 </Text>
             </TouchableOpacity>
             {isLoading ? (

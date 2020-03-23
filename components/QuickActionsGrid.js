@@ -10,7 +10,9 @@ const QuickActionsGrid = ({navigation}) => {
         }}>
             {/*ROW 1*/}
             <View style={style.gridRowContainer}>
-                <GridButton text={'Top Up'} iconName={'money-bill-wave'}/>
+                <GridButton text={'Top Up'} iconName={'money-bill-wave'} onPress={() => {
+                    navigation.navigate('TopUp');
+                }}/>
                 <GridButton text={'History'} iconName={'hourglass-half'}/>
             </View>
             {/*ROW 2*/}
@@ -23,7 +25,7 @@ const QuickActionsGrid = ({navigation}) => {
 
 const GridButton = ({iconName, text, onPress}) => {
     return (
-        <TouchableOpacity style={style.gridButton}>
+        <TouchableOpacity style={style.gridButton} onPress={onPress}>
             <View style={style.iconContainer}>
                 <Icon name={iconName} color={'white'} size={60}/>
             </View>
