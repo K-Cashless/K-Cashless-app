@@ -17,7 +17,9 @@ const QuickActionsGrid = ({navigation}) => {
             </View>
             {/*ROW 2*/}
             <View style={style.gridRowContainer}>
-                <GridButton text={'Library'} iconName={'book-reader'}/>
+                <GridButton text={'Library'} iconName={'book-reader'} onPress={() => {
+                    navigation.navigate('Library')
+                }}/>
             </View>
         </View>
     );

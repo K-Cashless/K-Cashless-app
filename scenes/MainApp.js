@@ -5,6 +5,9 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {HomeHeader, KPointRect, PromotionHeader, QuickActionsGrid, ScanButton} from '../components';
+import LibraryHeader from '../components/LibraryHeader';
+import MInfoSection from '../components/MInfoSection';
+import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
 
 const HomeScreen = ({navigation}) => {
@@ -45,8 +48,34 @@ const PromotionsScreen = () => {
 
 const LibraryScreen = () => {
     return (
-        <View style={MainStyles.container}>
-            <Text style={MainStyles.head1Text}>Library</Text>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <View style={{
+                marginHorizontal: 20,
+                top: '5%',
+            }}>
+                <LibraryHeader/>
+            </View>
+            <View style={{
+                position: 'absolute',
+                marginHorizontal: 20,
+                height: '100%',
+                alignSelf: 'center',
+                justifyContent: 'center'
+            }}>
+                <MInfoSection title={'STUDENT ID'} value={'61010000'}/>
+                <View style={{
+                    alignSelf: 'center',
+                    marginTop: 30,
+                    height: 300,
+                    width: 300,
+                    backgroundColor: 'white',
+                    borderRadius: 5,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <QRCode value={'61010000'} size={250}/>
+                </View>
+            </View>
         </View>
     );
 };
