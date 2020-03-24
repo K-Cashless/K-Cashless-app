@@ -14,7 +14,7 @@ const ScanButton = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderColor: 'white',
-                borderWidth: 5,
+                borderWidth: 3,
                 top: -15,
             }}
             onPress= {()=>{
