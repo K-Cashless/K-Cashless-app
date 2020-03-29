@@ -45,15 +45,16 @@ const style = StyleSheet.create({
     },
     iconContainer: {
         flex: 3,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     descriptionContainer: {
-        flex: 1,
+        flex: 2,
         justifyContent: 'center',
     },
     descriptionText: {
         fontFamily: 'proxima-bold',
+        justifyContent: 'flex-start',
         fontSize: 18,
         color: 'white',
         alignSelf: 'center',
