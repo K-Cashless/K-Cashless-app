@@ -4,7 +4,7 @@ import * as Icon from 'react-native-vector-icons';
 
 const NotificationBell = ({navigation}) => {
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {navigation.navigate('NotificationView')}}>
             <Icon.FontAwesome5 name={'bell'} size={25} color={'white'}/>
             <View style={{
                 position: 'absolute',

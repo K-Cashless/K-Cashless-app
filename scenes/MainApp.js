@@ -124,9 +124,9 @@ const MainApp = createBottomTabNavigator(
     },
     {
         tabBarOptions: {
-            activeTintColor: 'white',
+            activeTintColor: colors.primary,
             inactiveTintColor: 'rgba(255,255,255,0.5)',
-            showLabel: true,
+            showLabel: false,
             labelStyle: {
                 fontFamily: 'proxima-regular',
                 fontSize: 12
@@ -136,7 +136,8 @@ const MainApp = createBottomTabNavigator(
                 width: '100%',
                 height: 60,
                 alignItems: 'center',
-                backgroundColor: colors.primary,
+                backgroundColor: 'rgb(20,20,20)',
+                borderTopColor: "transparent",
             }
         },
     }
