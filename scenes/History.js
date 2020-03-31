@@ -63,7 +63,7 @@ const HistoryList = () => {
         return (
             <View style={{height: Dimensions.get('window').height/4, justifyContent: 'flex-end'}}>
                 <Text
-                    style={{textAlign: 'center', color: 'rgb(150,150,150)', fontFamily: 'proxima-bold', fontSize: 25}}>
+                    style={{textAlign: 'center', color: 'rgb(150,150,150)', fontFamily: 'proxima-regular', fontSize: 25}}>
                     No History
                 </Text>
             </View>
