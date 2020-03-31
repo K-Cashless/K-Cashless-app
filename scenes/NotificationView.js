@@ -1,42 +1,86 @@
 import React, {useState} from 'react';
-import {View, Text, ScrollView, RefreshControl} from 'react-native';
+import {View, Text, SafeAreaView, Dimensions, FlatList, RefreshControl} from 'react-native';
 import MainStyles from '../styles/MainStyles';
-import * as color from '../styles/Colors';
 import SubScreenHeader from "../components/SubScreenHeader";
 
+let notificationItems = [];
+let test = 0;
+
+async function NotificationLoader() {
+    let i;
+    test += 1;
+    test %= 2;
+    notificationItems = [];
+    for (i = 0; i < 10 * test; ++i) {
+        notificationItems.push({
+            id: i.toString(),
+            time: '1/2/2020 10:00 AM',
+            title: 'You Win a Lottery ! ' + i,
+            description: 'hello world',
+        });
+    }
+    console.log(notificationItems);
+}
+
+function wait(timeout) {
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout);
+    });
+}
+
 const NotificationView = ({navigation}) => {
-    const [refreshing,setRefreshing] = useState(false);
-    const testItem=[
-        {time: '1/2/2020 10:00 AM',title: 'This is title.',description:'This is description'},
-        {time: '1/2/2020 10:00 AM',title: 'This is title.',description:'This is description'},
-        {time: '1/2/2020 10:00 AM',title: 'This is title.',description:'This is description'},
-        {time: '1/2/2020 10:00 AM',title: 'This is title.',description:'This is description'},
-        {time: '1/2/2020 10:00 AM',title: 'This is title.',description:'This is description'},
-        {time: '1/2/2020 10:00 AM',title: 'This is title.',description:'This is description'}
-    ];
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, top: '5%', height: '95%'}}>
                 <SubScreenHeader navigation={navigation} title={'Notifications'} backButton={true}/>
             </View>
-            <View style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
-                <ScrollView refreshControl={
+            <NotificationList/>
+        </View>
+    )
+};
+
+
+const NotificationList = () => {
+    const [refreshing, setRefreshing] = useState(false);
+
+    const ListEmptyComponent = () => {
+        return (
+            <View style={{height: Dimensions.get('window').height / 4, justifyContent: 'flex-end'}}>
+                <Text
+                    style={{textAlign: 'center', color: 'rgb(150,150,150)', fontFamily: 'proxima-bold', fontSize: 25}}>
+                    No Notifications
+                </Text>
+            </View>
+        )
+    };
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        NotificationLoader().then(() => wait(3000)).then(() => setRefreshing(false));
+    };
+
+    return (
+        <SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
+            <FlatList
+                data={notificationItems}
+                renderItem={({item}) => {
+                    return (
+                        <NotificationCard title={item.title} time={item.time}
+                                          description={item.description}/>
+                    );
+                }
+                }
+                keyExtractor={item => item.id}
+                refreshControl={
                     <RefreshControl
-                        colors='white'
                         tintColor='white'
                         refreshing={refreshing}
-                        onRefreshing={() => {setRefreshing(true)}}/>
-                } indicatorStyle='white'>
-                    {
-                        testItem.map((value, index) => (
-                            <View key={index}>
-                                <NotificationCard time={value.time} title={value.title} description={value.description}/>
-                            </View>
-                        ))
-                    }
-                </ScrollView>
-            </View>
-        </View>
+                        onRefresh={onRefresh}
+                    />
+                }
+                ListEmptyComponent={ListEmptyComponent}
+            />
+        </SafeAreaView>
     );
 };
 
@@ -46,7 +90,7 @@ const NotificationCard = ({time, title, description, borderTop}) => {
             width: '100%',
             paddingVertical: 10,
             borderColor: 'rgb(100,100,100)',
-            borderTopWidth: borderTop? 1:0,
+            borderTopWidth: borderTop ? 1 : 0,
             borderBottomWidth: 1
         }}>
             <Text style={{
@@ -57,7 +101,7 @@ const NotificationCard = ({time, title, description, borderTop}) => {
                 fontSize: 12
             }}>{time}</Text>
             <Text style={{
-                fontFamily: 'proxima-bold',
+                fontFamily: 'proxima-regular',
                 marginTop: 5,
                 marginLeft: 60,
                 marginRight: 20,
