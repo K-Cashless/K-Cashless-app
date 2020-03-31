@@ -61,7 +61,7 @@ const HistoryList = () => {
 
     const ListEmptyComponent = () => {
         return (
-            <View style={{height: Dimensions.get('window').height - 100, justifyContent: 'center'}}>
+            <View style={{height: Dimensions.get('window').height/4, justifyContent: 'flex-end'}}>
                 <Text
                     style={{textAlign: 'center', color: 'rgb(150,150,150)', fontFamily: 'proxima-bold', fontSize: 25}}>
                     No History
@@ -100,25 +100,6 @@ const HistoryList = () => {
     )
 
 };
-
-/*
-
-<SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
-                <ScrollView refreshControl={
-                    <RefreshControl
-                        tintColor='white'
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                }>
-                    <View style={{height: 400, justifyContent: 'center'}}>
-                        <Text style={{textAlign: 'center', color: 'white', fontFamily: 'proxima-bold', fontSize: 25}}>No
-                            History</Text>
-                    </View>
-                </ScrollView>
-            </SafeAreaView>
- */
-
 
 const HistoryCard = ({time, title, borderTop, type, transaction, pic}) => {
     return (
