@@ -13,7 +13,10 @@ const QuickActionsGrid = ({navigation}) => {
                 <GridButton text={'Top Up'} iconName={'money-bill-wave'} onPress={() => {
                     navigation.navigate('TopUp');
                 }}/>
-                <GridButton text={'History'} iconName={'hourglass-half'}/>
+                <GridButton
+                    text={'History'}
+                    iconName={'hourglass-half'}
+                    onPress={() =>{navigation.navigate('History')}}/>
             </View>
             {/*ROW 2*/}
             <View style={style.gridRowContainer}>

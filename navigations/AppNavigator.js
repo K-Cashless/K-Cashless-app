@@ -6,6 +6,7 @@ import RedeemPointComplete from '../scenes/RedeemPointComplete';
 import TopUp from '../scenes/TopUp';
 import TopUpComplete from '../scenes/TopUpComplete';
 import NotificationView from '../scenes/NotificationView';
+import History from '../scenes/History';
 
 const AppNavigator = createStackNavigator(
     {
@@ -27,10 +28,13 @@ const AppNavigator = createStackNavigator(
         NotificationView: {
             screen: NotificationView
         },
+        History: {
+            screen: History
+        }
     },
     {
         initialRouteName: 'MainApp',
-        // initialRouteName: 'NotificationView', // for Development Only
+        // initialRouteName: 'History', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }
