@@ -1,14 +1,26 @@
 import React, {useState} from 'react';
-import {View, Image, Text, SafeAreaView, RefreshControl, TouchableHighlight, FlatList} from 'react-native';
+import {
+    View,
+    Image,
+    Text,
+    SafeAreaView,
+    Dimensions,
+    RefreshControl,
+    TouchableHighlight,
+    FlatList
+} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 
 let historyItems = [];
+let test = 0;
 
 async function HistoryLoader() {
     let i;
+    test += 1;
+    test %= 2;
     historyItems = [];
-    for (i = 0; i < 100; ++i) {
+    for (i = 0; i < 10 * test; ++i) {
         historyItems.push({
             id: i.toString(),
             pic: require('../assets/demoPic.png'),
@@ -39,45 +51,73 @@ const History = ({navigation}) => {
             <View style={{marginHorizontal: 20, top: '5%', height: '95%'}}>
                 <SubScreenHeader navigation={navigation} title={'History'} backButton={true}/>
             </View>
-            <HistoryView/>
+            <HistoryList/>
         </View>
     );
 };
 
-const HistoryView = () => {
+const HistoryList = () => {
     const [refreshing, setRefreshing] = useState(false);
+
+    const ListEmptyComponent = () => {
+        return (
+            <View style={{height: Dimensions.get('window').height - 100, justifyContent: 'center'}}>
+                <Text
+                    style={{textAlign: 'center', color: 'rgb(150,150,150)', fontFamily: 'proxima-bold', fontSize: 25}}>
+                    No History
+                </Text>
+            </View>
+        )
+    };
 
     const onRefresh = async () => {
         setRefreshing(true);
         HistoryLoader().then(() => wait(3000)).then(() => setRefreshing(false)); // wait(3000) to simulate fetching data from server
     };
 
-    if (historyItems.length !== 0) {
-        return (
-            <SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
-                <FlatList
-                    data={historyItems}
-                    renderItem={({item}) => <HistoryCard pic={item.pic} title={item.title} time={item.time}
-                                                         transaction={item.transaction} type={item.type}/>}
-                    keyExtractor={item => item.id}
-                    refreshControl={
-                        <RefreshControl
-                            tintColor='white'
-                            refreshing={refreshing}
-                            onRefresh={onRefresh}
-                        />
-                    }
-                />
-            </SafeAreaView>
-        )
-    } else {
-        return (
-            <View>
+    return (
+        <SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
+            <FlatList
+                data={historyItems}
+                renderItem={({item}) => {
+                    return (
+                        <HistoryCard pic={item.pic} title={item.title} time={item.time}
+                                     transaction={item.transaction} type={item.type}/>
+                    );
+                }
+                }
+                keyExtractor={item => item.id}
+                refreshControl={
+                    <RefreshControl
+                        tintColor='white'
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+                ListEmptyComponent={ListEmptyComponent}
+            />
+        </SafeAreaView>
+    )
 
-            </View>
-        )
-    }
 };
+
+/*
+
+<SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
+                <ScrollView refreshControl={
+                    <RefreshControl
+                        tintColor='white'
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }>
+                    <View style={{height: 400, justifyContent: 'center'}}>
+                        <Text style={{textAlign: 'center', color: 'white', fontFamily: 'proxima-bold', fontSize: 25}}>No
+                            History</Text>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+ */
 
 
 const HistoryCard = ({time, title, borderTop, type, transaction, pic}) => {
