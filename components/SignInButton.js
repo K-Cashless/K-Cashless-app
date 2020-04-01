@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import * as firebase from 'firebase';
 import {BallIndicator} from "react-native-indicators";
+import {UserStore} from '../store';
 
 const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +18,9 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
                     setIsLoading(false);
                     setButtonStyle(styles.buttonContainer);
                 })
-                .then(res => {
+                .then(() => {
+                    UserStore.isLoggedIn = true;
+                    UserStore.id = '61010000'; // WIP pulling data from firebase
                     navigation.navigate('App')
                 });
         } catch (error) {

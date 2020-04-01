@@ -23,7 +23,7 @@ const HomeScreen = ({navigation}) => {
 
             {/*K Point Balance*/}
             <View style={{marginHorizontal: 20, marginTop: '13%'}}>
-                <KPointRect navigation={navigation} point={100} redeemButton={true}/>
+                <KPointRect navigation={navigation} redeemButton={true}/>
             </View>
 
             {/*Quick Actions*/}

@@ -26,7 +26,7 @@ const RedeemPoint = ({navigation}) => {
                     height: '100%',
                 }}>
                     <SubScreenHeader navigation={navigation} title={'Redeem Points'} backButton={true}/>
-                    <KPointRect style={{top: 10}} point={100}/>
+                    <KPointRect style={{top: 10}}/>
                     <Text style={[MainStyles.bodyText, {top: 20, justifyContent: 'center'}]}>
                         <Icon name={'info-circle'} color={'white'} size={18}/> 25 Points = 1 {'\u0E3F'}
                     </Text>
