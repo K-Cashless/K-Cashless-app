@@ -11,17 +11,17 @@ import {
 } from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
+import {UserStore} from '../store';
 
-let historyItems = [];
 let test = 0;
 
 async function HistoryLoader() {
     let i;
     test += 1;
     test %= 2;
-    historyItems = [];
+    UserStore.history = [];
     for (i = 0; i < 10 * test; ++i) {
-        historyItems.push({
+        UserStore.history.push({
             id: i.toString(),
             pic: require('../assets/demoPic.png'),
             time: '1/2/2020 10:00 AM',
@@ -30,7 +30,7 @@ async function HistoryLoader() {
             type: 'pay'
         });
     }
-    console.log(historyItems);
+    console.log(UserStore.history);
 }
 
 function wait(timeout) {
@@ -78,7 +78,7 @@ const HistoryList = () => {
     return (
         <SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
             <FlatList
-                data={historyItems}
+                data={UserStore.history}
                 renderItem={({item}) => {
                     return (
                         <HistoryCard pic={item.pic} title={item.title} time={item.time}

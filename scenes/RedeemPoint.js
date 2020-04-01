@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import {Text, View, TouchableWithoutFeedback, TouchableOpacity, Keyboard} from 'react-native';
-import MainStyles, {BlueButton} from "../styles/MainStyles";
+import {Text, View, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import MainStyles from "../styles/MainStyles";
+import BlueButton from '../components/BlueButton';
 import SubScreenHeader from "../components/SubScreenHeader";
 import KPointRect from "../components/KPointRect";
 import NumberTextInput from "../components/NumberTextInput";
-import {BallIndicator} from "react-native-indicators";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {UserStore} from '../store';
 
-const MAX_POINTS = 100;
+const MAX_POINTS = UserStore.kpoints;
 
 const RedeemPoint = ({navigation}) => {
     const [redeemValue, setRedeemValue] = useState('');
@@ -16,6 +17,9 @@ const RedeemPoint = ({navigation}) => {
     const value = () => {
         return (redeemValueError) ? ('0.00') : ((redeemValue / 25).toFixed(2))
     };
+    let placeholderMsg;
+    if (MAX_POINTS === 0) placeholderMsg = 'No Points';
+    else placeholderMsg = '1 - ' + MAX_POINTS;
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -26,12 +30,12 @@ const RedeemPoint = ({navigation}) => {
                     height: '100%',
                 }}>
                     <SubScreenHeader navigation={navigation} title={'Redeem Points'} backButton={true}/>
-                    <KPointRect style={{top: 10}}/>
+                    <KPointRect style={{paddingTop: 10}}/>
                     <Text style={[MainStyles.bodyText, {top: 20, justifyContent: 'center'}]}>
                         <Icon name={'info-circle'} color={'white'} size={18}/> 25 Points = 1 {'\u0E3F'}
                     </Text>
 
-                    <View style={{top: 50}}>
+                    <View style={{paddingTop: 50}}>
                         {/*Points to Redeem Input*/}
                         <Text style={MainStyles.head2Text}>POINTS TO REDEEM</Text>
                         <NumberTextInput
@@ -41,8 +45,9 @@ const RedeemPoint = ({navigation}) => {
                                 setIsChanged(true);
                             }}
                             value={redeemValue}
-                            placeholder={'1 - ' + MAX_POINTS}
+                            placeholder={placeholderMsg}
                             error={redeemValueError}
+                            editable={MAX_POINTS !== 0}
                         />
                         <Text style={{
                             top: 5,
@@ -67,38 +72,45 @@ const RedeemPoint = ({navigation}) => {
 };
 
 const RedeemButton = ({value, disable, navigation}) => {
-
-    const [isLoading, setIsLoading] = useState(false);
-    let buttonStyle = BlueButton.buttonContainer;
-    let buttonTextColor = 'white';
-    if (disable) {
-        buttonStyle = BlueButton.buttonContainerDisable;
-        buttonTextColor = 'rgba(255,255,255,0.5)';
-    } else if (isLoading) {
-        buttonStyle = BlueButton.buttonContainerOutline;
-    }
     return (
-        <View style={BlueButton.buttonAlign}>
-            <TouchableOpacity
-                style={buttonStyle}
-                onPress={() => {
-                    setIsLoading(true);
-                    navigation.replace('RedeemPointComplete');
-                }}
-                disabled={disable}>
-                <Text style={[BlueButton.buttonText, {color: buttonTextColor}]}>
-                    {isLoading ? ('Processing...') : ('Redeem ' + value + ' Points')}
-                </Text>
-            </TouchableOpacity>
-            {isLoading ? (
-                <View style={{
-                    position: 'absolute',
-                    right: 30,
-                }}>
-                    <BallIndicator color={'rgb(38,115,226)'} size={20}/>
-                </View>) : null}
-        </View>
+        <BlueButton text={'Redeem ' + value + ' Points'} disable={disable}
+                    onPress={() => navigation.replace('RedeemPointComplete')}/>
     );
 };
+//
+// const RedeemButton = ({value, disable, navigation}) => {
+//
+//     const [isLoading, setIsLoading] = useState(false);
+//     let buttonStyle = BlueButton.buttonContainer;
+//     let buttonTextColor = 'white';
+//     if (disable) {
+//         buttonStyle = BlueButton.buttonContainerDisable;
+//         buttonTextColor = 'rgba(255,255,255,0.5)';
+//     } else if (isLoading) {
+//         buttonStyle = BlueButton.buttonContainerOutline;
+//     }
+//     return (
+//         <View style={BlueButton.buttonAlign}>
+//             <TouchableOpacity
+//                 style={buttonStyle}
+//                 onPress={() => {
+//                     setIsLoading(true);
+//                     navigation.replace('RedeemPointComplete');
+//                 }}
+//                 disabled={disable}>
+//                 <Text style={[BlueButton.buttonText, {color: buttonTextColor}]}>
+//                     {isLoading ? ('Processing...') : ('Redeem ' + value + ' Points')}
+//                 </Text>
+//             </TouchableOpacity>
+//             {isLoading ? (
+//                 <View style={{
+//                     position: 'absolute',
+//                     right: 30,
+//                 }}>
+//                     <BallIndicator color={'rgb(38,115,226)'} size={20}/>
+//                 </View>) : null}
+//         </View>
+//     );
+// };
 
 export default RedeemPoint;

@@ -9,6 +9,7 @@ import LibraryHeader from '../components/LibraryHeader';
 import MInfoSection from '../components/MInfoSection';
 import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
+import {UserStore} from '../store';
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -62,7 +63,7 @@ const LibraryScreen = () => {
                 alignSelf: 'center',
                 justifyContent: 'center'
             }}>
-                <MInfoSection title={'STUDENT ID'} value={'61010000'}/>
+                <MInfoSection title={'STUDENT ID'} value={UserStore.id}/>
                 <View style={{
                     alignSelf: 'center',
                     marginTop: 30,
@@ -73,7 +74,7 @@ const LibraryScreen = () => {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <QRCode value={'61010000'} size={250}/>
+                    <QRCode value={UserStore.id} size={250}/>
                 </View>
             </View>
         </View>

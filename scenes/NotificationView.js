@@ -2,24 +2,24 @@ import React, {useState} from 'react';
 import {View, Text, SafeAreaView, Dimensions, FlatList, RefreshControl} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
+import {UserStore} from '../store';
 
-let notificationItems = [];
 let test = 0;
 
 async function NotificationLoader() {
     let i;
     test += 1;
     test %= 2;
-    notificationItems = [];
+    UserStore.notifications.list = [];
     for (i = 0; i < 10 * test; ++i) {
-        notificationItems.push({
+        UserStore.notifications.list.push({
             id: i.toString(),
             time: '1/2/2020 10:00 AM',
             title: 'You Win a Lottery ! ' + i,
             description: 'hello world',
         });
     }
-    console.log(notificationItems);
+    console.log(UserStore.notifications.list);
 }
 
 function wait(timeout) {
@@ -47,7 +47,12 @@ const NotificationList = () => {
         return (
             <View style={{height: Dimensions.get('window').height / 4, justifyContent: 'flex-end'}}>
                 <Text
-                    style={{textAlign: 'center', color: 'rgb(150,150,150)', fontFamily: 'proxima-bold', fontSize: 25}}>
+                    style={{
+                        textAlign: 'center',
+                        color: 'rgb(150,150,150)',
+                        fontFamily: 'proxima-regular',
+                        fontSize: 25
+                    }}>
                     No Notifications
                 </Text>
             </View>
@@ -62,7 +67,7 @@ const NotificationList = () => {
     return (
         <SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
             <FlatList
-                data={notificationItems}
+                data={UserStore.notifications.list}
                 renderItem={({item}) => {
                     return (
                         <NotificationCard title={item.title} time={item.time}

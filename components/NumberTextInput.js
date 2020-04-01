@@ -4,11 +4,12 @@ import {TextInput} from 'react-native-gesture-handler';
 import MainStyles from '../styles/MainStyles';
 import * as colors from '../styles/Colors';
 
-const NumberTextInput = ({placeholder, onChangeText, value, secureTextEntry, style, error}) => {
+const NumberTextInput = ({placeholder, onChangeText, value, secureTextEntry, style, error, editable}) => {
     const [borderColor, setBorderColor] = useState(MainStyles.textInput.borderBottomColor);
     return (
         <View>
             <TextInput
+                editable={editable}
                 multiline={false}
                 keyboardAppearance='dark'
                 placeholder={placeholder}
