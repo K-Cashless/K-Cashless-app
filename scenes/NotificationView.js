@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, SafeAreaView, Dimensions, FlatList, RefreshControl} from 'react-native';
+import {Dimensions, FlatList, RefreshControl, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import {UserStore} from '../store';
+import Swipeable from 'react-native-swipeable-row';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 let test = 0;
+
 
 async function NotificationLoader() {
     let i;
@@ -42,6 +45,7 @@ const NotificationView = ({navigation}) => {
 
 const NotificationList = () => {
     const [refreshing, setRefreshing] = useState(false);
+    const [trigger, setTrigger] = useState(false);
 
     const ListEmptyComponent = () => {
         return (
@@ -70,7 +74,8 @@ const NotificationList = () => {
                 data={UserStore.notifications.list}
                 renderItem={({item}) => {
                     return (
-                        <NotificationCard title={item.title} time={item.time}
+                        <NotificationCard trigger={trigger} setTrigger={setTrigger} id={item.id} title={item.title}
+                                          time={item.time}
                                           description={item.description}/>
                     );
                 }
@@ -84,43 +89,65 @@ const NotificationList = () => {
                     />
                 }
                 ListEmptyComponent={ListEmptyComponent}
+                extraData={trigger}
             />
         </SafeAreaView>
     );
 };
 
-const NotificationCard = ({time, title, description, borderTop}) => {
+const NotificationCard = ({trigger, setTrigger, id, time, title, description, borderTop}) => {
+    const deleteItemById = id => {
+        UserStore.notifications.list = UserStore.notifications.list.filter(item => item.id !== id);
+        console.log(UserStore.notifications.list);
+        setTrigger(!trigger);
+    };
+
+    const rightButtons = [
+        <TouchableOpacity
+            style={{height: '100%', backgroundColor: 'red', justifyContent: 'center', alignContent: 'center'}}
+            onPress={() => deleteItemById(id)}
+        >
+            <View style={{width: 75, alignItems: 'center'}}>
+                <Icon name={'trash-alt'} color={'white'} size={25}/>
+                <Text style={{marginTop: 5, fontFamily: 'proxima-bold', left: 0, color: 'white'}}>Delete</Text>
+            </View>
+        </TouchableOpacity>,
+    ];
+
+
     return (
-        <View style={{
-            width: '100%',
-            paddingVertical: 10,
-            borderColor: 'rgb(100,100,100)',
-            borderTopWidth: borderTop ? 1 : 0,
-            borderBottomWidth: 1
-        }}>
-            <Text style={{
-                fontFamily: 'proxima-regular',
-                marginLeft: 60,
-                marginRight: 20,
-                color: 'rgb(150,150,150)',
-                fontSize: 12
-            }}>{time}</Text>
-            <Text style={{
-                fontFamily: 'proxima-regular',
-                marginTop: 5,
-                marginLeft: 60,
-                marginRight: 20,
-                color: 'white',
-                fontSize: 25
-            }}>{title}</Text>
-            <Text style={{
-                fontFamily: 'proxima-regular',
-                marginLeft: 60,
-                marginRight: 20,
-                color: 'rgb(150,150,150)',
-                fontSize: 16
-            }}>{description}</Text>
-        </View>
+        <Swipeable rightButtons={rightButtons}>
+            <View style={{
+                width: '100%',
+                paddingVertical: 10,
+                borderColor: 'rgb(100,100,100)',
+                borderTopWidth: borderTop ? 1 : 0,
+                borderBottomWidth: 1
+            }}>
+                <Text style={{
+                    fontFamily: 'proxima-regular',
+                    marginLeft: 60,
+                    marginRight: 20,
+                    color: 'rgb(150,150,150)',
+                    fontSize: 12
+                }}>{time}</Text>
+                <Text style={{
+                    fontFamily: 'proxima-regular',
+                    marginTop: 5,
+                    marginLeft: 60,
+                    marginRight: 20,
+                    color: 'white',
+                    fontSize: 25
+                }}>{title}</Text>
+                <Text style={{
+                    fontFamily: 'proxima-regular',
+                    marginLeft: 60,
+                    marginRight: 20,
+                    color: 'rgb(150,150,150)',
+                    fontSize: 16
+                }}>{description}</Text>
+            </View>
+        </Swipeable>
     );
 };
 

@@ -33,8 +33,8 @@ const AppNavigator = createStackNavigator(
         }
     },
     {
-        initialRouteName: 'MainApp',
-        // initialRouteName: 'History', // for Development Only
+        // initialRouteName: 'MainApp',
+        initialRouteName: 'NotificationView', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }
