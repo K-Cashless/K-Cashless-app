@@ -7,7 +7,7 @@ export const initialState = {
         balance: 0,
         kpoints: 0,
         notifications: {
-            haveUnread: false,
+            haveUnread: true,
             list: []
         },
         history: []

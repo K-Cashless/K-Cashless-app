@@ -3,8 +3,9 @@ import {View, Text} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
+import {connect} from 'react-redux';
 
-const TopUpComplete = ({navigation}) => {
+const TopUpComplete = ({navigation, balance}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
@@ -21,7 +22,7 @@ const TopUpComplete = ({navigation}) => {
                         }]}>Top Up Successful</Text>
                     </View>
                     <Text style={[MainStyles.bodyText, {flex: 1, textAlign: 'center'}]}>Your account has been topped up
-                        with 100 {'\u0E3F'}. Your new balance is 123 {'\u0E3F'}.</Text>
+                        with {'??'} {'\u0E3F'}. Your new balance is {balance} {'\u0E3F'}.</Text>
                 </View>
                 <View style={{width: '100%', bottom: 20}}>
                     <DoneButton navigation={navigation}/>
@@ -31,4 +32,10 @@ const TopUpComplete = ({navigation}) => {
     );
 };
 
-export default TopUpComplete;
+function mapStateToProps(state) {
+    return {
+        balance: state.User.balance
+    }
+}
+
+export default connect(mapStateToProps)(TopUpComplete);
