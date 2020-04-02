@@ -9,7 +9,6 @@ import LibraryHeader from '../components/LibraryHeader';
 import MInfoSection from '../components/MInfoSection';
 import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
-import store from '../store';
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -20,7 +19,6 @@ const HomeScreen = ({navigation}) => {
                 top: '5%'
             }}>
                 <HomeHeader navigation={navigation}/>
-                <Text>{store.getState().User.id}</Text>
             </View>
 
             {/*K Point Balance*/}

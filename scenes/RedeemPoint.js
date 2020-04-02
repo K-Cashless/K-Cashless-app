@@ -6,19 +6,20 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import KPointRect from "../components/KPointRect";
 import NumberTextInput from "../components/NumberTextInput";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
-const MAX_POINTS = 123;
+import store from '../store';
+import * as actions from '../actions';
 
 const RedeemPoint = ({navigation}) => {
     const [redeemValue, setRedeemValue] = useState('');
     const [isChanged, setIsChanged] = useState(false);
-    const redeemValueError = (redeemValue > MAX_POINTS || redeemValue < 1 || redeemValue.length === 0) && isChanged;
+    const state = store.getState();
+    const redeemValueError = (redeemValue > state.User.kpoints || redeemValue < 1 || redeemValue.length === 0) && isChanged;
     const value = () => {
         return (redeemValueError) ? ('0.00') : ((redeemValue / 25).toFixed(2))
     };
     let placeholderMsg;
-    if (MAX_POINTS === 0) placeholderMsg = 'No Points';
-    else placeholderMsg = '1 - ' + MAX_POINTS;
+    if (state.User.kpoints === 0) placeholderMsg = 'No Points';
+    else placeholderMsg = '1 - ' + state.User.kpoints;
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -46,7 +47,7 @@ const RedeemPoint = ({navigation}) => {
                             value={redeemValue}
                             placeholder={placeholderMsg}
                             error={redeemValueError}
-                            editable={MAX_POINTS !== 0}
+                            editable={state.User.kpoints !== 0}
                         />
                         <Text style={{
                             top: 5,
@@ -73,7 +74,10 @@ const RedeemPoint = ({navigation}) => {
 const RedeemButton = ({value, disable, navigation}) => {
     return (
         <BlueButton text={'Redeem ' + value + ' Points'} disable={disable}
-                    onPress={() => navigation.replace('RedeemPointComplete')}/>
+                    onPress={() => {
+                        store.dispatch(actions.User.setKpoints(store.getState().User.kpoints - value));
+                        navigation.replace('RedeemPointComplete');
+                    }}/>
     );
 };
 

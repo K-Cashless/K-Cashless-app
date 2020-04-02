@@ -1,17 +1,17 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import * as Icon from 'react-native-vector-icons';
-
-let test = true;
+import store from '../store';
 
 const NotificationBell = ({navigation}) => {
+    const state = store.getState();
     return (
         <TouchableOpacity onPress={() => {
             navigation.navigate('NotificationView')
         }}>
             <Icon.FontAwesome5 name={'bell'} size={25} color={'white'}/>
             {
-                (test) ? (
+                (state.User.notifications.haveUnread) ? (
                     <View style={{
                         position: 'absolute',
                         width: 13,

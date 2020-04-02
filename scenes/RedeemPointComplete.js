@@ -3,8 +3,9 @@ import {View, Text} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
+import {connect} from 'react-redux';
 
-const RedeemPointComplete = ({navigation}) => {
+const RedeemPointComplete = ({navigation, User}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
@@ -29,14 +30,14 @@ const RedeemPointComplete = ({navigation}) => {
                             textAlign: 'right',
                             justifyContent: 'center',
                             paddingBottom: 20,
-                        }]}>{123} <Text style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
+                        }]}>{User.balance} <Text style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
                         <Text style={[MainStyles.head2Text]}>YOUR K
                             POINT BALANCE IS</Text>
                         <Text style={[MainStyles.head2Text, {
                             fontSize: 50,
                             textAlign: 'right',
                             justifyContent: 'center'
-                        }]}>{123} <Text style={{fontSize: 30}}>Points</Text></Text>
+                        }]}>{User.kpoints} <Text style={{fontSize: 30}}>Points</Text></Text>
                     </View>
                     <DoneButton navigation={navigation}/>
                 </View>
@@ -45,4 +46,13 @@ const RedeemPointComplete = ({navigation}) => {
     );
 };
 
-export default RedeemPointComplete;
+function mapStateToProps(state) {
+    return {
+        User: {
+            balance: state.User.balance,
+            kpoints: state.User.kpoints
+        }
+    }
+}
+
+export default connect(mapStateToProps)(RedeemPointComplete);

@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import * as firebase from 'firebase';
 import {BallIndicator} from "react-native-indicators";
-import {connect} from 'react-redux';
 import * as actions from '../actions';
 import store from '../store';
 
@@ -120,15 +119,4 @@ const styles = StyleSheet.create({
 });
 
 
-function mapStateToProps(state) {
-    return {
-        User: {
-            id: state.User.id,
-            name: state.User.name,
-            balance: state.User.balance,
-            kpoints: state.User.kpoints
-        }
-    }
-}
-
-export default connect(mapStateToProps)(SignInButton);
+export default SignInButton;
