@@ -77,40 +77,5 @@ const RedeemButton = ({value, disable, navigation}) => {
                     onPress={() => navigation.replace('RedeemPointComplete')}/>
     );
 };
-//
-// const RedeemButton = ({value, disable, navigation}) => {
-//
-//     const [isLoading, setIsLoading] = useState(false);
-//     let buttonStyle = BlueButton.buttonContainer;
-//     let buttonTextColor = 'white';
-//     if (disable) {
-//         buttonStyle = BlueButton.buttonContainerDisable;
-//         buttonTextColor = 'rgba(255,255,255,0.5)';
-//     } else if (isLoading) {
-//         buttonStyle = BlueButton.buttonContainerOutline;
-//     }
-//     return (
-//         <View style={BlueButton.buttonAlign}>
-//             <TouchableOpacity
-//                 style={buttonStyle}
-//                 onPress={() => {
-//                     setIsLoading(true);
-//                     navigation.replace('RedeemPointComplete');
-//                 }}
-//                 disabled={disable}>
-//                 <Text style={[BlueButton.buttonText, {color: buttonTextColor}]}>
-//                     {isLoading ? ('Processing...') : ('Redeem ' + value + ' Points')}
-//                 </Text>
-//             </TouchableOpacity>
-//             {isLoading ? (
-//                 <View style={{
-//                     position: 'absolute',
-//                     right: 30,
-//                 }}>
-//                     <BallIndicator color={'rgb(38,115,226)'} size={20}/>
-//                 </View>) : null}
-//         </View>
-//     );
-// };
 
 export default RedeemPoint;
