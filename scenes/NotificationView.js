@@ -5,31 +5,27 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import * as color from '../styles/Colors';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import store from '../store';
+import * as actions from '../actions';
+import {connect} from 'react-redux';
 
 let test = 0;
-
-let UserStore = {
-    notifications: {
-        haveUnread: false,
-        list: [],
-    }
-};
-
 
 async function NotificationLoader() {
     let i;
     test += 1;
     test %= 2;
-    UserStore.notifications.list = [];
+    let list = [];
     for (i = 0; i < 10 * test; ++i) {
-        UserStore.notifications.list.push({
+        list.push({
             id: i.toString(),
             time: '1/2/2020 10:00 AM',
             title: 'You Win a Lottery ! ' + i,
             description: 'hello world',
         });
     }
-    console.log(UserStore.notifications.list);
+    store.dispatch(actions.User.setNotificationsList(list));
+    console.log(list);
 }
 
 function wait(timeout) {
@@ -38,21 +34,20 @@ function wait(timeout) {
     });
 }
 
-const NotificationView = ({navigation}) => {
+const NotificationView = ({navigation, list}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, top: '5%', height: '95%'}}>
                 <SubScreenHeader navigation={navigation} title={'Notifications'} backButton={true}/>
             </View>
-            <NotificationList/>
+            <NotificationList list={list}/>
         </View>
     )
 };
 
 
-const NotificationList = () => {
+const NotificationList = ({list}) => {
     const [refreshing, setRefreshing] = useState(false);
-    const [trigger, setTrigger] = useState(false);
 
     const ListEmptyComponent = () => {
         return (
@@ -111,9 +106,9 @@ const NotificationList = () => {
 
     const renderHiddenItem = (data) => {
         const deleteItemById = id => {
-            UserStore.notifications.list = UserStore.notifications.list.filter(item => item.id !== id);
-            console.log(UserStore.notifications.list);
-            setTrigger(!trigger);
+            let list = store.getState().User.notifications.list;
+            list = list.filter(item => item.id !== id);
+            store.dispatch(actions.User.setNotificationsList(list));
         };
         return (
             <TouchableOpacity
@@ -146,7 +141,7 @@ const NotificationList = () => {
     return (
         <SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
             <SwipeListView
-                data={UserStore.notifications.list}
+                data={list}
                 renderItem={renderItem}
                 renderHiddenItem={renderHiddenItem}
                 keyExtractor={item => item.id}
@@ -158,14 +153,19 @@ const NotificationList = () => {
                     />
                 }
                 ListEmptyComponent={ListEmptyComponent}
-                extraData={trigger}
                 disableRightSwipe={true}
                 rightOpenValue={-100}
-                rightActivationValue={-100}
+                rightActivationValue={-50}
                 recalculateHiddenLayout={true}
             />
         </SafeAreaView>
     );
 };
 
-export default NotificationView;
+function mapStateToProps(state) {
+    return {
+        list: state.User.notifications.list
+    }
+}
+
+export default connect(mapStateToProps)(NotificationView);
