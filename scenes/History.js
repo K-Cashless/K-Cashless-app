@@ -11,7 +11,12 @@ import {
 } from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
-import {UserStore} from '../store';
+
+
+//temp
+let UserStore = {
+    history: []
+};
 
 let test = 0;
 

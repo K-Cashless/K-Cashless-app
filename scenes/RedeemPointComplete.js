@@ -3,7 +3,6 @@ import {View, Text} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
-import {UserStore} from '../store';
 
 const RedeemPointComplete = ({navigation}) => {
     return (
@@ -30,14 +29,14 @@ const RedeemPointComplete = ({navigation}) => {
                             textAlign: 'right',
                             justifyContent: 'center',
                             paddingBottom: 20,
-                        }]}>{UserStore.balance} <Text style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
+                        }]}>{123} <Text style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
                         <Text style={[MainStyles.head2Text]}>YOUR K
                             POINT BALANCE IS</Text>
                         <Text style={[MainStyles.head2Text, {
                             fontSize: 50,
                             textAlign: 'right',
                             justifyContent: 'center'
-                        }]}>{UserStore.kpoints} <Text style={{fontSize: 30}}>Points</Text></Text>
+                        }]}>{123} <Text style={{fontSize: 30}}>Points</Text></Text>
                     </View>
                     <DoneButton navigation={navigation}/>
                 </View>

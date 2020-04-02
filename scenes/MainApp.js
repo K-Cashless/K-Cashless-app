@@ -9,7 +9,7 @@ import LibraryHeader from '../components/LibraryHeader';
 import MInfoSection from '../components/MInfoSection';
 import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
-import {UserStore} from '../store';
+import store from '../store';
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -20,6 +20,7 @@ const HomeScreen = ({navigation}) => {
                 top: '5%'
             }}>
                 <HomeHeader navigation={navigation}/>
+                <Text>{store.getState().User.id}</Text>
             </View>
 
             {/*K Point Balance*/}
@@ -34,6 +35,7 @@ const HomeScreen = ({navigation}) => {
         </View>
     );
 };
+
 const PromotionsScreen = () => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -63,7 +65,7 @@ const LibraryScreen = () => {
                 alignSelf: 'center',
                 justifyContent: 'center'
             }}>
-                <MInfoSection title={'STUDENT ID'} value={UserStore.id}/>
+                <MInfoSection title={'STUDENT ID'} value={123}/>
                 <View style={{
                     alignSelf: 'center',
                     marginTop: 30,
@@ -74,7 +76,7 @@ const LibraryScreen = () => {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <QRCode value={UserStore.id} size={250}/>
+                    <QRCode value={'123'} size={250}/>
                 </View>
             </View>
         </View>

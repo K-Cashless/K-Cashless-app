@@ -1,7 +1,8 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import * as Icon from 'react-native-vector-icons';
-import {UserStore} from '../store';
+
+let test = true;
 
 const NotificationBell = ({navigation}) => {
     return (
@@ -10,7 +11,7 @@ const NotificationBell = ({navigation}) => {
         }}>
             <Icon.FontAwesome5 name={'bell'} size={25} color={'white'}/>
             {
-                UserStore.notifications.haveUnread ? (
+                (test) ? (
                     <View style={{
                         position: 'absolute',
                         width: 13,

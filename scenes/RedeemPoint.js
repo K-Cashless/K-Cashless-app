@@ -6,9 +6,8 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import KPointRect from "../components/KPointRect";
 import NumberTextInput from "../components/NumberTextInput";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {UserStore} from '../store';
 
-const MAX_POINTS = UserStore.kpoints;
+const MAX_POINTS = 123;
 
 const RedeemPoint = ({navigation}) => {
     const [redeemValue, setRedeemValue] = useState('');

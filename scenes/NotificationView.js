@@ -2,12 +2,18 @@ import React, {useState} from 'react';
 import {Dimensions, RefreshControl, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
-import {UserStore} from '../store';
 import * as color from '../styles/Colors';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 let test = 0;
+
+let UserStore = {
+    notifications: {
+        haveUnread: false,
+        list: [],
+    }
+};
 
 
 async function NotificationLoader() {

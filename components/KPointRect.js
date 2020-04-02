@@ -2,7 +2,6 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import * as colors from '../styles/Colors';
 import RedeemButton from './RedeemButton';
-import {UserStore} from '../store';
 
 const KPointRect = ({style, navigation, redeemButton}) => {
     return (
@@ -28,7 +27,7 @@ const KPointRect = ({style, navigation, redeemButton}) => {
                     fontWeight: 'bold',
                     color: 'white',
                     textAlign: 'right',
-                }}>{UserStore.kpoints}</Text>
+                }}>{123}</Text>
                 <Text style={{
                     fontFamily: 'proxima-bold',
                     fontSize: 16,
