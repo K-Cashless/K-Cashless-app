@@ -10,6 +10,7 @@ import MInfoSection from '../components/MInfoSection';
 import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
 import store from '../store';
+import RedDot from '../components/RedDot';
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -95,7 +96,14 @@ const MainApp = createBottomTabNavigator(
         Home: {
             screen: HomeScreen,
             navigationOptions: () => ({
-                tabBarIcon: ({focused, tintColor}) => (<Icon name='home' size={25} color={tintColor}/>),
+                tabBarIcon: ({focused, tintColor}) => {
+                    return (
+                        <View>
+                            <Icon name='home' size={25} color={tintColor}/>
+                            <RedDot/>
+                        </View>
+                    );
+                },
             })
         },
         Promotions: {

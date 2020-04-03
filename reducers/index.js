@@ -7,7 +7,7 @@ export const initialState = {
         balance: 0,
         kpoints: 0,
         notifications: {
-            haveUnread: true,
+            haveUnread: false,
             list: []
         },
         history: []
@@ -67,6 +67,17 @@ const reducer = (state = initialState, action) => {
                     notifications: {
                         ...state.User.notifications,
                         list: action.payload
+                    }
+                }
+            };
+        case actionType.PUSH_USER_NOTIFICATIONS_LIST:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    notifications: {
+                        ...state.User.notifications,
+                        list: [...state.User.notifications.list, action.payload]
                     }
                 }
             };

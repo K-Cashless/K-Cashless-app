@@ -24,7 +24,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.k-cashless.k-cashless-alpha",
+      "buildNumber": "0.1.0"
+    },
+    "android": {
+      "package": "com.kcashless.kcashless_alpha",
+      "versionCode": 1
     }
   }
 }
