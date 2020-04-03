@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Dimensions, RefreshControl, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
@@ -35,6 +35,9 @@ function wait(timeout) {
 }
 
 const NotificationView = ({navigation, list}) => {
+    useEffect(() => {
+        store.dispatch(actions.User.setNotificationsUnread(false));
+    });
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, top: '5%', height: '95%'}}>

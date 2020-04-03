@@ -17,8 +17,8 @@ const NotificationBell = ({navigation, haveUnread}) => {
                 (haveUnread) ? (
                     <View style={{
                         position: 'absolute',
-                        width: 13,
-                        height: 13,
+                        width: 10,
+                        height: 10,
                         borderRadius: 15,
                         backgroundColor: 'red',
                         right: -5,
