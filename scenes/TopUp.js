@@ -5,9 +5,9 @@ import SubScreenHeader from '../components/SubScreenHeader';
 import LInfoSectionTHB from '../components/LInfoSectionTHB';
 import NormalTextInput from "../components/NormalTextInput";
 import BlueButton from "../components/BlueButton";
-import {UserStore} from '../store';
+import {connect} from 'react-redux';
 
-const TopUp = ({navigation}) => {
+const TopUp = ({navigation, balance}) => {
     const [topUpCode, setTopUpCode] = useState('');
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -19,7 +19,7 @@ const TopUp = ({navigation}) => {
                 }}>
                     <SubScreenHeader navigation={navigation} title={'Top Up'} backButton={true}/>
                     <View style={{paddingTop: 20, paddingBottom: 50}}>
-                        <LInfoSectionTHB title={'YOUR CURRENT BALANCE IS'} value={UserStore.balance}/>
+                        <LInfoSectionTHB title={'YOUR CURRENT BALANCE IS'} value={balance}/>
                     </View>
                     <Text style={MainStyles.bodyText}>Please enter your top up code</Text>
                     <NormalTextInput
@@ -38,4 +38,10 @@ const TopUp = ({navigation}) => {
     );
 };
 
-export default TopUp;
+function mapStateToProps(state) {
+    return {
+        balance: state.User.balance
+    }
+}
+
+export default connect(mapStateToProps)(TopUp);

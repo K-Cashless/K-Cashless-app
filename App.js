@@ -7,6 +7,9 @@ import * as Font from 'expo-font';
 import * as firebase from 'firebase';
 import firebaseConfig from './firebase/firebaseConfig';
 
+import {Provider} from 'react-redux';
+import store from './store';
+
 const AppContainer = createAppContainer(Navigator);
 
 const fetchFonts = async () => {
@@ -28,10 +31,12 @@ export default function App() {
                 startAsync={fetchFonts}
                 onFinish={() => setDataLoaded(true)}
             />
+        );
+    }
+    StatusBar.setBarStyle('light-content', true);
+    return (
+        <Provider store={store}>
+            <AppContainer/>
+        </Provider>
     );
-  }
-  StatusBar.setBarStyle('light-content',true);
-  return (
-      <AppContainer />
-  );
 }

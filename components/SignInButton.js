@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import * as firebase from 'firebase';
 import {BallIndicator} from "react-native-indicators";
-import {UserStore} from '../store';
+import * as actions from '../actions';
+import store from '../store';
 
 const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -19,9 +20,12 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
                     setButtonStyle(styles.buttonContainer);
                 })
                 .then(() => {
-                    UserStore.isLoggedIn = true;
-                    UserStore.id = '61010000'; // WIP pulling data from firebase
-                    navigation.navigate('App')
+                    // WIP pulling data from firebase
+                    store.dispatch(actions.User.setId('61010000'));
+                    store.dispatch(actions.User.setName('Mickey Mouse'));
+                    store.dispatch(actions.User.setBalance(100));
+                    store.dispatch(actions.User.setKpoints(100));
+                    navigation.navigate('App');
                 });
         } catch (error) {
             console.log(error.toString());
@@ -113,5 +117,6 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
     }
 });
+
 
 export default SignInButton;

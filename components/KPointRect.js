@@ -2,9 +2,9 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import * as colors from '../styles/Colors';
 import RedeemButton from './RedeemButton';
-import {UserStore} from '../store';
+import {connect} from 'react-redux';
 
-const KPointRect = ({style, navigation, redeemButton}) => {
+const KPointRect = ({style, navigation, redeemButton, kpoints}) => {
     return (
         <View style={style}>
             <View style={{
@@ -28,7 +28,7 @@ const KPointRect = ({style, navigation, redeemButton}) => {
                     fontWeight: 'bold',
                     color: 'white',
                     textAlign: 'right',
-                }}>{UserStore.kpoints}</Text>
+                }}>{kpoints}</Text>
                 <Text style={{
                     fontFamily: 'proxima-bold',
                     fontSize: 16,
@@ -51,4 +51,12 @@ const KPointRect = ({style, navigation, redeemButton}) => {
         </View>
     )
 };
-export default KPointRect;
+
+function mapStateToProps(state) {
+    return {
+        kpoints: state.User.kpoints
+    }
+}
+
+
+export default connect(mapStateToProps)(KPointRect);
