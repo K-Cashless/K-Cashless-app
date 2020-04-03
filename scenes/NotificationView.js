@@ -20,8 +20,8 @@ async function NotificationLoader() {
         list.push({
             id: i.toString(),
             time: '1/2/2020 10:00 AM',
-            title: 'You Win a Lottery ! ' + i,
-            description: 'hello world',
+            title: 'This is title ' + i,
+            description: 'This is description',
         });
     }
     store.dispatch(actions.User.setNotificationsList(list));
