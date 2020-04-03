@@ -77,8 +77,7 @@ const SignIn = ({navigation}) => {
                         <View style={{flexWrap: 'wrap', alignSelf: 'center'}}>
                             <TouchableOpacity>
                                 <Text style={[MainStyles.textButton, {textAlign: 'center', color: colors.primary}]}>Sign
-                                    Up
-                                    Now</Text>
+                                    Up Now</Text>
                             </TouchableOpacity>
                         </View>
 

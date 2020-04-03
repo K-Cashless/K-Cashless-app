@@ -5,6 +5,8 @@ import RedeemPoint from '../scenes/RedeemPoint';
 import RedeemPointComplete from '../scenes/RedeemPointComplete';
 import TopUp from '../scenes/TopUp';
 import TopUpComplete from '../scenes/TopUpComplete';
+import NotificationView from '../scenes/NotificationView';
+import History from '../scenes/History';
 
 const AppNavigator = createStackNavigator(
     {
@@ -22,11 +24,17 @@ const AppNavigator = createStackNavigator(
         },
         TopUpComplete: {
             screen: TopUpComplete
+        },
+        NotificationView: {
+            screen: NotificationView
+        },
+        History: {
+            screen: History
         }
     },
     {
         initialRouteName: 'MainApp',
-        // initialRouteName: 'TopUp', // for Development Only
+        // initialRouteName: 'NotificationView', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }

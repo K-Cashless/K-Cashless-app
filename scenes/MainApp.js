@@ -5,7 +5,11 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {HomeHeader, KPointRect, PromotionHeader, QuickActionsGrid, ScanButton} from '../components';
+import LibraryHeader from '../components/LibraryHeader';
+import MInfoSection from '../components/MInfoSection';
+import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
+import store from '../store';
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -20,7 +24,7 @@ const HomeScreen = ({navigation}) => {
 
             {/*K Point Balance*/}
             <View style={{marginHorizontal: 20, marginTop: '13%'}}>
-                <KPointRect navigation={navigation} point={100} redeemButton={true}/>
+                <KPointRect navigation={navigation} redeemButton={true}/>
             </View>
 
             {/*Quick Actions*/}
@@ -30,6 +34,7 @@ const HomeScreen = ({navigation}) => {
         </View>
     );
 };
+
 const PromotionsScreen = () => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -45,8 +50,34 @@ const PromotionsScreen = () => {
 
 const LibraryScreen = () => {
     return (
-        <View style={MainStyles.container}>
-            <Text style={MainStyles.head1Text}>Library</Text>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <View style={{
+                marginHorizontal: 20,
+                top: '5%',
+            }}>
+                <LibraryHeader/>
+            </View>
+            <View style={{
+                position: 'absolute',
+                marginHorizontal: 20,
+                height: '100%',
+                alignSelf: 'center',
+                justifyContent: 'center'
+            }}>
+                <MInfoSection title={'STUDENT ID'} value={store.getState().User.id}/>
+                <View style={{
+                    alignSelf: 'center',
+                    marginTop: 30,
+                    height: 300,
+                    width: 300,
+                    backgroundColor: 'white',
+                    borderRadius: 5,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <QRCode value={store.getState().User.id} size={250}/>
+                </View>
+            </View>
         </View>
     );
 };
@@ -95,9 +126,9 @@ const MainApp = createBottomTabNavigator(
     },
     {
         tabBarOptions: {
-            activeTintColor: 'white',
+            activeTintColor: colors.primary,
             inactiveTintColor: 'rgba(255,255,255,0.5)',
-            showLabel: true,
+            showLabel: false,
             labelStyle: {
                 fontFamily: 'proxima-regular',
                 fontSize: 12
@@ -107,7 +138,8 @@ const MainApp = createBottomTabNavigator(
                 width: '100%',
                 height: 60,
                 alignItems: 'center',
-                backgroundColor: colors.primary,
+                backgroundColor: 'rgb(20,20,20)',
+                borderTopColor: "transparent",
             }
         },
     }

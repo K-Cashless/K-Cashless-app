@@ -5,18 +5,12 @@ import Navigator from './navigations/Navigator';
 import {AppLoading} from 'expo';
 import * as Font from 'expo-font';
 import * as firebase from 'firebase';
+import firebaseConfig from './firebase/firebaseConfig';
+
+import {Provider} from 'react-redux';
+import store from './store';
 
 const AppContainer = createAppContainer(Navigator);
-const firebaseConfig = {
-    apiKey: "AIzaSyCgHJXJe1oUoIucKlGmoFsVdHGCBOeoAaU",
-    authDomain: "kcashless-demo.firebaseapp.com",
-    databaseURL: "https://kcashless-demo.firebaseio.com",
-    projectId: "kcashless-demo",
-    storageBucket: "kcashless-demo.appspot.com",
-    messagingSenderId: "33620630259",
-    appId: "1:33620630259:web:659556fa935013d494b586",
-    measurementId: "G-6B246S53K3"
-};
 
 const fetchFonts = async () => {
     return Font.loadAsync({
@@ -37,10 +31,12 @@ export default function App() {
                 startAsync={fetchFonts}
                 onFinish={() => setDataLoaded(true)}
             />
+        );
+    }
+    StatusBar.setBarStyle('light-content', true);
+    return (
+        <Provider store={store}>
+            <AppContainer/>
+        </Provider>
     );
-  }
-  StatusBar.setBarStyle('light-content',true);
-  return (
-      <AppContainer />
-  );
 }
