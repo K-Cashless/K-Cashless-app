@@ -10,7 +10,7 @@ const QRScanner = ({navigation}) => {
     const refRBSheet = useRef();
     const [hasCameraPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-    const [shopInfo, setShopInfo] = useState({name: '', pic: ''});
+    const [shopInfo, setShopInfo] = useState({});
     useEffect(() => {
         (async () => {
             const {status} = await BarCodeScanner.requestPermissionsAsync();
@@ -22,7 +22,7 @@ const QRScanner = ({navigation}) => {
         setScanned(true);
         console.log("Scanned: ", type, data);
         // TODO - fetch shop data from firebase
-        setShopInfo({name: data, pic: ''}); // sample data
+        setShopInfo({name: data, location: 'Building ABC', pic: ''}); // sample data
         refRBSheet.current.open();
     };
     if (!hasCameraPermission) {
@@ -76,15 +76,23 @@ const QRScanner = ({navigation}) => {
                 }}
                 onClose={() => setScanned(false)}
             >
-                <ShopInfoCard shopInfo={shopInfo} navigation={navigation}/>
+                <ShopInfoCard shopInfo={shopInfo} navigation={navigation} refRBSheet={refRBSheet}
+                              setScanned={setScanned}/>
             </RBSheet>
         </View>
     )
 };
 
-const ShopInfoCard = ({shopInfo}) => {
+const ShopInfoCard = ({navigation, refRBSheet, shopInfo, setScanned}) => {
     return (
-        <TouchableOpacity style={{marginHorizontal: 20, height: 200, justifyContent: 'center'}}>
+        <TouchableOpacity
+            style={{marginHorizontal: 20, height: 200, justifyContent: 'center'}}
+            onPress={() => {
+                refRBSheet.current.close();
+                setScanned(true);
+                navigation.replace('PaymentInfo', {shopInfo: shopInfo});
+            }}
+        >
             <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
                 {/*sample data*/}
                 <Image source={require('../assets/demoPic.png')}

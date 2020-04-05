@@ -8,8 +8,12 @@ import BlueButton from '../components/BlueButton';
 import {connect} from 'react-redux';
 
 const PaymentInfo = ({navigation, balance}) => {
-    const shopInfo = {name: 'Starbucks', location: 'Building A'}; // sample data
+    const shopInfo = navigation.getParam('shopInfo', {});
+
     const [payValue, setPayValue] = useState('');
+    const [isChanged, setIsChanged] = useState(false);
+    const payValueError = (payValue > balance || payValue <= 0) && isChanged;
+    console.log(shopInfo);
     return (
         <>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -19,7 +23,7 @@ const PaymentInfo = ({navigation, balance}) => {
                 >
                     <TouchableWithoutFeedback
                         onPress={() => {
-                            setPayValue((payValue / 1).toFixed(2));
+                            setPayValue(payValue);
                             Keyboard.dismiss();
                         }}>
                         <View style={{
@@ -29,13 +33,14 @@ const PaymentInfo = ({navigation, balance}) => {
                         }}>
                             <SubScreenHeader navigation={navigation} title={'Payment'} backButton={true}/>
                             <ShopInfoComponent shopInfo={shopInfo}/>
-                            <LInfoSectionTHB title={'ACCOUNT BALANCE'} value={balance}/>
+                            <LInfoSectionTHB title={'ACCOUNT BALANCE'} value={balance.toFixed(2)}/>
                             <View style={{paddingBottom: 50}}>
                                 <Text style={[MainStyles.head2Text, {marginTop: 20}]}>AMOUNT TO PAY</Text>
                                 <NumberTextInput
                                     style={{fontSize: 30, textAlign: 'right'}}
                                     onChangeText={(text) => {
                                         setPayValue(text);
+                                        setIsChanged(true);
                                     }}
                                     value={payValue}
                                     placeholder={'Enter amount to pay'}
@@ -48,10 +53,10 @@ const PaymentInfo = ({navigation, balance}) => {
             </View>
             <View style={{marginHorizontal: 20, bottom: '5%'}}>
                 <BlueButton
-                    text={'Pay ' + payValue + ' ' + '\u0E3F'}
+                    text={'Pay ' + (payValue * 1).toFixed(2) + ' ' + '\u0E3F'}
                     navigation={navigation}
-                    disable={false}
-                    onPress={() => navigation.replace('PaymentComplete')}
+                    disable={payValueError || !isChanged}
+                    onPress={() => navigation.replace('PaymentComplete')} // TODO - firebase
                 />
             </View>
         </>
