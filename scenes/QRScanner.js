@@ -1,5 +1,5 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {View, Text, Image, TouchableOpacity, Vibration, StyleSheet} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, Vibration, View} from 'react-native';
 import {BarCodeScanner} from 'expo-barcode-scanner';
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as color from '../styles/Colors';
@@ -86,6 +86,7 @@ const ShopInfoCard = ({shopInfo}) => {
     return (
         <TouchableOpacity style={{marginHorizontal: 20, height: 200, justifyContent: 'center'}}>
             <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
+                {/*sample data*/}
                 <Image source={require('../assets/demoPic.png')}
                        style={{width: 75, height: 75, borderRadius: 5}}
                        resizeMode='cover'/>

@@ -42,7 +42,7 @@ const AppNavigator = createStackNavigator(
     },
     {
         // initialRouteName: 'MainApp',
-        initialRouteName: 'QRScanner', // for Development Only
+        initialRouteName: 'PaymentInfo', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }
