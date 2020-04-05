@@ -30,7 +30,11 @@
     },
     "android": {
       "package": "com.kcashless.kcashless_alpha",
-      "versionCode": 1
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "VIBRATE"
+      ]
     }
   }
 }
