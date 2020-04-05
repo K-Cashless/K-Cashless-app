@@ -39,7 +39,7 @@ export default function App() {
     useEffect(() => {
         registerNotification().then();
         Notifications.addListener(({origin, data}) => {
-            console.log('HELLO NOTIFICATIONS', origin, data);
+            console.log('NOTIFICATIONS: ', origin, data);
             store.dispatch(action.User.pushNotificationsList(data));
             store.dispatch(action.User.setNotificationsUnread(true));
         });
