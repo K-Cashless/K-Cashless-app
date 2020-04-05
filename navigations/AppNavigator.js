@@ -7,6 +7,7 @@ import TopUp from '../scenes/TopUp';
 import TopUpComplete from '../scenes/TopUpComplete';
 import NotificationView from '../scenes/NotificationView';
 import History from '../scenes/History';
+import QRScanner from '../scenes/QRScanner';
 
 const AppNavigator = createStackNavigator(
     {
@@ -30,11 +31,14 @@ const AppNavigator = createStackNavigator(
         },
         History: {
             screen: History
-        }
+        },
+        QRScanner: {
+            screen: QRScanner
+        },
     },
     {
-        initialRouteName: 'MainApp',
-        // initialRouteName: 'NotificationView', // for Development Only
+        // initialRouteName: 'MainApp',
+        initialRouteName: 'QRScanner', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }
