@@ -6,7 +6,7 @@ import * as color from '../styles/Colors';
 import MainStyles from '../styles/MainStyles';
 import * as Icon from 'react-native-vector-icons';
 
-const QRScanner = () => {
+const QRScanner = ({navigation}) => {
     const refRBSheet = useRef();
     const [hasCameraPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -44,7 +44,7 @@ const QRScanner = () => {
                 barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
             />
             <View style={{position: 'absolute', top: 30, left: 20}}>
-                <CancelButton/>
+                <CancelButton navigation={navigation}/>
             </View>
             <View style={{
                 position: 'absolute',
@@ -76,7 +76,7 @@ const QRScanner = () => {
                 }}
                 onClose={() => setScanned(false)}
             >
-                <ShopInfoCard shopInfo={shopInfo}/>
+                <ShopInfoCard shopInfo={shopInfo} navigation={navigation}/>
             </RBSheet>
         </View>
     )
@@ -93,16 +93,36 @@ const ShopInfoCard = ({shopInfo}) => {
             <View style={{flex: 1.5, justifyContent: 'flex-start'}}>
                 <Text numberOfLines={1} ellipsizeMode='tail'
                       style={[MainStyles.head2Text, {textAlign: 'center'}]}>{shopInfo.name}</Text>
-                <Text style={[MainStyles.bodyText, {textAlign: 'center', fontSize: 15}]}>Press to Continue</Text>
+                <Text style={[MainStyles.bodyText, {textAlign: 'center', fontSize: 15}]}>Tab to Continue</Text>
             </View>
         </TouchableOpacity>
     )
 };
 
-const CancelButton = () => {
+const CancelButton = ({navigation}) => {
     return (
-        <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center'}}>
-            <Icon.AntDesign name={'closecircle'} size={30} color={'white'}/>
+        <TouchableOpacity
+            style={{alignItems: 'center', justifyContent: 'center'}}
+            onPress={() => {
+                navigation.replace('MainApp');
+            }}
+        >
+            <Icon.AntDesign
+                name={'closecircle'}
+                size={30}
+                color={'white'}
+                style={{
+                    shadowColor: "#000",
+                    shadowOffset: {
+                        width: 0,
+                        height: 4,
+                    },
+                    shadowOpacity: 0.32,
+                    shadowRadius: 5.46,
+
+                    elevation: 9,
+                }}
+            />
         </TouchableOpacity>
     )
 };

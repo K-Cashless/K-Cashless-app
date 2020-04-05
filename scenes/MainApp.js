@@ -115,7 +115,7 @@ const MainApp = createBottomTabNavigator(
         Scan: {
             screen: () => null,
             navigationOptions: () => ({
-                tabBarIcon: ({focused}) => <ScanButton/>,
+                tabBarIcon: <ScanButton/>,
                 tabBarLabel: () => null
             })
         },
