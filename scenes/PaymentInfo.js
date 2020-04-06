@@ -26,31 +26,29 @@ const PaymentInfo = ({navigation, balance}) => {
                             setPayValue(payValue);
                             Keyboard.dismiss();
                         }}>
-                        <View style={{
-                            marginHorizontal: 20,
-                            top: '5%',
-                            justifyContent: 'flex-end'
-                        }}>
-                            <SubScreenHeader navigation={navigation} title={'Payment'} backButton={true}/>
-                            <ShopInfoComponent shopInfo={shopInfo}/>
-                            <LInfoSectionTHB title={'ACCOUNT BALANCE'} value={balance.toFixed(2)}/>
-                            <View style={{paddingBottom: 50}}>
-                                <Text style={[MainStyles.head2Text, {marginTop: 20}]}>AMOUNT TO PAY</Text>
-                                <NumberTextInput
-                                    style={{fontSize: 30, textAlign: 'right'}}
-                                    onChangeText={(text) => {
-                                        setPayValue(text);
-                                        setIsChanged(true);
-                                    }}
-                                    value={payValue}
-                                    placeholder={'Enter amount to pay'}
-                                    error={payValueError}
-                                />
-                                <Text style={{
-                                    top: 5,
-                                    fontFamily: 'proxima-bold',
-                                    color: 'red',
-                                }}>{payValueError ? 'Please Enter the Correct Amount' : ' '}</Text>
+                        <View style={{marginHorizontal: 20, justifyContent: 'flex-end'}}>
+                            <View style={{top: '5%', width: '100%'}}>
+                                <SubScreenHeader navigation={navigation} title={'Payment'} backButton={true}/>
+                                <ShopInfoComponent shopInfo={shopInfo}/>
+                                <LInfoSectionTHB title={'ACCOUNT BALANCE'} value={balance.toFixed(2)}/>
+                                <View style={{paddingBottom: 50}}>
+                                    <Text style={[MainStyles.head2Text, {marginTop: 20}]}>AMOUNT TO PAY</Text>
+                                    <NumberTextInput
+                                        style={{fontSize: 30, textAlign: 'right'}}
+                                        onChangeText={(text) => {
+                                            setPayValue(text);
+                                            setIsChanged(true);
+                                        }}
+                                        value={payValue}
+                                        placeholder={'Enter amount to pay'}
+                                        error={payValueError}
+                                    />
+                                    <Text style={{
+                                        top: 5,
+                                        fontFamily: 'proxima-bold',
+                                        color: 'red',
+                                    }}>{payValueError ? 'Please Enter the Correct Amount' : ' '}</Text>
+                                </View>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>

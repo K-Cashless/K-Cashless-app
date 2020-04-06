@@ -10,8 +10,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 const Profile = ({navigation, User}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-            <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
-                <View style={{top: '5%', width: '100%'}}>
+            <View style={{marginHorizontal: 20, alignItems: 'center'}}>
+                <View style={{top: '10%', width: '100%'}}>
                     <SubScreenHeader navigation={navigation} title={'Profile'} backButton={true}/>
                     <View style={{marginTop: 20}}>
                         <ProfileCard User={User}/>

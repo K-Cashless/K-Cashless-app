@@ -1,6 +1,15 @@
 import React, {useState} from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+    Image,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    Text,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View
+} from 'react-native';
 import SubScreenHeader from "../components/SubScreenHeader";
 import MInfoSection from '../components/MInfoSection';
 import MainStyles from '../styles/MainStyles';
@@ -13,22 +22,35 @@ import * as actions from '../actions';
 const ManageAccount = ({navigation, User}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-            <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
-                <View style={{top: '5%', width: '100%'}}>
-                    <SubScreenHeader navigation={navigation} title={'Manage Account'} backButton={true}/>
-                    <View style={{marginTop: 20, alignItems: 'center'}}>
-                        <Image source={{uri: User.pic}}
-                               style={{width: 100, height: 100, borderRadius: 100}}
-                               resizeMode='cover'/>
-                        <TextButton text={'EDIT'} color={color.primary} onPress={() => handleImagePicking()}/>
+            <KeyboardAvoidingView
+                behavior={Platform.Os === "ios" ? "padding" : "height"}
+                style={{flex: 1}}
+            >
+                <TouchableWithoutFeedback
+                    onPress={() => {
+                        Keyboard.dismiss();
+                    }}>
+                    <View style={{marginHorizontal: 20, top: 0, justifyContent: 'flex-end'}}>
+                        <View style={{marginTop: '10%', width: '100%'}}>
+                            <SubScreenHeader navigation={navigation} title={'Manage Account'} backButton={true}/>
+
+                            <View style={{marginTop: 20, alignItems: 'center'}}>
+                                <Image source={{uri: User.pic}}
+                                       style={{width: 100, height: 100, borderRadius: 100}}
+                                       resizeMode='cover'/>
+                                <TextButton text={'EDIT'} color={color.primary} onPress={() => handleImagePicking()}/>
+                            </View>
+
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <MInfoSection title={'STUDENT ID'} value={User.id + ''}/>
+                            </View>
+                            <UserInfo title={'NAME'} value={User.name + ''}/>
+                            <UserInfo title={'PHONE'} value={User.phone + ''}/>
+
+                        </View>
                     </View>
-                    <View style={{flexDirection: 'row', marginTop: 20}}>
-                        <MInfoSection title={'STUDENT ID'} value={User.id + ''}/>
-                    </View>
-                    <UserInfo title={'NAME'} value={User.name + ''}/>
-                    <UserInfo title={'PHONE'} value={User.phone + ''}/>
-                </View>
-            </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </View>
     )
 };
