@@ -10,6 +10,7 @@ import History from '../scenes/History';
 import QRScanner from '../scenes/QRScanner';
 import PaymentInfo from "../scenes/PaymentInfo";
 import PaymentComplete from '../scenes/PaymentComplete';
+import Profile from '../scenes/Profile';
 
 const AppNavigator = createStackNavigator(
     {
@@ -42,11 +43,14 @@ const AppNavigator = createStackNavigator(
         },
         PaymentComplete: {
             screen: PaymentComplete
+        },
+        Profile: {
+            screen: Profile
         }
     },
     {
-        initialRouteName: 'MainApp',
-        // initialRouteName: 'PaymentComplete', // for Development Only
+        // initialRouteName: 'MainApp',
+        initialRouteName: 'Profile', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }
