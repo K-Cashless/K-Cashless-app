@@ -44,8 +44,13 @@ const PaymentInfo = ({navigation, balance}) => {
                                     }}
                                     value={payValue}
                                     placeholder={'Enter amount to pay'}
-                                    error={false}
+                                    error={payValueError}
                                 />
+                                <Text style={{
+                                    top: 5,
+                                    fontFamily: 'proxima-bold',
+                                    color: 'red',
+                                }}>{payValueError ? 'Please Enter the Correct Amount' : ' '}</Text>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
@@ -56,13 +61,18 @@ const PaymentInfo = ({navigation, balance}) => {
                     text={'Pay ' + (payValue * 1).toFixed(2) + ' ' + '\u0E3F'}
                     navigation={navigation}
                     disable={payValueError || !isChanged}
-                    onPress={() => navigation.replace('PaymentComplete')} // TODO - firebase
+                    onPress={() => {
+                        handlePayment(navigation, {shopInfo: shopInfo, amount: payValue})
+                    }}
                 />
             </View>
         </>
     )
 };
-
+const handlePayment = (navigation, dataToSend) => {
+    // TODO - firebase
+    navigation.replace('PaymentComplete', {data: dataToSend});
+};
 
 const ShopInfoComponent = ({shopInfo}) => {
     return (

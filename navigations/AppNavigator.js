@@ -9,6 +9,7 @@ import NotificationView from '../scenes/NotificationView';
 import History from '../scenes/History';
 import QRScanner from '../scenes/QRScanner';
 import PaymentInfo from "../scenes/PaymentInfo";
+import PaymentComplete from '../scenes/PaymentComplete';
 
 const AppNavigator = createStackNavigator(
     {
@@ -38,11 +39,14 @@ const AppNavigator = createStackNavigator(
         },
         PaymentInfo: {
             screen: PaymentInfo
+        },
+        PaymentComplete: {
+            screen: PaymentComplete
         }
     },
     {
-        // initialRouteName: 'MainApp',
-        initialRouteName: 'PaymentInfo', // for Development Only
+        initialRouteName: 'MainApp',
+        // initialRouteName: 'PaymentComplete', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }

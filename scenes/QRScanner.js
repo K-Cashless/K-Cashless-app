@@ -22,7 +22,12 @@ const QRScanner = ({navigation}) => {
         setScanned(true);
         console.log("Scanned: ", type, data);
         // TODO - fetch shop data from firebase
-        setShopInfo({name: data, location: 'Building ABC', pic: ''}); // sample data
+        setShopInfo({
+            id: '12345',
+            name: data,
+            location: 'Building ABC',
+            pic: ''
+        }); // sample data
         refRBSheet.current.open();
     };
     if (!hasCameraPermission) {
@@ -74,24 +79,25 @@ const QRScanner = ({navigation}) => {
                         backgroundColor: 'white'
                     }
                 }}
-                onClose={() => setScanned(false)}
+                onClose={() => {
+                    setScanned(false);
+                }}
             >
-                <ShopInfoCard shopInfo={shopInfo} navigation={navigation} refRBSheet={refRBSheet}
-                              setScanned={setScanned}/>
+                <ShopInfoCard shopInfo={shopInfo} navigation={navigation} refRBSheet={refRBSheet}/>
             </RBSheet>
         </View>
     )
 };
 
-const ShopInfoCard = ({navigation, refRBSheet, shopInfo, setScanned}) => {
+const ShopInfoCard = ({navigation, refRBSheet, shopInfo}) => {
+    const handleConfirmResult = async () => {
+        refRBSheet.current.close();
+        navigation.replace('PaymentInfo', {shopInfo: shopInfo});
+    };
     return (
         <TouchableOpacity
             style={{marginHorizontal: 20, height: 200, justifyContent: 'center'}}
-            onPress={() => {
-                refRBSheet.current.close();
-                setScanned(true);
-                navigation.replace('PaymentInfo', {shopInfo: shopInfo});
-            }}
+            onPress={handleConfirmResult}
         >
             <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
                 {/*sample data*/}
