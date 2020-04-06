@@ -1,11 +1,23 @@
 import React from 'react';
-import BlueButton from '../components/BlueButton';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {BlueButton as BlueButtonStyle} from '../styles/MainStyles';
 
 const DoneButton = ({navigation}) => {
+    let buttonStyle = BlueButtonStyle.buttonContainer;
+    let buttonTextColor = 'white';
     return (
-        <BlueButton text="Done" onPress={() => {
-            navigation.navigate('MainApp');
-        }}/>
+        <View style={BlueButtonStyle.buttonAlign}>
+            <TouchableOpacity
+                style={buttonStyle}
+                onPress={async () => {
+                    navigation.navigate('MainApp');
+                }}
+            >
+                <Text style={[BlueButtonStyle.buttonText, {color: buttonTextColor}]}>
+                    Done
+                </Text>
+            </TouchableOpacity>
+        </View>
     );
 };
 
