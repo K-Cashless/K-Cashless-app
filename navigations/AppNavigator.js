@@ -11,6 +11,7 @@ import QRScanner from '../scenes/QRScanner';
 import PaymentInfo from "../scenes/PaymentInfo";
 import PaymentComplete from '../scenes/PaymentComplete';
 import Profile from '../scenes/Profile';
+import ManageAccount from '../scenes/ManageAccount';
 
 const AppNavigator = createStackNavigator(
     {
@@ -46,11 +47,14 @@ const AppNavigator = createStackNavigator(
         },
         Profile: {
             screen: Profile
+        },
+        ManageAccount: {
+            screen: ManageAccount
         }
     },
     {
-        initialRouteName: 'MainApp',
-        // initialRouteName: 'Profile', // for Development Only
+        // initialRouteName: 'MainApp',
+        initialRouteName: 'Profile', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }

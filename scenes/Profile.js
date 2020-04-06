@@ -15,7 +15,7 @@ const Profile = ({navigation, User}) => {
                     <SubScreenHeader navigation={navigation} title={'Profile'} backButton={true}/>
                     <View style={{marginTop: 20}}>
                         <ProfileCard User={User}/>
-                        <AccountButton navigation={navigation}/>
+                        <ManageAccountButton navigation={navigation}/>
                     </View>
                 </View>
             </View>
@@ -63,7 +63,7 @@ const ProfileCard = ({User}) => {
                             fontWeight: 'bold',
                             color: 'white',
                             textAlign: 'right'
-                        }}>12{User.balance}.00 {'\u0E3F'}</Text>
+                        }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
                     </View>
                     <Text style={{
                         fontFamily: 'proxima-regular',
@@ -79,10 +79,11 @@ const ProfileCard = ({User}) => {
     )
 };
 
-const AccountButton = ({navigation}) => {
+const ManageAccountButton = ({navigation}) => {
     return (
         <TouchableOpacity
             style={{flexDirection: 'row', marginTop: 50, width: '100%', height: 50, alignItems: 'center'}}
+            onPress={() => navigation.navigate('ManageAccount')}
         >
             <View>
                 <Text style={[MainStyles.head2Text, {fontSize: 20}]}>
