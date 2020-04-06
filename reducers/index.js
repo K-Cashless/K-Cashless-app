@@ -3,6 +3,7 @@ import * as actionType from '../constants/action-const';
 export const initialState = {
     User: {
         id: null,
+        pic: null,
         name: null,
         balance: 0,
         kpoints: 0,
@@ -22,6 +23,14 @@ const reducer = (state = initialState, action) => {
                 User: {
                     ...state.User,
                     id: action.payload
+                }
+            };
+        case actionType.SET_USER_PIC:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    pic: action.payload
                 }
             };
         case actionType.SET_USER_NAME:

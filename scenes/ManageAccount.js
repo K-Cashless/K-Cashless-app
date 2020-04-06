@@ -7,19 +7,20 @@ import MainStyles from '../styles/MainStyles';
 import {connect} from 'react-redux';
 import * as color from '../styles/Colors';
 import NormalTextInput from "../components/NormalTextInput";
+import store from '../store';
+import * as actions from '../actions';
 
 const ManageAccount = ({navigation, User}) => {
-    const [testImg, setTestImg] = useState('../assets/demoPic.png');
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
                 <View style={{top: '5%', width: '100%'}}>
                     <SubScreenHeader navigation={navigation} title={'Manage Account'} backButton={true}/>
                     <View style={{marginTop: 20, alignItems: 'center'}}>
-                        <Image source={{uri: testImg}}
+                        <Image source={{uri: User.pic}}
                                style={{width: 100, height: 100, borderRadius: 100}}
                                resizeMode='cover'/>
-                        <TextButton text={'EDIT'} color={color.primary} onPress={() => handleImagePicking(setTestImg)}/>
+                        <TextButton text={'EDIT'} color={color.primary} onPress={() => handleImagePicking()}/>
                     </View>
                     <View style={{flexDirection: 'row', marginTop: 20}}>
                         <MInfoSection title={'STUDENT ID'} value={User.id + ''}/>
@@ -71,7 +72,7 @@ const TextButton = ({text, color, onPress}) => {
     )
 };
 
-const handleImagePicking = async (setTestImg) => {
+const handleImagePicking = async () => {
     let permission = await ImagePicker.requestCameraRollPermissionsAsync();
     if (permission.status === 'granted') {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -81,7 +82,8 @@ const handleImagePicking = async (setTestImg) => {
             quality: 1
         });
         if (result.cancelled === false) {
-            setTestImg(result.uri);
+            // TODO - update data with database
+            store.dispatch(actions.User.setPic(result.uri));
         }
     }
 };

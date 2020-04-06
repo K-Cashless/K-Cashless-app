@@ -39,7 +39,7 @@ const ProfileCard = ({User}) => {
                 flexDirection: 'row',
             }}>
                 <View style={{alignItems: 'center', justifyContent: 'flex-start'}}>
-                    <Image source={require('../assets/demoPic.png')} style={{width: 60, height: 60, borderRadius: 80}}
+                    <Image source={{uri: User.pic}} style={{width: 60, height: 60, borderRadius: 80}}
                            resizeMode='cover'/>
                 </View>
 

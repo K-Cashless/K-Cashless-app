@@ -1,4 +1,5 @@
 export const SET_USER_ID = 'SET_USER_ID';
+export const SET_USER_PIC = 'SET_USER_PIC';
 export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_USER_BALANCE = 'SET_USER_BAL';
 export const SET_USER_KPOINTS = 'SET_USER_KPOINTS';
