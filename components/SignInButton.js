@@ -20,11 +20,12 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
                     setButtonStyle(styles.buttonContainer);
                 })
                 .then(() => {
-                    // WIP pulling data from firebase
+                    // TODO-WIP pulling data from firebase
                     store.dispatch(actions.User.setId('61010000'));
                     store.dispatch(actions.User.setName('Mickey Mouse'));
                     store.dispatch(actions.User.setBalance(100));
                     store.dispatch(actions.User.setKpoints(100));
+                    store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
                     navigation.navigate('App');
                 });
         } catch (error) {
