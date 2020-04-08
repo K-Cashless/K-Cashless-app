@@ -53,10 +53,13 @@ const SignIn = ({navigation}) => {
 
                     {/*Forget Password Button*/}
                     <View style={{paddingTop: 20, flexWrap: 'wrap'}}>
-                        <TouchableOpacity style={{
-                            justifyContent: 'left',
-                            flexWrap: 'wrap',
-                        }}>
+                        <TouchableOpacity
+                            style={{
+                                justifyContent: 'left',
+                                flexWrap: 'wrap',
+                            }}
+                            onPress={() => navigation.navigate('ForgetPassword')}
+                        >
                             <Text style={[MainStyles.textButton, {textAlign: 'left'}]}>Forget
                                 Password?</Text>
                         </TouchableOpacity>
