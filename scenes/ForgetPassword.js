@@ -37,7 +37,10 @@ const ForgetPassword = ({navigation}) => {
                             <View style={{alignItems: 'flex-end'}}>
                                 <TouchableHighlight
                                     underlayColor='rgba(150,150,150,0.5)'
-                                    onPress={() => setIsLoading(!isLoading)}
+                                    onPress={() => {
+                                        setIsLoading(false);
+                                        navigation.replace('ForgetPasswordComplete');
+                                    }}
                                     style={{
                                         width: 100,
                                         height: 40,

@@ -4,6 +4,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import GetStart from '../scenes/GetStart';
 import SignIn from '../scenes/SignIn';
 import ForgetPassword from '../scenes/ForgetPassword';
+import ForgetPasswordComplete from '../scenes/ForgetPasswordComplete';
 
 const AuthNavigator = createStackNavigator(
     {
@@ -16,6 +17,9 @@ const AuthNavigator = createStackNavigator(
         ForgetPassword: {
             screen: ForgetPassword
         },
+        ForgetPasswordComplete: {
+            screen: ForgetPasswordComplete
+        }
     },
     {
         initialRouteName: 'GetStart',
