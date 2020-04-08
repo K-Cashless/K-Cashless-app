@@ -1,16 +1,20 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import GetStart  from '../scenes/GetStart';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import GetStart from '../scenes/GetStart';
 import SignIn from '../scenes/SignIn';
+import ForgetPassword from '../scenes/ForgetPassword';
 
 const AuthNavigator = createStackNavigator(
     {
-        GetStart:{
+        GetStart: {
             screen: GetStart
         },
-        SignIn:{
+        SignIn: {
             screen: SignIn
+        },
+        ForgetPassword: {
+            screen: ForgetPassword
         },
     },
     {
