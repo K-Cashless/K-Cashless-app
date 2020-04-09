@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {SignInButton} from '../components';
 import NormalTextInput from '../components/NormalTextInput';
@@ -11,12 +11,10 @@ const SignIn = ({navigation}) => {
     const [errorMsg, setErrorMsg] = useState("");
 
     return (
-        <TouchableWithoutFeedback onPress={() => {
-            Keyboard.dismiss
-        }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={MainStyles.container}>
                 <View style={styles.signInContainer}>
-                    <Text style={[MainStyles.head1Text, {textAlign: 'left', paddingBottom: 50}]}>Sign in</Text>
+                    <Text style={[MainStyles.head1Text, {textAlign: 'left', paddingBottom: 50}]}>Sign In</Text>
                     <Text style={{
                         position: 'absolute',
                         top: '7%',
@@ -55,10 +53,13 @@ const SignIn = ({navigation}) => {
 
                     {/*Forget Password Button*/}
                     <View style={{paddingTop: 20, flexWrap: 'wrap'}}>
-                        <TouchableOpacity style={{
-                            justifyContent: 'left',
-                            flexWrap: 'wrap',
-                        }}>
+                        <TouchableOpacity
+                            style={{
+                                justifyContent: 'left',
+                                flexWrap: 'wrap',
+                            }}
+                            onPress={() => navigation.navigate('ForgetPassword')}
+                        >
                             <Text style={[MainStyles.textButton, {textAlign: 'left'}]}>Forget
                                 Password?</Text>
                         </TouchableOpacity>
