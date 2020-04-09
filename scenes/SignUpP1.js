@@ -26,6 +26,7 @@ const SignUpP1 = ({navigation}) => {
         phone: ''
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(' ');
     const NextButton = () => {
         return (
             <View style={{marginTop: 20, alignItems: 'flex-end'}}>
@@ -33,7 +34,13 @@ const SignUpP1 = ({navigation}) => {
                     underlayColor='rgba(150,150,150,0.5)'
                     onPress={() => {
                         setIsLoading(false);
-                        navigation.replace('ForgetPasswordComplete');
+                        if (info.studentID.length === 0 ||
+                            info.email.length === 0 ||
+                            info.password.length === 0 ||
+                            info.confirmPassword.length === 0
+                        ) setErrorMsg('Incomplete Field');
+                        else if (info.password !== info.confirmPassword) setErrorMsg('Password and Confirm Password don\'t match.');
+                        else setErrorMsg(' ');
                     }}
                     style={{
                         width: 100,
@@ -78,6 +85,9 @@ const SignUpP1 = ({navigation}) => {
                         <View style={{marginTop: 20}}>
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please provide your
                                 information</Text>
+                            <Text style={[MainStyles.bodyText, {color: 'red', fontSize: 15}]}>
+                                {errorMsg}
+                            </Text>
                             <NormalTextInput
                                 placeholder={'Student ID'}
                                 onChangeText={(text) => setInfo({...info, studentID: text})}
@@ -92,11 +102,13 @@ const SignUpP1 = ({navigation}) => {
                                 placeholder={'Password'}
                                 onChangeText={(text) => setInfo({...info, password: text})}
                                 value={info.password}
+                                secureTextEntry={true}
                             />
                             <NormalTextInput
                                 placeholder={'Confirm Password'}
                                 onChangeText={(text) => setInfo({...info, confirmPassword: text})}
                                 value={info.confirmPassword}
+                                secureTextEntry={true}
                             />
                             <NextButton/>
                         </View>
