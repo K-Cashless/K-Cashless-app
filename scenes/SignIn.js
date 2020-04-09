@@ -76,7 +76,7 @@ const SignIn = ({navigation}) => {
                     }}>
                         <Text style={[MainStyles.bodyText, {textAlign: 'center'}]}>Don't have an account?</Text>
                         <View style={{flexWrap: 'wrap', alignSelf: 'center'}}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate('SignUpP1')}>
                                 <Text style={[MainStyles.textButton, {textAlign: 'center', color: colors.primary}]}>Sign
                                     Up Now</Text>
                             </TouchableOpacity>
