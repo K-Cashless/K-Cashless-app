@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {NavigationActions, StackActions} from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
@@ -10,9 +11,8 @@ import TransparentButton from "../components/TransparentButton";
 
 const SignUpP2 = ({navigation}) => {
     const [imgUri, setImgUri] = useState('');
-    const info = navigation.getParam('info', {});
+    const [info, setInfo] = useState(navigation.getParam('info', {}));
     const demoPic = require('../assets/demoPic.png');
-    console.log(info);
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -29,24 +29,33 @@ const SignUpP2 = ({navigation}) => {
                             </View>
                             <NormalTextInput
                                 placeholder={'First Name'}
-                                onChangeText={(text) => info.firstName = text}
+                                onChangeText={(text) => setInfo({...info, firstName: text})}
                                 value={info.firstName}
                             />
                             <NormalTextInput
                                 placeholder={'Last Name'}
-                                onChangeText={(text) => info.firstName = text}
-                                value={info.firstName}
+                                onChangeText={(text) => setInfo({...info, lastName: text})}
+                                value={info.lastName}
                             />
                             <NormalTextInput
                                 placeholder={'Phone'}
-                                onChangeText={(text) => info.phone = text}
+                                onChangeText={(text) => setInfo({...info, phone: text})}
                                 value={info.phone}
                             />
                         </View>
                         <TransparentButton
                             text={'Sign Up'}
                             style={{backgroundColor: 'rgb(38,115,226)'}}
-                            onPress={() => navigation.navigate('SignUpComplete')}
+                            onPress={() => {
+                                // TODO - firebase
+                                console.log('SEND');
+                                console.log(info);
+                                const resetAction = StackActions.reset({
+                                    index: 0,
+                                    actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
+                                });
+                                navigation.dispatch(resetAction);
+                            }}
                         />
                     </KeyboardAwareScrollView>
                 </View>

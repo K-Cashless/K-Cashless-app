@@ -9,18 +9,18 @@ const SignUpComplete = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
                 <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
-                    <SubScreenHeader title={'Forget Password'} navigation={navigation} backButton={true}/>
+                    <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={false}/>
                     <View style={{marginTop: 20}}>
                         <View style={{alignItems: 'center'}}>
                             <Icon name={'check-circle'} size={70} color={'#2AC062'}/>
                             <Text style={[MainStyles.head2Text, {fontSize: 25, marginVertical: 20}]}>
-                                Password Reset Email Sent
+                                Sign Up Complete
                             </Text>
                         </View>
-                        <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>An email has been sent to your email
-                            address. Please follow the instructions in the email to reset password.</Text>
+                        <Text style={[MainStyles.bodyText, {marginBottom: 20, textAlign: 'center'}]}>
+                            Your account is waiting for confirmation.
+                        </Text>
                     </View>
-                    <View style={{flex: 1}}/>
                 </View>
                 <View style={{flex: 1, marginHorizontal: 20}}>
                     <DoneButton navigation={navigation}/>
@@ -37,7 +37,7 @@ const DoneButton = ({navigation}) => {
             <TouchableOpacity
                 style={BlueButtonStyle.buttonContainer}
                 onPress={async () => {
-                    navigation.navigate('SignIn');
+                    navigation.replace('SignIn');
                 }}
             >
                 <Text style={[BlueButtonStyle.buttonText, {color: 'white'}]}>

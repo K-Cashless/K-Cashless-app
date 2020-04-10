@@ -29,7 +29,6 @@ const SignUpP1 = ({navigation}) => {
             setErrorMsg(' ');
             navigation.navigate('SignUpP2', {info: info});
         }
-        navigation.navigate('SignUpP2', {info: info});
     };
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
