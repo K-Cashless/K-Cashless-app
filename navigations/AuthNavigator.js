@@ -6,6 +6,7 @@ import SignIn from '../scenes/SignIn';
 import ForgetPassword from '../scenes/ForgetPassword';
 import ForgetPasswordComplete from '../scenes/ForgetPasswordComplete';
 import SignUpP1 from '../scenes/SignUpP1';
+import SignUpP2 from '../scenes/SignUpP2';
 
 const AuthNavigator = createStackNavigator(
     {
@@ -22,7 +23,10 @@ const AuthNavigator = createStackNavigator(
             screen: ForgetPasswordComplete
         },
         SignUpP1: {
-            screen: SignUpP1
+            screen: SignUpP1,
+        },
+        SignUpP2: {
+            screen: SignUpP2,
         }
     },
     {

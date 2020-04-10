@@ -1,18 +1,10 @@
 import React, {useState} from 'react';
-import {
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TouchableHighlight,
-    TouchableWithoutFeedback,
-    View
-} from 'react-native';
+import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
-import {BallIndicator} from "react-native-indicators";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import TransparentButton from "../components/TransparentButton";
 
 
 const SignUpP1 = ({navigation}) => {
@@ -25,63 +17,26 @@ const SignUpP1 = ({navigation}) => {
         lastName: '',
         phone: ''
     });
-    const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(' ');
-    const NextButton = () => {
-        return (
-            <View style={{marginTop: 20, alignItems: 'flex-end'}}>
-                <TouchableHighlight
-                    underlayColor='rgba(150,150,150,0.5)'
-                    onPress={() => {
-                        setIsLoading(false);
-                        if (info.studentID.length === 0 ||
-                            info.email.length === 0 ||
-                            info.password.length === 0 ||
-                            info.confirmPassword.length === 0
-                        ) setErrorMsg('Incomplete Field');
-                        else if (info.password !== info.confirmPassword) setErrorMsg('Password and Confirm Password don\'t match.');
-                        else setErrorMsg(' ');
-                    }}
-                    style={{
-                        width: 100,
-                        height: 40,
-                        borderRadius: 80,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                >
-                    {
-                        isLoading ? (
-                            <BallIndicator color={'white'} size={20}/>
-                        ) : (
-                            <View style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <Text style={{
-                                    fontFamily: 'proxima-bold',
-                                    fontSize: 20,
-                                    color: 'white'
-                                }}>Next</Text>
-                                <Icon name={'chevron-right'} size={20} color={'white'}
-                                      style={{marginLeft: 7}}/>
-                            </View>
-                        )
-                    }
-                </TouchableHighlight>
-            </View>
-        )
+    const handleButtonPress = () => {
+        if (info.studentID.length === 0 ||
+            info.email.length === 0 ||
+            info.password.length === 0 ||
+            info.confirmPassword.length === 0
+        ) setErrorMsg('Incomplete Field');
+        else if (info.password !== info.confirmPassword) setErrorMsg('Password and Confirm Password don\'t match.');
+        else {
+            setErrorMsg(' ');
+            navigation.navigate('SignUpP2', {info: info});
+        }
+        navigation.navigate('SignUpP2', {info: info});
     };
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <KeyboardAvoidingView
-                    behavior={Platform.Os === "ios" ? "padding" : "height"}
-                    style={{flex: 1}}
-                >
-                    <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
-                        <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
+                <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
+                    <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
+                    <KeyboardAwareScrollView>
                         <View style={{marginTop: 20}}>
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please provide your
                                 information</Text>
@@ -110,10 +65,10 @@ const SignUpP1 = ({navigation}) => {
                                 value={info.confirmPassword}
                                 secureTextEntry={true}
                             />
-                            <NextButton/>
+                            <TransparentButton text={'Next'} onPress={handleButtonPress}/>
                         </View>
-                    </View>
-                </KeyboardAvoidingView>
+                    </KeyboardAwareScrollView>
+                </View>
             </View>
         </TouchableWithoutFeedback>
     )
