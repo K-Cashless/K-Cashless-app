@@ -12,17 +12,20 @@ import {
 import MainStyles from '../styles/MainStyles';
 import {BallIndicator} from "react-native-indicators";
 
+const msg = "🍲 Kagonoya Buffet Delivery 15 ถาดเริ่มต้นที่ 699.- สไตล์โอซาก้าแท้ๆ";
+
 const PromotionLoader = (list, setList) => {
+    // TODO - firebase
     return new Promise((resolve, reject) => {
         let tempList = [];
         for (let i = 0; i < 5; ++i) {
             tempList.push({
                 key: i.toString(),
-                pic: 'https://www.camerastuffreview.com/wp-content/uploads/2019/06/DSC0420-HDRv2.jpg',
+                pic: 'https://scontent.fcnx2-1.fna.fbcdn.net/v/t1.0-9/92392559_3225470824155915_4525602040453267456_o.jpg?_nc_cat=1&_nc_sid=8024bb&_nc_ohc=JFIrHP1jFeMAX-xIcYP&_nc_ht=scontent.fcnx2-1.fna&oh=2f3a801cd263dc40dd8a704d1111dad2&oe=5EB454FD',
                 time: '1/2/2020 10:00 AM',
                 shopName: 'Shop ' + i,
-                shopPic: 'https://scontent.fcnx2-1.fna.fbcdn.net/v/t31.0-8/17547096_861275837346018_5283542374338266044_o.jpg?_nc_cat=107&_nc_sid=85a577&_nc_ohc=tJbF2NxVsKEAX_QuTpz&_nc_ht=scontent.fcnx2-1.fna&oh=96324e77938f7684f10be6879c907ff0&oe=5EB5832E',
-                description: 'This is Description'
+                shopPic: 'https://scontent.fcnx2-1.fna.fbcdn.net/v/t1.0-9/64642155_2447997465236592_9186722105960431616_n.jpg?_nc_cat=1&_nc_sid=85a577&_nc_ohc=J76Ok3XRLbMAX9z3dSe&_nc_ht=scontent.fcnx2-1.fna&oh=c0991a6489f5cb7e80de36e7fe7d148b&oe=5EB689E4',
+                description: msg
             });
         }
         setList(tempList);
