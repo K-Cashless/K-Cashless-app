@@ -46,7 +46,7 @@ const SignUpP2 = ({navigation}) => {
                         <TransparentButton
                             text={'Sign Up'}
                             style={{backgroundColor: 'rgb(38,115,226)'}}
-                            onPress={() => navigation.navigate('SignIn')}
+                            onPress={() => navigation.navigate('SignUpComplete')}
                         />
                     </KeyboardAwareScrollView>
                 </View>
