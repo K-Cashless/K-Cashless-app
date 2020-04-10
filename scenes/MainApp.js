@@ -11,6 +11,7 @@ import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
 import store from '../store';
 import RedDot from '../components/RedDot';
+import PromotionsList from '../components/PromotionsList';
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -39,12 +40,15 @@ const HomeScreen = ({navigation}) => {
 const PromotionsScreen = () => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-            <View style={{
-                marginHorizontal: 20,
-                top: '5%'
-            }}>
-                <PromotionHeader/>
+            <View style={{top: '5%'}}>
+                <View style={{marginHorizontal: 20}}>
+                    <PromotionHeader/>
+                </View>
+                <View style={{marginTop: 20}}>
+                    <PromotionsList/>
+                </View>
             </View>
+
         </View>
     );
 };
