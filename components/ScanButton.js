@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import * as colors from '../styles/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {withNavigation} from 'react-navigation';
@@ -17,6 +17,9 @@ const ScanButton = ({navigation}) => {
                 borderColor: 'white',
                 borderWidth: 3,
                 top: -15,
+                shadowRadius: 20,
+                shadowColor: 'black',
+                shadowOpacity: 0.5,
             }}
             onPress= {()=>{
                 console.log('scan');
