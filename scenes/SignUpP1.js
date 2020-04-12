@@ -26,6 +26,7 @@ const SignUpP1 = ({navigation}) => {
     };
 
     const handleButtonPress = () => {
+        Keyboard.dismiss;
         if (errorState.studentID[0] === false &&
             errorState.email[0] === false &&
             errorState.password[0] === false &&
@@ -51,7 +52,7 @@ const SignUpP1 = ({navigation}) => {
                             <NormalTextInput
                                 placeholder={'Student ID'}
                                 errorRule={[
-                                    {pattern: /.{8}/, message: 'Student ID Length Must Be 8'},
+                                    {pattern: /.{8}/, message: 'Student ID Must Be 8 Digits Long'},
                                     {pattern: /\d{8}/, message: 'Student ID Must Be Numbers Only'}
                                 ]}
                                 onChangeText={(text) => setInfo({...info, studentID: text})}

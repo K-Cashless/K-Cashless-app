@@ -13,6 +13,23 @@ const SignUpP2 = ({navigation}) => {
     const [imgUri, setImgUri] = useState('');
     const [info, setInfo] = useState(navigation.getParam('info', {}));
     const demoPic = require('../assets/demoPic.png');
+    let errorState = {
+        firstName: useState(false),
+        lastName: useState(false),
+        phone: useState(false),
+    };
+    const isFieldError = () => {
+        if (errorState.firstName[0] === false &&
+            errorState.lastName[0] === false &&
+            errorState.phone[0] === false) {
+            if (info.firstName.length > 0 &&
+                info.lastName.length > 0 &&
+                info.phone.length > 0) {
+                return false;
+            }
+        }
+        return true;
+    };
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -31,22 +48,36 @@ const SignUpP2 = ({navigation}) => {
                                 placeholder={'First Name'}
                                 onChangeText={(text) => setInfo({...info, firstName: text})}
                                 value={info.firstName}
+                                errorStatus={errorState.firstName}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'First Name Must Not Be Empty'},
+                                ]}
                             />
                             <NormalTextInput
                                 placeholder={'Last Name'}
                                 onChangeText={(text) => setInfo({...info, lastName: text})}
                                 value={info.lastName}
+                                errorStatus={errorState.lastName}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'Last Name Must Not Be Empty'},
+                                ]}
                             />
                             <NormalTextInput
                                 placeholder={'Phone'}
                                 onChangeText={(text) => setInfo({...info, phone: text})}
                                 value={info.phone}
+                                errorStatus={errorState.phone}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'Phone Number Must Not Be Empty'},
+                                ]}
                             />
                         </View>
                         <TransparentButton
                             text={'Sign Up'}
                             style={{backgroundColor: 'rgb(38,115,226)'}}
                             onPress={() => {
+                                Keyboard.dismiss;
+                                if (isFieldError()) return;
                                 // TODO - firebase
                                 console.log('SEND');
                                 console.log(info);
