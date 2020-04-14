@@ -4,15 +4,18 @@ import {BallIndicator} from "react-native-indicators";
 
 const TransparentButton = ({onPress, text, style}) => {
     const [isLoading, setIsLoading] = useState(false);
+
+    function onPressAction() {
+        setIsLoading(true);
+        onPress();
+        setIsLoading(false);
+    }
+
     return (
         <View style={{marginTop: 20, alignItems: 'flex-end'}}>
             <TouchableHighlight
                 underlayColor='rgba(150,150,150,0.5)'
-                onPress={async () => {
-                    setIsLoading(true);
-                    onPress();
-                    setIsLoading(false);
-                }}
+                onPress={onPressAction}
                 style={[{
                     width: 100,
                     height: 40,
