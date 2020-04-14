@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
@@ -38,17 +38,17 @@ const HomeScreen = ({navigation}) => {
 };
 
 const PromotionsScreen = () => {
+    const [layout, setLayout] = useState({});
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{top: '5%'}}>
                 <View style={{marginHorizontal: 20}}>
-                    <PromotionHeader/>
+                    <PromotionHeader setLayout={setLayout}/>
                 </View>
-                <View style={{marginTop: 20}}>
-                    <PromotionsList/>
+                <View style={{marginTop: 10}}>
+                    <PromotionsList topBarLayout={layout}/>
                 </View>
             </View>
-
         </View>
     );
 };
