@@ -7,8 +7,9 @@ const TransparentButton = ({onPress, text, style}) => {
 
     function onPressAction() {
         setIsLoading(true);
-        onPress();
-        setIsLoading(false);
+        onPress()
+            .then(() => setIsLoading(false))
+            .catch(() => setIsLoading(false));
     }
 
     return (

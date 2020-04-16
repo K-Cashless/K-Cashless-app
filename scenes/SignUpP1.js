@@ -26,18 +26,22 @@ const SignUpP1 = ({navigation}) => {
     };
 
     const handleButtonPress = () => {
-        Keyboard.dismiss;
-        if (errorState.studentID[0] === false &&
-            errorState.email[0] === false &&
-            errorState.password[0] === false &&
-            errorState.confirmPassword[0] === false) {
-            if (info.studentID.length > 0 &&
-                info.email.length > 0 &&
-                info.password.length > 0 &&
-                info.confirmPassword.length > 0) {
-                navigation.navigate('SignUpP2', {info: info});
+        return new Promise((resolve, reject) => {
+            Keyboard.dismiss;
+            if (errorState.studentID[0] === false &&
+                errorState.email[0] === false &&
+                errorState.password[0] === false &&
+                errorState.confirmPassword[0] === false) {
+                if (info.studentID.length > 0 &&
+                    info.email.length > 0 &&
+                    info.password.length > 0 &&
+                    info.confirmPassword.length > 0) {
+                    resolve();
+                    navigation.navigate('SignUpP2', {info: info});
+                }
             }
-        }
+            reject();
+        });
     };
 
     return (

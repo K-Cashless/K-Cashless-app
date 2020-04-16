@@ -1,14 +1,5 @@
 import React, {useState} from 'react';
-import {
-    Alert,
-    Image,
-    Keyboard,
-    Text,
-    TouchableHighlight,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View
-} from 'react-native';
+import {Alert, Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
@@ -17,7 +8,7 @@ import NormalTextInput from "../components/NormalTextInput";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import * as color from '../styles/Colors';
 import axios from 'axios';
-import {BallIndicator} from "react-native-indicators";
+import TransparentButton from "../components/TransparentButton";
 
 const SignUpP2 = ({navigation}) => {
     const [imgUri, setImgUri] = useState('');
@@ -41,10 +32,9 @@ const SignUpP2 = ({navigation}) => {
         return true;
     };
 
-    const SignUpButton = ({style}) => {
-        const [isLoading, setIsLoading] = useState(false);
-
-        const handleSignUp = async () => {
+    const handleSignUp = () => {
+        return new Promise((resolve, reject) => {
+            if (isFieldError()) reject();
             const infoToSend = {
                 email: info.email,
                 password: info.password,
@@ -56,65 +46,22 @@ const SignUpP2 = ({navigation}) => {
             };
             console.log(infoToSend);
 
-            return axios.post('https://asia-east2-k-cash-less.cloudfunctions.net/api/signup', infoToSend)
+            axios.post('https://asia-east2-k-cash-less.cloudfunctions.net/api/signup', infoToSend)
                 .then(res => {
                     console.log(res);
-                })
-        };
-
-        function onPressAction() {
-            Keyboard.dismiss;
-            if (isFieldError()) return;
-            setIsLoading(true);
-            handleSignUp()
-                .then(() => setIsLoading(false))
-                .then(() => {
                     const resetAction = StackActions.reset({
                         index: 0,
                         actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
                     });
                     navigation.dispatch(resetAction);
+                    resolve();
                 })
-                .catch(value => {
-                    console.log(value.response.data.handle);
-                    Alert.alert('Error', value.response.data.handle);
-                    setIsLoading(false);
-                })
-        }
-
-        return (
-            <View style={{marginTop: 20, alignItems: 'flex-end'}}>
-                <TouchableHighlight
-                    underlayColor='rgba(150,150,150,0.5)'
-                    onPress={onPressAction}
-                    style={[{
-                        width: 100,
-                        height: 40,
-                        borderRadius: 80,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }, style]}
-                >
-                    {
-                        isLoading ? (
-                            <BallIndicator color={'white'} size={20}/>
-                        ) : (
-                            <View style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <Text style={{
-                                    fontFamily: 'proxima-bold',
-                                    fontSize: 20,
-                                    color: 'white'
-                                }}>Sign Up</Text>
-                            </View>
-                        )
-                    }
-                </TouchableHighlight>
-            </View>
-        )
+                .catch(error => {
+                    console.log(error.response.data.handle);
+                    Alert.alert('Error', error.response.data.handle);
+                    reject();
+                });
+        });
     };
 
 
@@ -160,9 +107,8 @@ const SignUpP2 = ({navigation}) => {
                                 ]}
                             />
                         </View>
-                        <SignUpButton
-                            style={{backgroundColor: 'rgb(38,115,226)'}}
-                        />
+                        <TransparentButton text={'Sign Up'} onPress={handleSignUp}
+                                           style={{backgroundColor: 'rgb(38,115,226)'}}/>
                     </KeyboardAwareScrollView>
                 </View>
             </View>
