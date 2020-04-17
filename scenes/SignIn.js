@@ -6,30 +6,22 @@ import NormalTextInput from '../components/NormalTextInput';
 import * as colors from '../styles/Colors';
 
 const SignIn = ({navigation}) => {
-    const [userName, setUserName] = useState("");
+    const [email, setUserName] = useState("");
     const [password, setPassword] = useState("");
-    const [errorMsg, setErrorMsg] = useState("");
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={MainStyles.container}>
                 <View style={styles.signInContainer}>
                     <Text style={[MainStyles.head1Text, {textAlign: 'left', paddingBottom: 50}]}>Sign In</Text>
-                    <Text style={{
-                        position: 'absolute',
-                        top: '7%',
-                        fontFamily: 'proxima-bold',
-                        color: 'red',
-                    }}>{errorMsg}</Text>
 
                     {/*Username Input*/}
                     <NormalTextInput
                         placeholder={'Email'}
                         onChangeText={(text) => {
-                            setErrorMsg('');
                             setUserName(text);
                         }}
-                        value={userName}
+                        value={email}
                     />
 
                     {/*Password Input*/}
@@ -37,7 +29,6 @@ const SignIn = ({navigation}) => {
                         placeholder={'Password'}
                         secureTextEntry={true}
                         onChangeText={(text) => {
-                            setErrorMsg('');
                             setPassword(text);
                         }}
                         value={password}
@@ -46,8 +37,7 @@ const SignIn = ({navigation}) => {
                     {/*Sign in Button*/}
                     <SignInButton
                         navigation={navigation}
-                        setErrorMsg={setErrorMsg}
-                        userName={userName}
+                        email={email}
                         password={password}
                     />
 

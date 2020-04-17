@@ -3,6 +3,9 @@ import * as actionType from '../constants/action-const';
 export const initialState = {
     User: {
         id: null,
+        email: null,
+        password: null,
+        token: null,
         pic: null,
         name: null,
         balance: 0,
@@ -96,6 +99,30 @@ const reducer = (state = initialState, action) => {
                 User: {
                     ...state.User,
                     history: action.payload
+                }
+            };
+        case actionType.SET_USER_EMAIL:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    email: action.payload
+                }
+            };
+        case actionType.SET_USER_PASSWORD:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    password: action.payload
+                }
+            };
+        case actionType.SET_USER_TOKEN:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    token: action.payload
                 }
             };
         default:

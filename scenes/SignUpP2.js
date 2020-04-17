@@ -9,6 +9,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import * as color from '../styles/Colors';
 import axios from 'axios';
 import TransparentButton from "../components/TransparentButton";
+import API_URL from '../firebase/apiLinks';
 
 const SignUpP2 = ({navigation}) => {
     const [imgUri, setImgUri] = useState('');
@@ -46,7 +47,7 @@ const SignUpP2 = ({navigation}) => {
             };
             console.log(infoToSend);
 
-            axios.post('https://asia-east2-k-cash-less.cloudfunctions.net/api/signup', infoToSend)
+            axios.post(API_URL.SIGN_UP, infoToSend)
                 .then(res => {
                     console.log(res);
                     const resetAction = StackActions.reset({

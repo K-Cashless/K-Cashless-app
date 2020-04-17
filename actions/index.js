@@ -12,6 +12,9 @@ export const User = {
     }),
     setNotificationsList: (list) => ({type: actionType.SET_USER_NOTIFICATIONS_LIST, payload: list}),
     pushNotificationsList: (list) => ({type: actionType.PUSH_USER_NOTIFICATIONS_LIST, payload: list}),
-    setHistoryList: (list) => ({type: actionType.SET_USER_HISTORY_LIST, payload: list})
+    setHistoryList: (list) => ({type: actionType.SET_USER_HISTORY_LIST, payload: list}),
+    setEmail: (email) => ({type: actionType.SET_USER_EMAIL, payload: email}),
+    setPassword: (password) => ({type: actionType.SET_USER_PASSWORD, payload: password}),
+    setToken: (token) => ({type: actionType.SET_USER_TOKEN, payload: token}),
 };
 

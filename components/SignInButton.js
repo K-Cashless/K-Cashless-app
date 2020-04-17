@@ -1,45 +1,58 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import * as firebase from 'firebase';
+import axios from 'axios';
 import {BallIndicator} from "react-native-indicators";
+import API_URL from '../firebase/apiLinks';
 import * as actions from '../actions';
 import store from '../store';
 
-const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
+// store.dispatch(actions.User.setId('61010000'));
+// store.dispatch(actions.User.setName('Mickey Mouse'));
+// store.dispatch(actions.User.setBalance(100));
+// store.dispatch(actions.User.setKpoints(100));
+// store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
+// navigation.navigate('App');
+
+
+// const errorMessageInterpreter = (message) => {
+//     switch (message){
+//         case message === ''
+//     }
+//
+// };
+
+
+const SignInButton = ({navigation, email, password}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
 
-    async function signIn(userName, password) {
-        try {
-            await firebase
-                .auth()
-                .signInWithEmailAndPassword(userName, password)
-                .then(res => {
-                    console.log(res.user.email);
-                    setIsLoading(false);
-                    setButtonStyle(styles.buttonContainer);
-                })
-                .then(() => {
-                    // TODO-WIP pulling data from firebase
-                    store.dispatch(actions.User.setId('61010000'));
-                    store.dispatch(actions.User.setName('Mickey Mouse'));
-                    store.dispatch(actions.User.setBalance(100));
-                    store.dispatch(actions.User.setKpoints(100));
-                    store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
-                    navigation.navigate('App');
-                });
-        } catch (error) {
-            console.log(error.toString());
-            setErrorMsg(error.message);
-            setIsLoading(false);
-            setButtonStyle(styles.buttonContainer);
-        }
+    function signIn(email, password) {
+        return axios.post(API_URL.SIGN_IN, {email: email, password: password});
     }
 
     const onPressAction = () => {
         setIsLoading(true);
         setButtonStyle(styles.buttonContainerOutline);
-        signIn(userName, password).then(null);
+        signIn(email, password)
+            .then(res => {
+                console.log('Success');
+                store.dispatch(actions.User.setToken(res.data.token));
+
+                store.dispatch(actions.User.setId('61010000'));
+                store.dispatch(actions.User.setName('Mickey Mouse'));
+                store.dispatch(actions.User.setBalance(100));
+                store.dispatch(actions.User.setKpoints(100));
+                store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
+
+                setButtonStyle(styles.buttonContainer);
+                setIsLoading(false);
+                navigation.navigate('App');
+            })
+            .catch(error => {
+                setButtonStyle(styles.buttonContainer);
+                setIsLoading(false);
+                console.log(error);
+            })
     };
 
     return (

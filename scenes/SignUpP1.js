@@ -36,8 +36,8 @@ const SignUpP1 = ({navigation}) => {
                     info.email.length > 0 &&
                     info.password.length > 0 &&
                     info.confirmPassword.length > 0) {
-                    resolve();
                     navigation.navigate('SignUpP2', {info: info});
+                    resolve();
                 }
             }
             reject();
@@ -80,6 +80,7 @@ const SignUpP1 = ({navigation}) => {
                                 placeholder={'Password'}
                                 errorRule={[
                                     {pattern: /.+/, message: 'Password Can\'t Be Empty'},
+                                    {pattern: /.{6,}/, message: 'Password must be at least 6 characters long'},
                                     {pattern: new RegExp(info.confirmPassword, 'g'), message: 'Password Did Not Match'},
                                 ]}
                                 onChangeText={(text) => setInfo({...info, password: text})}
