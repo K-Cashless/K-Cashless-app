@@ -1,25 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import axios from 'axios';
 import {BallIndicator} from "react-native-indicators";
 import API_URL from '../firebase/apiLinks';
 import * as actions from '../actions';
 import store from '../store';
-
-// store.dispatch(actions.User.setId('61010000'));
-// store.dispatch(actions.User.setName('Mickey Mouse'));
-// store.dispatch(actions.User.setBalance(100));
-// store.dispatch(actions.User.setKpoints(100));
-// store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
-// navigation.navigate('App');
-
-
-// const errorMessageInterpreter = (message) => {
-//     switch (message){
-//         case message === ''
-//     }
-//
-// };
 
 
 const SignInButton = ({navigation, email, password}) => {
@@ -51,7 +36,8 @@ const SignInButton = ({navigation, email, password}) => {
             .catch(error => {
                 setButtonStyle(styles.buttonContainer);
                 setIsLoading(false);
-                console.log(error);
+                console.log(error.response);
+                Alert.alert('Error', error.response.message);
             })
     };
 
