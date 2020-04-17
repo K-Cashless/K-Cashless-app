@@ -112,10 +112,10 @@ exports.login = (req, res) => {
 };
 //Get user Data
 exports.getUserData = (req,res) =>{
+  let userData = [];
   db.doc(`/users/${req.user.handle}`)
     .get()
     .then((doc) => {
-      let userData = [];
         userData.push({
           userId: doc.id,
           handle: doc.data().handle,
@@ -131,6 +131,35 @@ exports.getUserData = (req,res) =>{
       return res.json(userData);
     })
 }
+//Get All user
+exports.getAllUserData = (req, res) => {
+  let userData = [];
+  db.collection("users")
+    .get()
+    .then(data => {
+      data.forEach(doc => {
+        userData.push({
+          userId: doc.id,
+          handle: doc.data().handle,
+          email: doc.data().email,
+          firstName: doc.data().firstName,
+          lastName: doc.data().lastName,
+          phone: doc.data().phone,
+          deposit:doc.data().deposit,
+          point:doc.data().point,
+          createdAt: doc.data().createdAt,
+        });
+      });
+      console.log(userData);
+      
+      return res.json(userData);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
 //Add user Detail
 exports.addUserDetails = (req, res) => {
   let userDetails = reduceUserDetails(req.body);
@@ -170,7 +199,23 @@ exports.getAuthenticatedUser = (req, res) => {
       return res.status(500).json({ error: err.code });
     });
 };
+//Forget password
+exports.resetPass = (req,res) =>{
+  let userEmail = {
+    email: req.body.email
+  };
+  firebase.auth()
+  .sendPasswordResetEmail(userEmail.email)
+  .then(()=>{
+    return res.json({ message: 'Password reset sent' });
+  })
+  .catch((err) =>{
+    console.log(err);
+    return res.status(500).json({ error: err.code });
+  })
+}
 
+//Upload Image
 exports.uploadImage = (req, res) => {
   const BusBoy = require("busboy");
   const path = require("path");
@@ -331,7 +376,6 @@ exports.transfer = (req, res) => {
       }
     })
     .catch((err) => {
-      console.error('con'+err);
       res.status(500).json({ error: err.code });
     });
 };

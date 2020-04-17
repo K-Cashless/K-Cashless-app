@@ -6,6 +6,10 @@ const app = express();
 
 const FBAuth = require("./utility/fbAuth");
 
+
+const cors = require('cors');
+app.use(cors());
+
 const { db } = require("./utility/admin");
 
 const {
@@ -21,11 +25,13 @@ const {
   signup,
   login,
   getUserData,
+  resetPass,
   uploadImage,
   addUserDetails,
   getAuthenticatedUser,
   topup,
   transfer,
+  getAllUserData,
 } = require("./handlers/users");
 
 //Scream route
@@ -36,15 +42,18 @@ app.delete("/scream/:screamId", FBAuth, deleteScream);
 app.get("/scream/:screamId/like", FBAuth, likeScream);
 app.get("/scream/:screamId/unlike", FBAuth, unlikeScream);
 app.post("/scream/:screamId/comment", FBAuth, commentOnScream);
+
 //Users route
 app.post("/signup", signup);
 app.post("/login", login);
-app.get("/login",FBAuth, getUserData);
+app.get("/getUserData",FBAuth, getUserData);
+app.post("/resetPass",resetPass)
 app.post("/user/image", FBAuth, uploadImage);
 app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getAuthenticatedUser);
 app.post("/prepaidCard/:cardID",FBAuth,topup);
 app.post("/merchant/:merchantID",FBAuth,transfer);
+app.get("/getAllUserData",getAllUserData);
 
 
 exports.api = functions.region("asia-east2").https.onRequest(app);
