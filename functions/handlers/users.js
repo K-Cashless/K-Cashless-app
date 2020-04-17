@@ -114,9 +114,8 @@ exports.login = (req, res) => {
 exports.getUserData = (req,res) =>{
   db.doc(`/users/${req.user.handle}`)
     .get()
-    .then((data) => {
+    .then((doc) => {
       let userData = [];
-      data.forEach(doc => {
         userData.push({
           userId: doc.id,
           handle: doc.data().handle,
@@ -128,7 +127,6 @@ exports.getUserData = (req,res) =>{
           point:doc.data().point,
           createdAt: doc.data().createdAt,
         });
-      });
       console.log(userData);
       return res.json(userData);
     })

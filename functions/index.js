@@ -39,7 +39,7 @@ app.post("/scream/:screamId/comment", FBAuth, commentOnScream);
 //Users route
 app.post("/signup", signup);
 app.post("/login", login);
-app.get("/login", getUserData);
+app.get("/login",FBAuth, getUserData);
 app.post("/user/image", FBAuth, uploadImage);
 app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getAuthenticatedUser);
