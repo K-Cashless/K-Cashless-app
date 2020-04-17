@@ -20,10 +20,12 @@ const {
 const {
   signup,
   login,
+  getUserData,
   uploadImage,
   addUserDetails,
   getAuthenticatedUser,
   topup,
+  transfer,
 } = require("./handlers/users");
 
 //Scream route
@@ -37,10 +39,13 @@ app.post("/scream/:screamId/comment", FBAuth, commentOnScream);
 //Users route
 app.post("/signup", signup);
 app.post("/login", login);
+app.get("/login", getUserData);
 app.post("/user/image", FBAuth, uploadImage);
 app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getAuthenticatedUser);
 app.post("/prepaidCard/:cardID",FBAuth,topup);
+app.post("/merchant/:merchantID",FBAuth,transfer);
+
 
 exports.api = functions.region("asia-east2").https.onRequest(app);
 

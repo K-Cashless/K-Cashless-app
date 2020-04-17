@@ -33,7 +33,9 @@ exports.signup = (req, res) => {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        return res.status(400).json({ handle: "this handle is already taken" });
+        return res
+          .status(400)
+          .json({ message: "This handle is already taken" });
       } else {
         return firebase
           .auth()
@@ -41,6 +43,8 @@ exports.signup = (req, res) => {
       }
     })
     .then((data) => {
+      console.log("pass");
+
       userId = data.user.uid;
       return data.user.getIdToken();
     })
@@ -84,7 +88,6 @@ exports.login = (req, res) => {
     email: req.body.email,
     password: req.body.password,
   };
-
   const { valid, errors } = validateLoginData(user);
 
   if (!valid) return res.status(400).json(errors);
@@ -103,10 +106,33 @@ exports.login = (req, res) => {
       if (err.code === "auth/wrong-password") {
         return res
           .status(403)
-          .json({ genaral: "Wrong credentials,please try again" });
+          .json({ message: "Wrong credentials,please try again" });
       } else return res.status(500).json({ error: err.code });
     });
 };
+//Get user Data
+exports.getUserData = (req,res) =>{
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then((data) => {
+      let userData = [];
+      data.forEach(doc => {
+        userData.push({
+          userId: doc.id,
+          handle: doc.data().handle,
+          email: doc.data().email,
+          firstName: doc.data().firstName,
+          lastName: doc.data().lastName,
+          phone: doc.data().phone,
+          deposit:doc.data().deposit,
+          point:doc.data().point,
+          createdAt: doc.data().createdAt,
+        });
+      });
+      console.log(userData);
+      return res.json(userData);
+    })
+}
 //Add user Detail
 exports.addUserDetails = (req, res) => {
   let userDetails = reduceUserDetails(req.body);
@@ -210,12 +236,11 @@ exports.topup = (req, res) => {
     value: req.body.value,
     deposit: req.body.deposit,
   };
-  let cardData = {};
   db.doc(`/prepaidCard/${req.params.cardID}`)
     .get()
     .then((doc) => {
       console.log(doc.data().number);
-      console.log(req.user.deposit);
+      console.log(req.params.cardID);
       if (!doc.exists) {
         return res.status(404).json({ error: "Wrong CardID" });
       }
@@ -225,31 +250,75 @@ exports.topup = (req, res) => {
       ) {
         return res.status(404).json({ error: "Wrong value or number of card" });
       }
-      if(doc.data().used === true){
+      if (doc.data().used === true) {
         return res.status(404).json({ error: "This card is already use" });
       }
     })
-    .then(()=>{
+    .then(() => {
       //Fix for easy don't forget change used = True
       const used = false;
       return db.doc(`/prepaidCard/${req.params.cardID}`).update({ used });
     })
-    .then(() =>{
+    .then(() => {
       const whoUsed = req.user.handle;
       return db.doc(`/prepaidCard/${req.params.cardID}`).update({ whoUsed });
     })
-    .then(()=>{
+    .then(() => {
       db.doc(`/users/${req.user.handle}`)
-      .get()
-      .then((doc) => {
-          console.log('tester '+ doc.data().deposit);
-          const deposit = Number(doc.data().deposit) + Number(prepaidCard.value);
+        .get()
+        .then((doc) => {
+          console.log("tester " + doc.data().deposit);
+          const deposit =
+            Number(doc.data().deposit) + Number(prepaidCard.value);
           return db.doc(`/users/${req.user.handle}`).update({ deposit });
+        });
+    })
+    .then((data) => {
+      console.log("done");
+      return res.json({ message: "Top-Up Successful" });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
+exports.transfer = (req, res) => {
+  const merchant = {
+    cost: req.body.cost,
+  };
+  db.doc(`/merchants/${req.params.merchantID}`)
+    .get()
+    .then((doc) => {
+      console.log('num store ' + req.params.merchantID );
+      if (!doc.exists) {
+        return res.status(404).json({ error: "Wrong MerchantID" });
+      };
+    })
+    .then((doc) => {
+      db.doc(`/users/${req.user.handle}`)
+        .get()
+        .then((doc) => {
+          console.log("tester " + doc.data().deposit);
+          const deposit = Number(doc.data().deposit) - Number(merchant.cost);
+          return db.doc(`/users/${req.user.handle}`).update({ deposit });
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).json({ error: err.code });
+        })
+    })
+    .then((doc)=>{
+      db.doc(`/merchants/${req.params.merchantID}`)
+      .get()
+      .then((doc)=>{
+        const total = Number(doc.data().total) + Number(merchant.cost);
+        return db.doc(`/merchants/${req.params.merchantID}`).update({ total });
       })
     })
     .then((data) => {
-      console.log('done');
-      return res.json({ message: "Top-Up Successful" });
+      console.log("done");
+      return res.json({ message: "Paid Successful" });
     })
     .catch((err) => {
       console.error(err);
