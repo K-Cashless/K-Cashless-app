@@ -287,41 +287,53 @@ exports.transfer = (req, res) => {
   const merchant = {
     cost: req.body.cost,
   };
+  const checkMoney = false;
   db.doc(`/merchants/${req.params.merchantID}`)
     .get()
     .then((doc) => {
       console.log('num store ' + req.params.merchantID );
       if (!doc.exists) {
-        return res.status(404).json({ error: "Wrong MerchantID" });
+        return res.status(404).json({ message: "Wrong MerchantID" });
       };
     })
-    .then((doc) => {
+    .then(() => {
       db.doc(`/users/${req.user.handle}`)
         .get()
         .then((doc) => {
+          if(Number(doc.data().deposit) < Number(merchant.cost))
+          {
+            console.log('d l c');
+            
+            return res.status(404).json({ err: "Deposit less than cost" });
+          }
+          else{
           console.log("tester " + doc.data().deposit);
+          checkMoney = true;
           const deposit = Number(doc.data().deposit) - Number(merchant.cost);
           return db.doc(`/users/${req.user.handle}`).update({ deposit });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).json({ error: err.code });
+          }
         })
     })
-    .then((doc)=>{
-      db.doc(`/merchants/${req.params.merchantID}`)
-      .get()
-      .then((doc)=>{
-        const total = Number(doc.data().total) + Number(merchant.cost);
-        return db.doc(`/merchants/${req.params.merchantID}`).update({ total });
-      })
+    .then(()=>{
+      if(checkMoney === true)
+      {
+        db.doc(`/merchants/${req.params.merchantID}`)
+        .get()
+        .then((doc)=>{
+          const total = Number(doc.data().total) + Number(merchant.cost);
+          return db.doc(`/merchants/${req.params.merchantID}`).update({ total });
+        })
+      }
     })
-    .then((data) => {
-      console.log("done");
-      return res.json({ message: "Paid Successful" });
+    .then(() => {
+      if(checkMoney === true)
+      {
+        console.log("done");
+        return res.json({ message: "Paid Successful" });
+      }
     })
     .catch((err) => {
-      console.error(err);
+      console.error('con'+err);
       res.status(500).json({ error: err.code });
     });
 };
