@@ -21,6 +21,7 @@ const SignInButton = ({navigation, email, password}) => {
         signIn(email, password)
             .then(res => {
                 console.log('Success');
+                console.log(res);
                 store.dispatch(actions.User.setToken(res.data.token));
 
                 store.dispatch(actions.User.setId('61010000'));

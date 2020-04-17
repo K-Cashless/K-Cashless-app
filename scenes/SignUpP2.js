@@ -58,8 +58,8 @@ const SignUpP2 = ({navigation}) => {
                     resolve();
                 })
                 .catch(error => {
-                    console.log(error.response.data.handle);
-                    Alert.alert('Error', error.response.data.handle);
+                    console.log(error.response.data.message);
+                    Alert.alert('Error', error.response.data.message);
                     reject();
                 });
         });
