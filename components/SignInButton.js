@@ -15,21 +15,43 @@ const SignInButton = ({navigation, email, password}) => {
         return axios.post(API_URL.SIGN_IN, {email: email, password: password});
     }
 
+    function getUserData(token) {
+        return axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + token}})
+    }
+
     const onPressAction = () => {
         setIsLoading(true);
         setButtonStyle(styles.buttonContainerOutline);
+        let tempToken = '';
         signIn(email, password)
             .then(res => {
-                console.log('Success');
-                console.log(res);
+                // console.log('Success');
+                // console.log(res);
                 store.dispatch(actions.User.setToken(res.data.token));
-
-                store.dispatch(actions.User.setId('61010000'));
-                store.dispatch(actions.User.setName('Mickey Mouse'));
-                store.dispatch(actions.User.setBalance(100));
-                store.dispatch(actions.User.setKpoints(100));
-                store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
-
+                tempToken = res.data.token;
+            })
+            .then(() => {
+                getUserData(tempToken)
+                    .then(res => {
+                        console.log(res.data[0]);
+                        store.dispatch(actions.User.setId(res.data[0].userId));
+                        store.dispatch(actions.User.setName(res.data[0].firstName + " " + res.data[0].lastName));
+                        store.dispatch(actions.User.setBalance(res.data[0].deposit));
+                        store.dispatch(actions.User.setKpoints(res.data[0].point));
+                        store.dispatch(actions.User.setEmail(res.data[0].email));
+                        store.dispatch(actions.User.setPhone(res.data[0].phone));
+                        store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
+                    })
+                    .catch(error => {
+                        console.log('FAILED');
+                        setButtonStyle(styles.buttonContainer);
+                        setIsLoading(false);
+                        // console.log(error);
+                        console.log(error.response);
+                        Alert.alert('Error Getting User Data', error.response.message);
+                    });
+            })
+            .then(() => {
                 setButtonStyle(styles.buttonContainer);
                 setIsLoading(false);
                 navigation.navigate('App');
@@ -38,7 +60,7 @@ const SignInButton = ({navigation, email, password}) => {
                 setButtonStyle(styles.buttonContainer);
                 setIsLoading(false);
                 console.log(error.response);
-                Alert.alert('Error', error.response.message);
+                Alert.alert('Error', error.response.data.message);
             })
     };
 

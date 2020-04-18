@@ -4,9 +4,8 @@ export const initialState = {
     User: {
         id: null,
         email: null,
-        password: null,
         token: null,
-        pic: null,
+        pic: 'https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613',
         name: null,
         balance: 0,
         kpoints: 0,
@@ -14,7 +13,8 @@ export const initialState = {
             haveUnread: false,
             list: []
         },
-        history: []
+        history: [],
+        phone: null,
     }
 };
 
@@ -109,20 +109,20 @@ const reducer = (state = initialState, action) => {
                     email: action.payload
                 }
             };
-        case actionType.SET_USER_PASSWORD:
-            return {
-                ...state,
-                User: {
-                    ...state.User,
-                    password: action.payload
-                }
-            };
         case actionType.SET_USER_TOKEN:
             return {
                 ...state,
                 User: {
                     ...state.User,
                     token: action.payload
+                }
+            };
+        case actionType.SET_USER_PHONE:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    phone: action.payload
                 }
             };
         default:
