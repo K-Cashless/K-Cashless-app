@@ -5,7 +5,7 @@ export const initialState = {
         id: null,
         email: null,
         token: null,
-        pic: 'https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613',
+        pic: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Solid_white.svg',
         firstName: null,
         lastName: null,
         balance: 0,

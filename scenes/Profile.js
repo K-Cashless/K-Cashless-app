@@ -44,7 +44,6 @@ const ProfileCard = ({User}) => {
                 </View>
 
                 <View style={{flex: 3, marginLeft: 20, height: 110, justifyContent: 'flex-start'}}>
-                    {/*Sample Data*/}
                     <Text style={{
                         fontFamily: 'proxima-bold',
                         fontSize: 18,

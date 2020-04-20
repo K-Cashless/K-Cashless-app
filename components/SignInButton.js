@@ -39,7 +39,7 @@ const SignInButton = ({navigation, email, password}) => {
                         store.dispatch(actions.User.setKpoints(res.data[0].point));
                         store.dispatch(actions.User.setEmail(res.data[0].email));
                         store.dispatch(actions.User.setPhone(res.data[0].phone));
-                        store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
+                        store.dispatch(actions.User.setPic(res.data[0].imageUrl));
                     })
                     .catch(error => {
                         console.log('FAILED');
