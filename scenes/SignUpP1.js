@@ -26,18 +26,22 @@ const SignUpP1 = ({navigation}) => {
     };
 
     const handleButtonPress = () => {
-        Keyboard.dismiss;
-        if (errorState.studentID[0] === false &&
-            errorState.email[0] === false &&
-            errorState.password[0] === false &&
-            errorState.confirmPassword[0] === false) {
-            if (info.studentID.length > 0 &&
-                info.email.length > 0 &&
-                info.password.length > 0 &&
-                info.confirmPassword.length > 0) {
-                navigation.navigate('SignUpP2', {info: info});
+        return new Promise((resolve, reject) => {
+            Keyboard.dismiss;
+            if (errorState.studentID[0] === false &&
+                errorState.email[0] === false &&
+                errorState.password[0] === false &&
+                errorState.confirmPassword[0] === false) {
+                if (info.studentID.length > 0 &&
+                    info.email.length > 0 &&
+                    info.password.length > 0 &&
+                    info.confirmPassword.length > 0) {
+                    navigation.navigate('SignUpP2', {info: info});
+                    resolve();
+                }
             }
-        }
+            reject();
+        });
     };
 
     return (
@@ -76,6 +80,7 @@ const SignUpP1 = ({navigation}) => {
                                 placeholder={'Password'}
                                 errorRule={[
                                     {pattern: /.+/, message: 'Password Can\'t Be Empty'},
+                                    {pattern: /.{6,}/, message: 'Password must be at least 6 characters long'},
                                     {pattern: new RegExp(info.confirmPassword, 'g'), message: 'Password Did Not Match'},
                                 ]}
                                 onChangeText={(text) => setInfo({...info, password: text})}

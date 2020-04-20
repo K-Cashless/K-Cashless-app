@@ -5,6 +5,8 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const ForgetPasswordComplete = ({navigation}) => {
+    const email = navigation.getParam('email', {});
+    console.log(email);
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -17,8 +19,9 @@ const ForgetPasswordComplete = ({navigation}) => {
                                 Password Reset Email Sent
                             </Text>
                         </View>
-                        <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>An email has been sent to your email
-                            address. Please follow the instructions in the email to reset password.</Text>
+                        <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>An email has been sent to <Text
+                            style={{fontFamily: 'proxima-bold'}}>{email}</Text>{'\n\n'}Please follow the instructions in
+                            the email to reset password.</Text>
                     </View>
                     <View style={{flex: 1}}/>
                 </View>

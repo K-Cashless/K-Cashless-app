@@ -1,12 +1,12 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyCgHJXJe1oUoIucKlGmoFsVdHGCBOeoAaU",
-    authDomain: "kcashless-demo.firebaseapp.com",
-    databaseURL: "https://kcashless-demo.firebaseio.com",
-    projectId: "kcashless-demo",
-    storageBucket: "kcashless-demo.appspot.com",
-    messagingSenderId: "33620630259",
-    appId: "1:33620630259:web:659556fa935013d494b586",
-    measurementId: "G-6B246S53K3"
+    apiKey: "AIzaSyBBJUSTHQcBy1Ab0eJ92-wktJubYiO1ueY",
+    authDomain: "k-cash-less.firebaseapp.com",
+    databaseURL: "https://k-cash-less.firebaseio.com",
+    projectId: "k-cash-less",
+    storageBucket: "k-cash-less.appspot.com",
+    messagingSenderId: "39627483583",
+    appId: "1:39627483583:web:ac1c711e2b4f421247190a",
+    measurementId: "G-7DC35RWHQR"
 };
 
 export default firebaseConfig;

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
@@ -7,7 +7,9 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import * as color from '../styles/Colors';
+import axios from 'axios';
 import TransparentButton from "../components/TransparentButton";
+import API_URL from '../firebase/apiLinks';
 
 const SignUpP2 = ({navigation}) => {
     const [imgUri, setImgUri] = useState('');
@@ -30,6 +32,40 @@ const SignUpP2 = ({navigation}) => {
         }
         return true;
     };
+
+    const handleSignUp = () => {
+        return new Promise((resolve, reject) => {
+            if (isFieldError()) reject();
+            const infoToSend = {
+                email: info.email,
+                password: info.password,
+                confirmPassword: info.confirmPassword,
+                handle: info.studentID,
+                firstName: info.firstName,
+                lastName: info.lastName,
+                phone: info.phone
+            };
+            console.log(infoToSend);
+
+            axios.post(API_URL.SIGN_UP, infoToSend)
+                .then(res => {
+                    console.log(res);
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
+                    });
+                    navigation.dispatch(resetAction);
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response.data.message);
+                    Alert.alert('Error', error.response.data.message);
+                    reject();
+                });
+        });
+    };
+
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -72,22 +108,8 @@ const SignUpP2 = ({navigation}) => {
                                 ]}
                             />
                         </View>
-                        <TransparentButton
-                            text={'Sign Up'}
-                            style={{backgroundColor: 'rgb(38,115,226)'}}
-                            onPress={() => {
-                                Keyboard.dismiss;
-                                if (isFieldError()) return;
-                                // TODO - firebase
-                                console.log('SEND');
-                                console.log(info);
-                                const resetAction = StackActions.reset({
-                                    index: 0,
-                                    actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
-                                });
-                                navigation.dispatch(resetAction);
-                            }}
-                        />
+                        <TransparentButton text={'Sign Up'} onPress={handleSignUp}
+                                           style={{backgroundColor: 'rgb(38,115,226)'}}/>
                     </KeyboardAwareScrollView>
                 </View>
             </View>

@@ -1,22 +1,14 @@
 import React, {useState} from 'react';
-import {
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TouchableHighlight,
-    TouchableWithoutFeedback,
-    View
-} from 'react-native';
+import {Alert, Keyboard, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {BallIndicator} from "react-native-indicators";
+import TransparentButton from "../components/TransparentButton";
+import axios from 'axios';
+import API_URL from "../firebase/apiLinks";
 
 const ForgetPassword = ({navigation}) => {
     const [email, setEmail] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -32,43 +24,31 @@ const ForgetPassword = ({navigation}) => {
                                 placeholder={'Enter your email'}
                                 onChangeText={(text) => setEmail(text)}
                                 value={email}
-                                style={{marginBottom: 20}}
+                                style={{marginBottom: 5}}
+                                errorRule={[{
+                                    pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                    message: 'Incorrect Email Format'
+                                }]}
                             />
-                            <View style={{alignItems: 'flex-end'}}>
-                                <TouchableHighlight
-                                    underlayColor='rgba(150,150,150,0.5)'
+                            <View style={{marginTop: 10, alignItems: 'flex-end'}}>
+                                <TransparentButton
+                                    style={{backgroundColor: 'rgb(38,115,226)'}}
+                                    text={'Next'}
                                     onPress={() => {
-                                        setIsLoading(false);
-                                        navigation.replace('ForgetPasswordComplete');
+                                        return new Promise((resolve, reject) => {
+                                            axios.post(API_URL.FORGET_PASSWORD, {email: email})
+                                                .then(res => {
+                                                    navigation.replace('ForgetPasswordComplete', {email: email});
+                                                    resolve();
+                                                })
+                                                .catch(error => {
+                                                    console.log(error.response);
+                                                    Alert.alert('Error', error.response.data);
+                                                    reject();
+                                                })
+                                        })
                                     }}
-                                    style={{
-                                        width: 100,
-                                        height: 40,
-                                        borderRadius: 80,
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                >
-                                    {
-                                        isLoading ? (
-                                            <BallIndicator color={'white'} size={20}/>
-                                        ) : (
-                                            <View style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                justifyContent: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    fontFamily: 'proxima-bold',
-                                                    fontSize: 20,
-                                                    color: 'white'
-                                                }}>Next</Text>
-                                                <Icon name={'chevron-right'} size={20} color={'white'}
-                                                      style={{marginLeft: 7}}/>
-                                            </View>
-                                        )
-                                    }
-                                </TouchableHighlight>
+                                />
                             </View>
                         </View>
                         <View style={{flex: 1}}/>

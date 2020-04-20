@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from "../styles/MainStyles";
 import BlueButton from '../components/BlueButton';
 import SubScreenHeader from "../components/SubScreenHeader";
@@ -7,7 +7,6 @@ import KPointRect from "../components/KPointRect";
 import NumberTextInput from "../components/NumberTextInput";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import store from '../store';
-import * as actions from '../actions';
 
 const RedeemPoint = ({navigation}) => {
     const [redeemValue, setRedeemValue] = useState('');
@@ -75,8 +74,13 @@ const RedeemButton = ({value, disable, navigation}) => {
     return (
         <BlueButton text={'Redeem ' + value + ' Points'} disable={disable}
                     onPress={() => {
-                        store.dispatch(actions.User.setKpoints(store.getState().User.kpoints - value));
-                        navigation.replace('RedeemPointComplete');
+                        return new Promise((resolve, reject) => {
+                            // store.dispatch(actions.User.setKpoints(store.getState().User.kpoints - value));
+                            setTimeout(() => {
+                                navigation.replace('RedeemPointComplete');
+                                resolve('success');
+                            }, 1000);
+                        });
                     }}/>
     );
 };

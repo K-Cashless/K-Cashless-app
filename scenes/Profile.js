@@ -50,12 +50,12 @@ const ProfileCard = ({User}) => {
                         fontSize: 18,
                         fontWeight: 'bold',
                         color: 'white',
-                    }}>{User.name}</Text>
+                    }}>{User.firstName} {User.lastName}</Text>
                     <Text style={{
                         fontFamily: 'proxima-regular',
                         fontSize: 18,
                         color: 'white',
-                    }}>090-0000000</Text>
+                    }}>{User.email}</Text>
                     <View style={{flex: 1, marginTop: 10}}>
                         <Text style={{
                             fontFamily: 'proxima-bold',

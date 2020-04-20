@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {RefreshControl, ScrollView, Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
@@ -14,26 +14,44 @@ import RedDot from '../components/RedDot';
 import PromotionsList from '../components/PromotionsList';
 
 const HomeScreen = ({navigation}) => {
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = () => {
+
+    };
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             {/*Header*/}
-            <View style={{
-                marginHorizontal: 20,
-                top: '5%'
-            }}>
-                <HomeHeader navigation={navigation}/>
-            </View>
-
-            {/*K Point Balance*/}
-            <View style={{marginHorizontal: 20, marginTop: '13%'}}>
-                <KPointRect navigation={navigation} redeemButton={true}/>
-            </View>
-
-            {/*Quick Actions*/}
-            <View style={{marginHorizontal: 20, top: '5%'}}>
-                <QuickActionsGrid navigation={navigation}/>
+            <View style={{top: '5%'}}>
+                <View style={{
+                    marginHorizontal: 20,
+                }}>
+                    <HomeHeader navigation={navigation}/>
+                    <ScrollView
+                        style={{marginTop: 20}}
+                        showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl
+                                tintColor='white'
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }
+                    >
+                        {/*K Point Balance*/}
+                        <View style={{marginTop: 20}}>
+                            <KPointRect navigation={navigation} redeemButton={true}/>
+                        </View>
+                        {/*Quick Actions*/}
+                        <View style={{marginTop: 20}}>
+                            <QuickActionsGrid navigation={navigation}/>
+                        </View>
+                        <View style={{height: 200}}/>
+                    </ScrollView>
+                </View>
             </View>
         </View>
+
     );
 };
 

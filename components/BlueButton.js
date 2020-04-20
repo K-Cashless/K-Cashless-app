@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {BallIndicator} from "react-native-indicators";
 import {BlueButton as BlueButtonStyle} from '../styles/MainStyles';
 
@@ -17,9 +17,11 @@ const BlueButton = ({disable, onPress, text}) => {
         <View style={BlueButtonStyle.buttonAlign}>
             <TouchableOpacity
                 style={buttonStyle}
-                onPress={async () => {
+                onPress={() => {
                     setIsLoading(true);
-                    onPress();
+                    onPress()
+                        .then(() => setIsLoading(false))
+                        .catch(() => setIsLoading(false));
                 }}
                 disabled={disable}>
                 <Text style={[BlueButtonStyle.buttonText, {color: buttonTextColor}]}>

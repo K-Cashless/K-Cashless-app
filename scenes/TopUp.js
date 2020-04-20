@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from '../components/SubScreenHeader';
 import LInfoSectionTHB from '../components/LInfoSectionTHB';
@@ -30,7 +30,10 @@ const TopUp = ({navigation, balance}) => {
                         placeholder={'Enter top up code'}
                     />
                     <BlueButton text={'Top Up'} onPress={() => {
-                        navigation.replace('TopUpComplete')
+                        return new Promise((resolve, reject) => {
+                            navigation.replace('TopUpComplete');
+                            resolve();
+                        });
                     }} disable={topUpCode.length === 0}/>
                 </View>
             </View>

@@ -3,15 +3,19 @@ import * as actionType from '../constants/action-const';
 export const initialState = {
     User: {
         id: null,
-        pic: null,
-        name: null,
+        email: null,
+        token: null,
+        pic: 'https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613',
+        firstName: null,
+        lastName: null,
         balance: 0,
         kpoints: 0,
         notifications: {
             haveUnread: false,
             list: []
         },
-        history: []
+        history: [],
+        phone: null,
     }
 };
 
@@ -33,12 +37,20 @@ const reducer = (state = initialState, action) => {
                     pic: action.payload
                 }
             };
-        case actionType.SET_USER_NAME:
+        case actionType.SET_USER_FIRST_NAME:
             return {
                 ...state,
                 User: {
                     ...state.User,
-                    name: action.payload
+                    firstName: action.payload
+                }
+            };
+        case actionType.SET_USER_LAST_NAME:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    lastName: action.payload
                 }
             };
         case actionType.SET_USER_BALANCE:
@@ -96,6 +108,30 @@ const reducer = (state = initialState, action) => {
                 User: {
                     ...state.User,
                     history: action.payload
+                }
+            };
+        case actionType.SET_USER_EMAIL:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    email: action.payload
+                }
+            };
+        case actionType.SET_USER_TOKEN:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    token: action.payload
+                }
+            };
+        case actionType.SET_USER_PHONE:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    phone: action.payload
                 }
             };
         default:
