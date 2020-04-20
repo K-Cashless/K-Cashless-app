@@ -6,7 +6,8 @@ export const initialState = {
         email: null,
         token: null,
         pic: 'https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613',
-        name: null,
+        firstName: null,
+        lastName: null,
         balance: 0,
         kpoints: 0,
         notifications: {
@@ -36,12 +37,20 @@ const reducer = (state = initialState, action) => {
                     pic: action.payload
                 }
             };
-        case actionType.SET_USER_NAME:
+        case actionType.SET_USER_FIRST_NAME:
             return {
                 ...state,
                 User: {
                     ...state.User,
-                    name: action.payload
+                    firstName: action.payload
+                }
+            };
+        case actionType.SET_USER_LAST_NAME:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    lastName: action.payload
                 }
             };
         case actionType.SET_USER_BALANCE:

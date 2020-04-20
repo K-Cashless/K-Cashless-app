@@ -25,8 +25,6 @@ const SignInButton = ({navigation, email, password}) => {
         let tempToken = '';
         signIn(email, password)
             .then(res => {
-                // console.log('Success');
-                // console.log(res);
                 store.dispatch(actions.User.setToken(res.data.token));
                 tempToken = res.data.token;
             })
@@ -35,7 +33,8 @@ const SignInButton = ({navigation, email, password}) => {
                     .then(res => {
                         console.log(res.data[0]);
                         store.dispatch(actions.User.setId(res.data[0].userId));
-                        store.dispatch(actions.User.setName(res.data[0].firstName + " " + res.data[0].lastName));
+                        store.dispatch(actions.User.setFirstName(res.data[0].firstName));
+                        store.dispatch(actions.User.setLastName(res.data[0].lastName));
                         store.dispatch(actions.User.setBalance(res.data[0].deposit));
                         store.dispatch(actions.User.setKpoints(res.data[0].point));
                         store.dispatch(actions.User.setEmail(res.data[0].email));
@@ -46,7 +45,6 @@ const SignInButton = ({navigation, email, password}) => {
                         console.log('FAILED');
                         setButtonStyle(styles.buttonContainer);
                         setIsLoading(false);
-                        // console.log(error);
                         console.log(error.response);
                         Alert.alert('Error Getting User Data', error.response.message);
                     });
