@@ -6,8 +6,7 @@ const app = express();
 
 const FBAuth = require("./utility/fbAuth");
 
-
-const cors = require('cors');
+const cors = require("cors");
 app.use(cors());
 
 const { db } = require("./utility/admin");
@@ -19,7 +18,7 @@ const {
   commentOnScream,
   likeScream,
   unlikeScream,
-  deleteScream
+  deleteScream,
 } = require("./handlers/screams");
 const {
   signup,
@@ -33,6 +32,18 @@ const {
   transfer,
   getAllUserData,
 } = require("./handlers/users");
+const {
+  merchantSignup,
+  merchantLogin,
+  getMerchantData,
+  getAllMerchantData,
+} = require("./handlers/merchants");
+
+//Merchants route
+app.post("/merchantSignup", merchantSignup);
+app.post("/merchantLogin", merchantLogin);
+app.get("/getMerchantData", FBAuth, getMerchantData);
+app.get("/getAllMerchantData", getAllMerchantData);
 
 //Scream route
 app.get("/screams", getAllScreams);
@@ -46,26 +57,25 @@ app.post("/scream/:screamId/comment", FBAuth, commentOnScream);
 //Users route
 app.post("/signup", signup);
 app.post("/login", login);
-app.get("/getUserData",FBAuth, getUserData);
-app.post("/resetPass",resetPass)
+app.get("/getUserData", FBAuth, getUserData);
+app.post("/resetPass", resetPass);
 app.post("/user/image", FBAuth, uploadImage);
 app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getAuthenticatedUser);
-app.post("/prepaidCard/:cardID",FBAuth,topup);
-app.post("/merchant/:merchantID",FBAuth,transfer);
-app.get("/getAllUserData",getAllUserData);
-
+app.post("/prepaidCard/:cardID", FBAuth, topup);
+app.post("/merchant/:merchantID", FBAuth, transfer);
+app.get("/getAllUserData", getAllUserData);
 
 exports.api = functions.region("asia-east2").https.onRequest(app);
 
 exports.createNotificationOnLike = functions
   .region("asia-east2")
   .firestore.document("likes/{id}")
-  .onCreate(snapshot => {
+  .onCreate((snapshot) => {
     return db
       .doc(`/screams/${snapshot.data().screamId}`)
       .get()
-      .then(doc => {
+      .then((doc) => {
         if (
           doc.exists &&
           doc.data().userHandle !== snapshot.data().userHandle
@@ -76,20 +86,20 @@ exports.createNotificationOnLike = functions
             sender: snapshot.data().userHandle,
             type: "like",
             read: false,
-            screamId: doc.id
+            screamId: doc.id,
           });
         }
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   });
 exports.deleteNotificationOnUnLike = functions
   .region("asia-east2")
   .firestore.document("likes/{id}")
-  .onDelete(snapshot => {
+  .onDelete((snapshot) => {
     return db
       .doc(`/notifications/${snapshot.id}`)
       .delete()
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         return;
       });
@@ -97,11 +107,11 @@ exports.deleteNotificationOnUnLike = functions
 exports.createNotificationOnComment = functions
   .region("asia-east2")
   .firestore.document("comments/{id}")
-  .onCreate(snapshot => {
+  .onCreate((snapshot) => {
     return db
       .doc(`/screams/${snapshot.data().screamId}`)
       .get()
-      .then(doc => {
+      .then((doc) => {
         if (
           doc.exists &&
           doc.data().userHandle !== snapshot.data().userHandle
@@ -112,11 +122,11 @@ exports.createNotificationOnComment = functions
             sender: snapshot.data().userHandle,
             type: "comment",
             read: false,
-            screamId: doc.id
+            screamId: doc.id,
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         return;
       });
@@ -125,7 +135,7 @@ exports.createNotificationOnComment = functions
 exports.onUserImageChange = functions
   .region("asia-east2")
   .firestore.document("/users/{userId}")
-  .onUpdate(change => {
+  .onUpdate((change) => {
     console.log(change.before.data());
     console.log(change.after.data());
     if (change.before.data().imageUrl !== change.after.data().imageUrl) {
@@ -135,8 +145,8 @@ exports.onUserImageChange = functions
         .collection("screams")
         .where("userHandle", "==", change.before.data().handle)
         .get()
-        .then(data => {
-          data.forEach(doc => {
+        .then((data) => {
+          data.forEach((doc) => {
             const scream = db.doc(`/screams/${doc.id}`);
             batch.update(scream, { userImage: change.after.data().imageUrl });
           });
@@ -155,17 +165,14 @@ exports.onScreamDelete = functions
       .collection("comments")
       .where("screamId", "==", screamId)
       .get()
-      .then(data => {
-        data.forEach(doc => {
+      .then((data) => {
+        data.forEach((doc) => {
           batch.delete(db.doc(`/comments/${doc.id}`));
         });
-        return db
-          .collection("likes")
-          .where("screamId", "==", screamId)
-          .get();
+        return db.collection("likes").where("screamId", "==", screamId).get();
       })
-      .then(data => {
-        data.forEach(doc => {
+      .then((data) => {
+        data.forEach((doc) => {
           batch.delete(db.doc(`/likes/${doc.id}`));
         });
         return db
@@ -173,16 +180,15 @@ exports.onScreamDelete = functions
           .where("screamId", "==", screamId)
           .get();
       })
-      .then(data => {
-        data.forEach(doc => {
+      .then((data) => {
+        data.forEach((doc) => {
           batch.delete(db.doc(`/notifications/${doc.id}`));
         });
         return batch.commit();
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   });
 
- 
-  exports.helloWorld = functions.https.onRequest((request,response) =>{
-    response.send('Hello world');
-  });
+exports.helloWorld = functions.https.onRequest((request, response) => {
+  response.send("Hello world");
+});
