@@ -6,7 +6,7 @@ const QuickActionsGrid = ({navigation}) => {
     return (
         <View style={{
             width: '100%',
-            height: '70%',
+            height: 300,
         }}>
             {/*ROW 1*/}
             <View style={style.gridRowContainer}>
@@ -16,10 +16,9 @@ const QuickActionsGrid = ({navigation}) => {
                 <GridButton
                     text={'History'}
                     iconName={'hourglass-half'}
-                    onPress={() =>{navigation.navigate('History')}}/>
-            </View>
-            {/*ROW 2*/}
-            <View style={style.gridRowContainer}>
+                    onPress={() => {
+                        navigation.navigate('History')
+                    }}/>
                 <GridButton text={'Library'} iconName={'book-reader'} onPress={() => {
                     navigation.navigate('Library')
                 }}/>
