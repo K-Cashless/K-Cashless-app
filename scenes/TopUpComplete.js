@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import API_URL from '../firebase/apiLinks';
 import * as actions from '../actions';
+import store from '../store';
 
 const TopUpComplete = ({navigation, User}) => {
     const topUpValue = navigation.getParam('topUpValue', '??');
@@ -14,6 +15,7 @@ const TopUpComplete = ({navigation, User}) => {
         (async () => {
             await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + User.token}})
                 .then(res => {
+                    console.log(res);
                     store.dispatch(actions.User.setId(res.data[0].userId));
                     store.dispatch(actions.User.setFirstName(res.data[0].firstName));
                     store.dispatch(actions.User.setLastName(res.data[0].lastName));
