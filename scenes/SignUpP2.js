@@ -14,7 +14,7 @@ import API_URL from '../firebase/apiLinks';
 const SignUpP2 = ({navigation}) => {
     const [imgUri, setImgUri] = useState('');
     const [info, setInfo] = useState(navigation.getParam('info', {}));
-    const demoPic = require('../assets/demoPic.png');
+    const demoPic = require('../assets/solid-white.png');
     let errorState = {
         firstName: useState(false),
         lastName: useState(false),

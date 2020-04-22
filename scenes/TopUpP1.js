@@ -14,6 +14,7 @@ const TopUpP1 = ({navigation, User}) => {
     const refRBSheet = useRef();
     const [hasCameraPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const [confirm, setConfirm] = useState(false);
     const [topUpInfo, setTopUpInfo] = useState({});
     useEffect(() => {
         (async () => {
@@ -85,17 +86,17 @@ const TopUpP1 = ({navigation, User}) => {
                     }
                 }}
                 onClose={() => {
-                    setScanned(false);
+                    if (!confirm) setScanned(false);
                 }}
             >
                 <TopUpInfoCard topUpInfo={topUpInfo} navigation={navigation} refRBSheet={refRBSheet}
-                               token={User.token}/>
+                               token={User.token} setConfirm={setConfirm}/>
             </RBSheet>
         </View>
     )
 };
 
-const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token}) => {
+const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setConfirm}) => {
     const logo = require('../assets/logo.png');
     const gradient = require('../assets/13561.png');
     const TopUpCard = () => {
@@ -153,6 +154,9 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token}) => {
             axios.post(link, tempData, {'headers': {'Authorization': 'Bearer ' + token}})
                 .then(res => {
                     console.log(res);
+                    setConfirm(true);
+                })
+                .then(() => {
                     refRBSheet.current.close();
                 })
                 .then(value => {

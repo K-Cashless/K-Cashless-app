@@ -134,6 +134,21 @@ const reducer = (state = initialState, action) => {
                     phone: action.payload
                 }
             };
+        case actionType.UPDATE_USER_DATA:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    id: payload.id,
+                    email: payload.email,
+                    pic: payload.pic,
+                    firstName: payload.firstName,
+                    lastName: payload.lastName,
+                    balance: payload.balance,
+                    kpoints: payload.kpoints,
+                    phone: payload.phone,
+                }
+            };
         default:
             return state;
     }
