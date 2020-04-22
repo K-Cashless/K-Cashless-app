@@ -1,15 +1,6 @@
 import React, {useState} from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import {
-    Image,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View
-} from 'react-native';
+import {Alert, Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import SubScreenHeader from "../components/SubScreenHeader";
 import MInfoSection from '../components/MInfoSection';
 import MainStyles from '../styles/MainStyles';
@@ -18,14 +9,15 @@ import * as color from '../styles/Colors';
 import NormalTextInput from "../components/NormalTextInput";
 import store from '../store';
 import * as actions from '../actions';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import API_URL from "../firebase/apiLinks";
+import axios from 'axios';
+
 
 const ManageAccount = ({navigation, User}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-            <KeyboardAvoidingView
-                behavior={Platform.Os === "ios" ? "padding" : "height"}
-                style={{flex: 1}}
-            >
+            <KeyboardAwareScrollView>
                 <TouchableWithoutFeedback
                     onPress={() => {
                         Keyboard.dismiss();
@@ -38,19 +30,21 @@ const ManageAccount = ({navigation, User}) => {
                                 <Image source={{uri: User.pic}}
                                        style={{width: 100, height: 100, borderRadius: 100}}
                                        resizeMode='cover'/>
-                                <TextButton text={'EDIT'} color={color.primary} onPress={() => handleImagePicking()}/>
+                                <TextButton text={'EDIT'} color={color.primary}
+                                            onPress={() => handleImagePicking(User.token)}/>
                             </View>
 
-                            <View style={{flexDirection: 'row', marginTop: 20}}>
-                                <MInfoSection title={'STUDENT ID'} value={User.id + ''}/>
-                            </View>
-                            <UserInfo title={'NAME'} value={User.name + ''}/>
-                            <UserInfo title={'PHONE'} value={User.phone + ''}/>
-
+                            {/*<View style={{flexDirection: 'row', marginTop: 20}}>*/}
+                            {/*    <MInfoSection title={'Student ID'} value={User.id + ''}/>*/}
+                            {/*</View>*/}
+                            <UserInfo title={'Student ID'} value={User.firstName}/>
+                            <UserInfo title={'First Name'} value={User.firstName}/>
+                            <UserInfo title={'Last Name'} value={User.lastName}/>
+                            <UserInfo title={'Phone'} value={User.phone}/>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
         </View>
     )
 };
@@ -60,7 +54,7 @@ const UserInfo = ({title, value, onFinishEditing}) => {
 
     return (
         <View>
-            <View style={{flexDirection: 'row', marginTop: 20}}>
+            <View style={{flexDirection: 'row', marginTop: 5}}>
                 <View style={{flex: 2}}>
                     <MInfoSection title={title} value={value}/>
                 </View>
@@ -89,12 +83,12 @@ const UserInfo = ({title, value, onFinishEditing}) => {
 const TextButton = ({text, color, onPress}) => {
     return (
         <TouchableOpacity style={{margin: 20}} onPress={onPress}>
-            <Text style={[MainStyles.head2Text, {color: color}]}>{text}</Text>
+            <Text style={[MainStyles.head2Text, {fontSize: 16, color: color}]}>{text}</Text>
         </TouchableOpacity>
     )
 };
 
-const handleImagePicking = async () => {
+const handleImagePicking = async (token) => {
     let permission = await ImagePicker.requestCameraRollPermissionsAsync();
     if (permission.status === 'granted') {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -104,8 +98,24 @@ const handleImagePicking = async () => {
             quality: 1
         });
         if (result.cancelled === false) {
-            // TODO - update data with database
-            store.dispatch(actions.User.setPic(result.uri));
+            let infoToSend = new FormData();
+            infoToSend.append('image', {
+                uri: result.uri,
+                name: 'userProfile.jpg',
+                type: 'image/jpg'
+            });
+            console.log("uploading: ", result);
+            axios.post(API_URL.UPLOAD_IMAGE, infoToSend, {
+                'headers': {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+                .then(res => {
+                    Alert.alert('SUCCESS');
+                    store.dispatch(actions.User.setPic(result.uri));
+                })
+                .catch(error => console.log(error));
         }
     }
 };

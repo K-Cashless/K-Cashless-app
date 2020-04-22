@@ -3,7 +3,7 @@ import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import TransparentButton from "../components/TransparentButton";
 
 
