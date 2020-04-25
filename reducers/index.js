@@ -16,7 +16,7 @@ export const initialState = {
         },
         history: [],
         phone: null,
-    }
+    },
 };
 
 const reducer = (state = initialState, action) => {
