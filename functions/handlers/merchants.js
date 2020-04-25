@@ -4,8 +4,6 @@ const config = require("../utility/config.js");
 
 const firebase = require("firebase");
 
-//firebase.initializeApp(config);
-
 const {
     validateSignupData,
     validateLoginData,
@@ -112,9 +110,11 @@ const {
   //Get Merchant Data
 exports.getMerchantData = (req,res) =>{
     let merchantData = [];
-    db.doc(`/merchants/${req.user.handle}`)
+    db.doc(`/merchants/${req.merchant.handle}`)
       .get()
       .then((doc) => {
+        console.log('mh'+req.merchant.handle);
+        
           merchantData.push({
             userId: doc.id,
             handle: doc.data().handle,
@@ -158,3 +158,7 @@ exports.getMerchantData = (req,res) =>{
         res.status(500).json({ error: err.code });
       });
   };
+
+  exports.moneyRequest = (req,res) =>{
+    
+  }

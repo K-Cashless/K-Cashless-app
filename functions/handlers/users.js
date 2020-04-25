@@ -111,34 +111,34 @@ exports.login = (req, res) => {
     });
 };
 //Get user Data
-exports.getUserData = (req,res) =>{
+exports.getUserData = (req, res) => {
   let userData = [];
   db.doc(`/users/${req.user.handle}`)
     .get()
     .then((doc) => {
-        userData.push({
-          userId: doc.id,
-          handle: doc.data().handle,
-          email: doc.data().email,
-          firstName: doc.data().firstName,
-          lastName: doc.data().lastName,
-          phone: doc.data().phone,
-          deposit:doc.data().deposit,
-          point:doc.data().point,
-          imageUrl: doc.data().imageUrl,
-          createdAt: doc.data().createdAt,
-        });
+      userData.push({
+        userId: doc.id,
+        handle: doc.data().handle,
+        email: doc.data().email,
+        firstName: doc.data().firstName,
+        lastName: doc.data().lastName,
+        phone: doc.data().phone,
+        deposit: doc.data().deposit,
+        point: doc.data().point,
+        imageUrl: doc.data().imageUrl,
+        createdAt: doc.data().createdAt,
+      });
       console.log(userData);
       return res.json(userData);
-    })
-}
+    });
+};
 //Get All user
 exports.getAllUserData = (req, res) => {
   let userData = [];
   db.collection("users")
     .get()
-    .then(data => {
-      data.forEach(doc => {
+    .then((data) => {
+      data.forEach((doc) => {
         userData.push({
           userId: doc.id,
           handle: doc.data().handle,
@@ -146,17 +146,17 @@ exports.getAllUserData = (req, res) => {
           firstName: doc.data().firstName,
           lastName: doc.data().lastName,
           phone: doc.data().phone,
-          deposit:doc.data().deposit,
-          point:doc.data().point,
+          deposit: doc.data().deposit,
+          point: doc.data().point,
           imageUrl: doc.data().imageUrl,
           createdAt: doc.data().createdAt,
         });
       });
       console.log(userData);
-      
+
       return res.json(userData);
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
       res.status(500).json({ error: err.code });
     });
@@ -165,6 +165,27 @@ exports.getAllUserData = (req, res) => {
 //Add user Detail
 exports.addUserDetails = (req, res) => {
   let userDetails = reduceUserDetails(req.body);
+
+  db.doc(`/users/${req.user.handle}`)
+    .update(userDetails)
+    .then(() => {
+      return res.json({ message: "Details added successfully" });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+exports.updateUserDetails = (req, res) => {
+  const userDetails = {
+    email: req.body.email,
+    password: req.body.password,
+    confirmPassword: req.body.confirmPassword,
+    handle: req.body.handle,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    phone: req.body.phone,
+  };
 
   db.doc(`/users/${req.user.handle}`)
     .update(userDetails)
@@ -202,20 +223,21 @@ exports.getAuthenticatedUser = (req, res) => {
     });
 };
 //Forget password
-exports.resetPass = (req,res) =>{
+exports.resetPass = (req, res) => {
   let userEmail = {
-    email: req.body.email
+    email: req.body.email,
   };
-  firebase.auth()
-  .sendPasswordResetEmail(userEmail.email)
-  .then(()=>{
-    return res.json({ message: 'Password reset sent' });
-  })
-  .catch((err) =>{
-    console.log(err);
-    return res.status(500).json({ error: err.code });
-  })
-}
+  firebase
+    .auth()
+    .sendPasswordResetEmail(userEmail.email)
+    .then(() => {
+      return res.json({ message: "Password reset sent" });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
 
 // Upload a profile image for user
 exports.uploadImage = (req, res) => {
@@ -318,6 +340,16 @@ exports.topup = (req, res) => {
           return db.doc(`/users/${req.user.handle}`).update({ deposit });
         });
     })
+    .then(() => {
+      const transaction = {
+        createdAt: new Date().toISOString(),
+        from: req.params.cardID,
+        to: req.user.handle,
+        amount: prepaidCard.value,
+        info: "Top-Up Money",
+      };
+      return db.doc(`/transactions/${transaction.createdAt}`).set(transaction);
+    })
     .then((data) => {
       console.log("done");
       return res.json({ message: "Top-Up Successful" });
@@ -329,55 +361,126 @@ exports.topup = (req, res) => {
 };
 
 exports.transfer = (req, res) => {
+  let check = false;
   const merchant = {
     cost: req.body.cost,
   };
-  const checkMoney = false;
   db.doc(`/merchants/${req.params.merchantID}`)
     .get()
     .then((doc) => {
-      console.log('num store ' + req.params.merchantID );
+      console.log("num store " + req.params.merchantID);
+      check = true;
       if (!doc.exists) {
-        return res.status(404).json({ message: "Wrong MerchantID" });
-      };
+        return res.status(404).json({ error: "Wrong MerchantID" });
+      }
+    })
+    .then(() => {
+      console.log('check'+check);
+      
+      db.doc(`/users/${req.user.handle}`)
+        .get()
+        .then((doc) => {
+          if (Number(doc.data().deposit) < Number(merchant.cost)) {
+            return res.status(404).json({ err: "Deposit less than cost" });
+          } else {
+            console.log("tester " + doc.data().deposit);
+
+            const deposit = Number(doc.data().deposit) - Number(merchant.cost);
+            return db.doc(`/users/${req.user.handle}`).update({ deposit });
+          }
+        });
     })
     .then(() => {
       db.doc(`/users/${req.user.handle}`)
         .get()
         .then((doc) => {
-          if(Number(doc.data().deposit) < Number(merchant.cost))
-          {
-            console.log('d l c');
-            
+          if (Number(doc.data().deposit) < Number(merchant.cost)) {
             return res.status(404).json({ err: "Deposit less than cost" });
           }
-          else{
-          console.log("tester " + doc.data().deposit);
-          checkMoney = true;
-          const deposit = Number(doc.data().deposit) - Number(merchant.cost);
-          return db.doc(`/users/${req.user.handle}`).update({ deposit });
-          }
-        })
-    })
-    .then(()=>{
-      if(checkMoney === true)
-      {
-        db.doc(`/merchants/${req.params.merchantID}`)
-        .get()
-        .then((doc)=>{
-          const total = Number(doc.data().total) + Number(merchant.cost);
-          return db.doc(`/merchants/${req.params.merchantID}`).update({ total });
-        })
-      }
+          db.doc(`/merchants/${req.params.merchantID}`)
+            .get()
+            .then((doc) => {
+              const total = Number(doc.data().total) + Number(merchant.cost);
+              console.log(total);
+
+              return db
+                .doc(`/merchants/${req.params.merchantID}`)
+                .update({ total });
+            });
+        });
     })
     .then(() => {
-      if(checkMoney === true)
-      {
-        console.log("done");
-        return res.json({ message: "Paid Successful" });
-      }
+      db.doc(`/users/${req.user.handle}`)
+        .get()
+        .then((doc) => {
+          if (Number(doc.data().deposit) < Number(merchant.cost)) {
+            return res.status(404).json({ err: "Deposit less than cost" });
+          } else {
+            const transaction = {
+              createdAt: new Date().toISOString(),
+              from: req.user.handle,
+              to: req.params.merchantID,
+              amount: merchant.cost,
+              info: "Paid Merchant",
+            };
+            return db
+              .doc(`/transactions/${transaction.createdAt}`)
+              .set(transaction);
+          }
+        });
+    })
+    .then(() => {
+      db.doc(`/users/${req.user.handle}`)
+        .get()
+        .then((doc) => {
+          if (Number(doc.data().deposit) < Number(merchant.cost)) {
+            return res.status(404).json({ err: "Deposit less than cost" });
+          } else {
+            console.log("done");
+            return res.json({ message: "Paid Successful" });
+          }
+        });
     })
     .catch((err) => {
-      res.status(500).json({ error: err.code });
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+exports.redeemPoint = (req, res) => {
+  let tempDeposit;
+  let tempMoney;
+  let tempPoint;
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then((doc) => {
+      if (Number(doc.data().point) >= 10) {
+        tempPoint = Number(doc.data().point);
+        tempDeposit = Number(doc.data().deposit);
+        tempMoney = tempPoint / 10;
+        tempPoint = tempPoint % 10;
+        tempDeposit = tempDeposit + tempMoney;
+        const updatePoint = {
+          point: tempPoint,
+          deposit: tempDeposit,
+        };
+        return db.doc(`/users/${req.user.handle}`).update(updatePoint);
+      } else return res.status(404).json({ err: "Point less than 10" });
+    })
+    .then((doc) => {
+        const transaction = {
+          createdAt: new Date().toISOString(),
+          from: req.user.handle,
+          to: req.user.handle,
+          amount: tempMoney,
+          info: "Redeem Point",
+        };
+        return db
+          .doc(`/transactions/${transaction.createdAt}`)
+          .set(transaction);
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
     });
 };
