@@ -5,7 +5,7 @@ export const initialState = {
         id: null,
         email: null,
         token: null,
-        pic: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Solid_white.svg',
+        pic: null,
         firstName: null,
         lastName: null,
         balance: 0,
@@ -139,15 +139,20 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 User: {
                     ...state.User,
-                    id: payload.id,
-                    email: payload.email,
-                    pic: payload.pic,
-                    firstName: payload.firstName,
-                    lastName: payload.lastName,
-                    balance: payload.balance,
-                    kpoints: payload.kpoints,
-                    phone: payload.phone,
+                    id: action.payload.id,
+                    email: action.payload.email,
+                    pic: action.payload.pic,
+                    firstName: action.payload.firstName,
+                    lastName: action.payload.lastName,
+                    balance: action.payload.balance,
+                    kpoints: action.payload.kpoints,
+                    phone: action.payload.phone,
                 }
+            };
+        case actionType.CLEAR_ALL_USER:
+            return {
+                ...state,
+                User: initialState.User
             };
         default:
             return state;
