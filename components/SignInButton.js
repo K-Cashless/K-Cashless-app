@@ -28,8 +28,8 @@ const SignInButton = ({navigation, email, password}) => {
                 store.dispatch(actions.User.setToken(res.data.token));
                 tempToken = res.data.token;
             })
-            .then(() => {
-                getUserData(tempToken)
+            .then(async () => {
+                await getUserData(tempToken)
                     .then(res => {
                         console.log(res.data[0]);
                         store.dispatch(actions.User.setId(res.data[0].userId));
