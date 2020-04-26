@@ -1,12 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import Navigator from './navigations/Navigator';
 import {AppLoading, Notifications} from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
-import * as firebase from 'firebase';
-import firebaseConfig from './firebase/firebaseConfig';
 
 import {Provider} from 'react-redux';
 import store from './store';
@@ -22,8 +20,6 @@ const fetchFonts = async () => {
         'proxima-black': require('./assets/fonts/proxima/Proxima-Nova-Black.otf'),
     });
 };
-
-firebase.initializeApp(firebaseConfig);
 
 async function registerNotification() {
     let status = await Permissions.askAsync(Permissions.NOTIFICATIONS);
