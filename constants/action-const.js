@@ -13,4 +13,5 @@ export const SET_USER_EMAIL = 'SET_USER_EMAIL';
 export const SET_USER_PHONE = 'SET_USER_PHONE';
 export const SET_USER_TOKEN = 'SET_USER_TOKEN';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
+export const CLEAR_ALL_USER = 'CLEAR_ALL_USER';
 

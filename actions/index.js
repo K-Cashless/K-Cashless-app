@@ -17,6 +17,7 @@ export const User = {
     setEmail: (email) => ({type: actionType.SET_USER_EMAIL, payload: email}),
     setToken: (token) => ({type: actionType.SET_USER_TOKEN, payload: token}),
     setPhone: (phone) => ({type: actionType.SET_USER_PHONE, payload: phone}),
-    updateUserData: (User) => ({type: actionType.UPDATE_USER_DATA, payload: User})
+    updateUserData: (User) => ({type: actionType.UPDATE_USER_DATA, payload: User}),
+    clearAllUser: () => ({type: actionType.CLEAR_ALL_USER, payload: null})
 };
 
