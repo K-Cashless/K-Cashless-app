@@ -8,9 +8,9 @@ const UserProfilePic = ({navigation, pic}) => {
             <TouchableOpacity
                 onPress={() => {
                     navigation.navigate('Profile');
-                }}>
-                {/*<Image source={{uri: pic}} style={{width: 40, height: 40, borderRadius: 40}}*/}
-                {/*       resizeMode='cover'/>*/}
+                }}
+                style={{width: 40, height: 40, borderRadius: 40, backgroundColor: 'white'}}
+            >
                 <Image source={{uri: pic}} style={{width: 40, height: 40, borderRadius: 40}}
                        resizeMode='cover'/>
             </TouchableOpacity>
