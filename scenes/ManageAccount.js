@@ -39,9 +39,15 @@ const ManageAccount = ({navigation, User}) => {
 
 
                             <View style={{marginTop: 20, alignItems: 'center'}}>
-                                <Image source={{uri: User.pic}}
-                                       style={{width: 100, height: 100, borderRadius: 100}}
-                                       resizeMode='cover'/>
+                                <View style={{width: 100, height: 100, borderRadius: 100, backgroundColor: 'white'}}>
+                                    {
+                                        User.pic &&
+                                        <Image source={{uri: User.pic}}
+                                               style={{width: 100, height: 100, borderRadius: 100}}
+                                               resizeMode='cover'/>
+                                    }
+                                </View>
+
                                 <View style={{margin: 20}}>
                                     <TextButton text={'EDIT'} color={color.primary}
                                                 onPress={() => handleImagePicking(User.token, setShowLoading)}/>

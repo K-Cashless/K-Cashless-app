@@ -76,7 +76,7 @@ const HomeScreen = ({navigation}) => {
                     }}>
                         <QuickActionsGrid navigation={navigation}/>
                     </View>
-                    <View style={{height: 200}}/>
+                    <View style={{height: Dimensions.get('window').height / 3}}/>
                 </ScrollView>
             </View>
         </View>
@@ -120,14 +120,14 @@ const LibraryScreen = () => {
                 <View style={{
                     alignSelf: 'center',
                     marginTop: 30,
-                    height: 300,
-                    width: 300,
+                    height: Dimensions.get('screen').width - 50,
+                    width: Dimensions.get('screen').width - 50,
                     backgroundColor: 'white',
                     borderRadius: 5,
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <QRCode value={store.getState().User.id} size={250}/>
+                    <QRCode value={store.getState().User.id} size={Dimensions.get('screen').width - 100}/>
                 </View>
             </View>
         </View>

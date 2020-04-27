@@ -52,10 +52,11 @@ const style = StyleSheet.create({
     },
     descriptionContainer: {
         flex: 2,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
     descriptionText: {
         fontFamily: 'proxima-bold',
+        paddingTop: 20,
         justifyContent: 'flex-start',
         fontSize: 18,
         color: 'white',
