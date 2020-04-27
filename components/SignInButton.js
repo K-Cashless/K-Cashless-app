@@ -58,7 +58,7 @@ const SignInButton = ({navigation, email, password}) => {
                 setButtonStyle(styles.buttonContainer);
                 setIsLoading(false);
                 console.log(error.response);
-                Alert.alert('Error', error.response.data.message);
+                Alert.alert('Error', 'Please Try Again');
             })
     };
 

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {RefreshControl, ScrollView, Text, View} from 'react-native';
+import {Dimensions, RefreshControl, ScrollView, Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
@@ -9,46 +9,75 @@ import LibraryHeader from '../components/LibraryHeader';
 import MInfoSection from '../components/MInfoSection';
 import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
-import store from '../store';
+import * as actions from '../actions';
 import RedDot from '../components/RedDot';
 import PromotionsList from '../components/PromotionsList';
+import RecentActivity from '../components/RecentActivity';
+import axios from 'axios';
+import API_URL from '../firebase/apiLinks';
+import store from '../store';
 
 const HomeScreen = ({navigation}) => {
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = () => {
+        setRefreshing(true);
+        const token = store.getState().User.token;
+        axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + token}})
+            .then(res => {
+                const infoToSet = {
+                    id: res.data[0].userId,
+                    firstName: res.data[0].firstName,
+                    lastName: res.data[0].lastName,
+                    balance: res.data[0].deposit,
+                    kpoints: res.data[0].point,
+                    email: res.data[0].email,
+                    phone: res.data[0].phone,
+                    pic: res.data[0].imageUrl,
+                };
+                store.dispatch(actions.User.updateUserData(infoToSet));
+            })
+            .catch(err => console.log(err))
+            .finally(() => setRefreshing(false));
 
     };
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             {/*Header*/}
             <View style={{top: '5%'}}>
-                <View style={{
-                    marginHorizontal: 20,
-                }}>
+                <View style={{marginHorizontal: 20}}>
                     <HomeHeader navigation={navigation}/>
-                    <ScrollView
-                        style={{marginTop: 20}}
-                        showsVerticalScrollIndicator={false}
-                        refreshControl={
-                            <RefreshControl
-                                tintColor='white'
-                                refreshing={refreshing}
-                                onRefresh={onRefresh}
-                            />
-                        }
-                    >
-                        {/*K Point Balance*/}
-                        <View style={{marginTop: 20}}>
-                            <KPointRect navigation={navigation} redeemButton={true}/>
-                        </View>
-                        {/*Quick Actions*/}
-                        <View style={{marginTop: 20}}>
-                            <QuickActionsGrid navigation={navigation}/>
-                        </View>
-                        <View style={{height: 200}}/>
-                    </ScrollView>
                 </View>
+                <ScrollView
+                    style={{marginTop: 20}}
+                    showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            tintColor='white'
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    }
+                >
+                    {/*K Point Balance*/}
+                    <View style={{marginTop: 20, marginHorizontal: 20}}>
+                        <KPointRect style={{shadowRadius: 10, shadowOpacity: 0.9}} navigation={navigation}
+                                    redeemButton={true}/>
+                    </View>
+                    <View style={{marginTop: 40, marginHorizontal: 20, height: 100}}>
+                        <RecentActivity/>
+                    </View>
+                    {/*Quick Actions*/}
+                    <View style={{
+                        flex: 1,
+                        marginHorizontal: 20,
+                        justifyContent: 'center',
+                        height: Dimensions.get('window').height / 4
+                    }}>
+                        <QuickActionsGrid navigation={navigation}/>
+                    </View>
+                    <View style={{height: 200}}/>
+                </ScrollView>
             </View>
         </View>
 

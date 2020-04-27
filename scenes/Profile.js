@@ -4,8 +4,9 @@ import MainStyles from '../styles/MainStyles';
 import * as colors from '../styles/Colors';
 import {connect} from 'react-redux'
 import SubScreenHeader from "../components/SubScreenHeader";
-import * as firebase from 'firebase';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import * as actions from '../actions';
+import store from '../store';
 
 const Profile = ({navigation, User}) => {
     return (
@@ -39,8 +40,14 @@ const ProfileCard = ({User}) => {
                 flexDirection: 'row',
             }}>
                 <View style={{alignItems: 'center', justifyContent: 'flex-start'}}>
-                    <Image source={{uri: User.pic}} style={{width: 60, height: 60, borderRadius: 80}}
-                           resizeMode='cover'/>
+                    <View style={{width: 60, height: 60, borderRadius: 80, backgroundColor: 'white'}}>
+                        {
+                            User.pic &&
+                            <Image source={{uri: User.pic}} style={{width: 60, height: 60, borderRadius: 80}}
+                                   resizeMode='cover'/>
+                        }
+                    </View>
+
                 </View>
 
                 <View style={{flex: 3, marginLeft: 20, height: 110, justifyContent: 'flex-start'}}>
@@ -98,9 +105,9 @@ const SignOutButton = ({navigation}) => {
     return (
         <TouchableOpacity
             style={{position: 'absolute', bottom: 50, width: '100%'}}
-            onPress={() => {
-                console.log('press!');
-                firebase.auth().signOut().then(() => navigation.navigate('SignIn'));
+            onPress={async () => {
+                await store.dispatch(actions.User.clearAllUser());
+                navigation.navigate('SignIn');
             }}
         >
             <Text style={[MainStyles.head2Text, {fontSize: 20, textAlign: 'center', color: 'red'}]}>

@@ -11,8 +11,11 @@ const UserProfilePic = ({navigation, pic}) => {
                 }}
                 style={{width: 40, height: 40, borderRadius: 40, backgroundColor: 'white'}}
             >
-                <Image source={{uri: pic}} style={{width: 40, height: 40, borderRadius: 40}}
-                       resizeMode='cover'/>
+                {
+                    pic &&
+                    <Image source={{uri: pic}} style={{width: 40, height: 40, borderRadius: 40}}
+                           resizeMode='cover'/>
+                }
             </TouchableOpacity>
         </View>
     );
