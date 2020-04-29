@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Text, TouchableHighlight, View} from 'react-native';
 import {BallIndicator} from "react-native-indicators";
 
-const TransparentButton = ({onPress, text, style}) => {
+const TransparentButton = ({onPress, text, style, disabled}) => {
     const [isLoading, setIsLoading] = useState(false);
 
     function onPressAction() {
@@ -15,6 +15,7 @@ const TransparentButton = ({onPress, text, style}) => {
     return (
         <View style={{marginTop: 20, alignItems: 'flex-end'}}>
             <TouchableHighlight
+                disabled={disabled}
                 underlayColor='rgba(150,150,150,0.5)'
                 onPress={onPressAction}
                 style={[{
