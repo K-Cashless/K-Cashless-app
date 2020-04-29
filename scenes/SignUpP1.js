@@ -36,29 +36,18 @@ const SignUpP1 = ({navigation}) => {
     });
 
     const handleButtonPress = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             Keyboard.dismiss;
-            if (errorState.studentID[0] === false &&
-                errorState.email[0] === false &&
-                errorState.password[0] === false &&
-                errorState.confirmPassword[0] === false) {
-                if (info.studentID.length > 0 &&
-                    info.email.length > 0 &&
-                    info.password.length > 0 &&
-                    info.confirmPassword.length > 0) {
-                    navigation.navigate('SignUpP2', {info: info});
-                    resolve();
-                }
-            }
-            reject();
+            navigation.navigate('SignUpP2', {info: info});
+            resolve();
         });
     };
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
-                    <KeyboardAwareScrollView>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <KeyboardAwareScrollView>
+                    <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start'}}>
                         <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please provide your
@@ -116,10 +105,10 @@ const SignUpP1 = ({navigation}) => {
                                 onPress={handleButtonPress}
                             />
                         </View>
-                    </KeyboardAwareScrollView>
-                </View>
-            </View>
-        </TouchableWithoutFeedback>
+                    </View>
+                </KeyboardAwareScrollView>
+            </TouchableWithoutFeedback>
+        </View>
     )
 };
 

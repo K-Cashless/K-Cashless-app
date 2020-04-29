@@ -6,7 +6,7 @@ import NormalTextInput from '../components/NormalTextInput';
 import * as colors from '../styles/Colors';
 
 const SignIn = ({navigation}) => {
-    const [email, setUserName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     return (
@@ -18,9 +18,7 @@ const SignIn = ({navigation}) => {
                     {/*Username Input*/}
                     <NormalTextInput
                         placeholder={'Email'}
-                        onChangeText={(text) => {
-                            setUserName(text);
-                        }}
+                        onChangeText={(text) => setEmail(text)}
                         value={email}
                     />
 

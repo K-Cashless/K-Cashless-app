@@ -8,6 +8,7 @@ const NormalTextInput = ({errorStatus = null, errorRule = [], placeholder, onCha
     const [borderColor, setBorderColor] = useState(MainStyles.textInput.borderBottomColor);
     const [errorMsg, setErrorMsg] = useState('');
     const [firstTime, setFirstTime] = useState(true);
+    const [focus, setFocus] = useState(false);
     const isError = () => {
         for (let i = 0; i < errorRule.length; ++i) {
             if (!(errorRule[i].pattern).test(value)) {
@@ -20,14 +21,15 @@ const NormalTextInput = ({errorStatus = null, errorRule = [], placeholder, onCha
     };
 
     useEffect(() => {
-        if (!firstTime) {
-            if (isError()) {
-                setBorderColor('red');
-                if (errorStatus !== null) errorStatus[1](true);
-            } else {
-                setBorderColor('white');
-                if (errorStatus !== null) errorStatus[1](false);
-            }
+        if (!firstTime && isError()) {
+            setBorderColor('red');
+            errorStatus && errorStatus[1](true);
+        } else if (focus) {
+            setBorderColor(colors.primary);
+            !firstTime && errorStatus && errorStatus[1](false);
+        } else {
+            setBorderColor('white');
+            !firstTime && errorStatus && errorStatus[1](false);
         }
     });
 
@@ -42,9 +44,13 @@ const NormalTextInput = ({errorStatus = null, errorRule = [], placeholder, onCha
                 style={[MainStyles.textInput, {marginTop: 5, borderBottomColor: borderColor}, style]}
                 onFocus={() => {
                     setBorderColor(colors.primary);
+                    setFocus(true);
                     setFirstTime(false);
                 }}
-                onBlur={() => setFirstTime(false)}
+                onBlur={() => {
+                    setFocus(false);
+                    setFirstTime(false);
+                }}
                 onChangeText={onChangeText}
                 value={value}
                 autoCapitalize='none'

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
@@ -16,27 +16,21 @@ const SignUpP2 = ({navigation}) => {
     const [info, setInfo] = useState(navigation.getParam('info', {}));
     const demoPic = require('../assets/solid-white.png');
     let errorState = {
-        firstName: useState(false),
-        lastName: useState(false),
-        phone: useState(false),
+        firstName: useState(true),
+        lastName: useState(true),
+        phone: useState(true),
     };
-    const isFieldError = () => {
-        if (errorState.firstName[0] === false &&
+    const [allowProceed, setAllowProceed] = useState(false);
+    useEffect(() => {
+        setAllowProceed(
+            errorState.firstName[0] === false &&
             errorState.lastName[0] === false &&
-            errorState.phone[0] === false) {
-            if (info.firstName.length > 0 &&
-                info.lastName.length > 0 &&
-                info.phone.length > 0) {
-                return false;
-            }
-        }
-        return true;
-    };
+            errorState.phone[0] === false
+        );
+    });
 
     const handleSignUp = () => {
         return new Promise((resolve, reject) => {
-            if (isFieldError()) reject();
-
             const infoToSend = {
                 email: info.email,
                 password: info.password,
@@ -68,11 +62,11 @@ const SignUpP2 = ({navigation}) => {
 
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
-                    <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
-                    <KeyboardAwareScrollView>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <KeyboardAwareScrollView>
+                    <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start'}}>
+                        <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
                             <View style={{marginTop: 20, alignItems: 'center'}}>
                                 <Image source={imgUri.length === 0 ? demoPic : {uri: imgUri}}
@@ -110,12 +104,16 @@ const SignUpP2 = ({navigation}) => {
                                 ]}
                             />
                         </View>
-                        <TransparentButton text={'Sign Up'} onPress={handleSignUp}
-                                           style={{backgroundColor: 'rgb(38,115,226)'}}/>
-                    </KeyboardAwareScrollView>
-                </View>
-            </View>
-        </TouchableWithoutFeedback>
+                        <TransparentButton
+                            text={'Sign Up'}
+                            disabled={!allowProceed}
+                            onPress={handleSignUp}
+                            style={{backgroundColor: allowProceed ? 'rgb(38,115,226)' : 'rgb(150,150,150)'}}
+                        />
+                    </View>
+                </KeyboardAwareScrollView>
+            </TouchableWithoutFeedback>
+        </View>
     )
 };
 
