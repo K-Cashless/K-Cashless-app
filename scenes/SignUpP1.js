@@ -54,17 +54,17 @@ const SignUpP1 = ({navigation}) => {
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please provide your
                                 information</Text>
                             <NormalTextInput
-                                placeholder={'Student ID'}
+                                placeholder={'Student ID*'}
                                 errorRule={[
-                                    {pattern: /.{8}/, message: 'Student ID Must Be 8 Digits Long'},
-                                    {pattern: /\d{8}/, message: 'Student ID Must Be Numbers Only'}
+                                    {pattern: /^.{8}$/, message: 'Student ID Must Be 8 Digits Long'},
+                                    {pattern: /^\d{8}$/, message: 'Student ID Must Be Numbers Only'}
                                 ]}
                                 onChangeText={(text) => setInfo({...info, studentID: text})}
                                 value={info.studentID}
                                 errorStatus={errorState.studentID}
                             />
                             <NormalTextInput
-                                placeholder={'Email'}
+                                placeholder={'Email*'}
                                 errorRule={[
                                     {
                                         pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
@@ -77,7 +77,7 @@ const SignUpP1 = ({navigation}) => {
                                 errorStatus={errorState.email}
                             />
                             <NormalTextInput
-                                placeholder={'Password'}
+                                placeholder={'Password*'}
                                 errorRule={[
                                     {pattern: /.+/, message: 'Password Can\'t Be Empty'},
                                     {pattern: /.{6,}/, message: 'Password must be at least 6 characters long'},
@@ -89,7 +89,7 @@ const SignUpP1 = ({navigation}) => {
                                 errorStatus={errorState.password}
                             />
                             <NormalTextInput
-                                placeholder={'Confirm Password'}
+                                placeholder={'Confirm Password*'}
                                 errorRule={[
                                     {pattern: /.+/, message: 'Confirm Password Can\'t Be Empty'},
                                     {pattern: new RegExp(info.password, 'g'), message: 'Password Did Not Match'},

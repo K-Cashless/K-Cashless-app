@@ -45,7 +45,7 @@ const SignIn = ({navigation}) => {
                     <View style={{paddingTop: 20, flexWrap: 'wrap'}}>
                         <TouchableOpacity
                             style={{
-                                justifyContent: 'left',
+                                justifyContent: 'flex-start',
                                 flexWrap: 'wrap',
                             }}
                             onPress={() => navigation.navigate('ForgetPassword')}

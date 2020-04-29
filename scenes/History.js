@@ -1,14 +1,5 @@
 import React, {useState} from 'react';
-import {
-    View,
-    Image,
-    Text,
-    SafeAreaView,
-    Dimensions,
-    RefreshControl,
-    TouchableHighlight,
-    FlatList
-} from 'react-native';
+import {Dimensions, FlatList, Image, RefreshControl, SafeAreaView, Text, TouchableHighlight, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import store from '../store';
@@ -122,7 +113,7 @@ const HistoryCard = ({time, title, borderTop, type, transaction, pic}) => {
                 justifyContent: 'center'
             }}>
                 <View style={{marginHorizontal: 20, flexDirection: 'row', justifyItems: 'center'}}>
-                    <View style={{flexWrap: 'wrap', alignItems: 'right', justifyContent: 'center'}}>
+                    <View style={{flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'center'}}>
                         <Image source={pic}
                                style={{width: 50, height: 50, borderRadius: 5}}
                                resizeMode='cover'/>

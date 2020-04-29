@@ -140,7 +140,13 @@ const PromotionCard = ({end, pic, shopPic, title, description}) => {
 
                 {
                     pic.length !== 0 ? (
-                        <View style={{flexWrap: 'wrap', alignItems: 'right', justifyContent: 'center'}}>
+                        <View style={{
+                            flexWrap: 'wrap',
+                            width: windowDimension,
+                            height: windowDimension,
+                            alignItems: 'flex-end',
+                            justifyContent: 'center'
+                        }}>
                             <View style={{position: 'absolute', width: windowDimension, height: windowDimension}}>
                                 <BallIndicator size={25} color={'white'}/>
                             </View>

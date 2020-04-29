@@ -36,6 +36,7 @@ const SignUpP2 = ({navigation}) => {
     const handleSignUp = () => {
         return new Promise((resolve, reject) => {
             if (isFieldError()) reject();
+
             const infoToSend = {
                 email: info.email,
                 password: info.password,
@@ -81,7 +82,7 @@ const SignUpP2 = ({navigation}) => {
                                             onPress={() => handleImagePicking(setImgUri)}/>
                             </View>
                             <NormalTextInput
-                                placeholder={'First Name'}
+                                placeholder={'First Name*'}
                                 onChangeText={(text) => setInfo({...info, firstName: text})}
                                 value={info.firstName}
                                 errorStatus={errorState.firstName}
@@ -90,7 +91,7 @@ const SignUpP2 = ({navigation}) => {
                                 ]}
                             />
                             <NormalTextInput
-                                placeholder={'Last Name'}
+                                placeholder={'Last Name*'}
                                 onChangeText={(text) => setInfo({...info, lastName: text})}
                                 value={info.lastName}
                                 errorStatus={errorState.lastName}
@@ -99,7 +100,7 @@ const SignUpP2 = ({navigation}) => {
                                 ]}
                             />
                             <NormalTextInput
-                                placeholder={'Phone'}
+                                placeholder={'Phone*'}
                                 onChangeText={(text) => setInfo({...info, phone: text})}
                                 value={info.phone}
                                 errorStatus={errorState.phone}

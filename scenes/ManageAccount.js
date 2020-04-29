@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
+import RBSheet from "react-native-raw-bottom-sheet";
 import * as ImagePicker from 'expo-image-picker';
 import {Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import SubScreenHeader from "../components/SubScreenHeader";
@@ -6,7 +7,6 @@ import MInfoSection from '../components/MInfoSection';
 import MainStyles from '../styles/MainStyles';
 import {connect} from 'react-redux';
 import * as color from '../styles/Colors';
-import NormalTextInput from "../components/NormalTextInput";
 import store from '../store';
 import * as actions from '../actions';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -16,7 +16,9 @@ import {BallIndicator} from "react-native-indicators";
 
 
 const ManageAccount = ({navigation, User}) => {
+    const refRBSheet = useRef();
     const [showLoading, setShowLoading] = useState(false);
+    const [editedField, setEditedField] = useState(null);
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <KeyboardAwareScrollView>
@@ -49,28 +51,88 @@ const ManageAccount = ({navigation, User}) => {
                                 </View>
 
                                 <View style={{margin: 20}}>
-                                    <TextButton text={'EDIT'} color={color.primary}
+                                    <TextButton text={'Edit'} color={color.primary}
                                                 onPress={() => handleImagePicking(User.token, setShowLoading)}/>
                                 </View>
                             </View>
 
 
-                            <UserInfo title={'Student ID'} value={User.id}/>
-                            <UserInfo title={'Email'} value={User.email}/>
-                            <UserInfo title={'First Name'} value={User.firstName}/>
-                            <UserInfo title={'Last Name'} value={User.lastName}/>
-                            <UserInfo title={'Phone'} value={User.phone}/>
+                            <UserInfo title={'Student ID'} value={User.id} refRBSheet={refRBSheet}
+                                      setEditedField={setEditedField}/>
+                            <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
+                                      setEditedField={setEditedField}/>
+                            <UserInfo title={'First Name'} value={User.firstName} refRBSheet={refRBSheet}
+                                      setEditedField={setEditedField}/>
+                            <UserInfo title={'Last Name'} value={User.lastName} refRBSheet={refRBSheet}
+                                      setEditedField={setEditedField}/>
+                            <UserInfo title={'Phone'} value={User.phone} refRBSheet={refRBSheet}
+                                      setEditedField={setEditedField}/>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAwareScrollView>
+            <RBSheet
+                ref={refRBSheet}
+                animationType={'fade'}
+                duration={200}
+                height={320}
+                closeOnDragDown={true}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: 'rgba(0,0,0,0.5)'
+                    },
+                    container: {
+                        backgroundColor: color.background,
+                    },
+                    draggableIcon: {
+                        backgroundColor: 'white'
+                    }
+                }}
+            >
+                <EditingSheet editedField={editedField}/>
+            </RBSheet>
         </View>
     )
 };
 
-const UserInfo = ({title, value, onFinishEditing}) => {
-    const [edit, setEdit] = useState(false);
+const EditingSheet = ({editedField}) => {
+    switch (editedField) {
+        case 'Student ID':
+            return (
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Student ID</Text>
+                </View>
+            );
+        case 'Email':
+            return (
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Email</Text>
+                </View>
+            );
+        case 'First Name':
+            return (
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter First Name</Text>
+                </View>
+            );
+        case 'Last Name':
+            return (
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Last Name</Text>
+                </View>
+            );
+        case 'Phone':
+            return (
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Phone</Text>
+                </View>
+            );
+        default:
+            return null;
+    }
+};
 
+const UserInfo = ({title, value, setEditedField, refRBSheet}) => {
     return (
         <View style={{marginBottom: 10}}>
             <View style={{flexDirection: 'row', marginTop: 5}}>
@@ -79,24 +141,14 @@ const UserInfo = ({title, value, onFinishEditing}) => {
                 </View>
                 <View style={{justifyContent: 'center'}}>
                     <TextButton
-                        text={edit ? 'CANCEL' : 'EDIT'}
-                        color={edit ? 'red' : color.primary}
+                        text='Edit'
+                        color={color.primary}
                         onPress={() => {
-                            setEdit(!edit);
+                            setEditedField(title);
+                            refRBSheet.current.open();
                         }}/>
                 </View>
             </View>
-            {
-                edit ? (
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{flex: 1}}>
-                            <NormalTextInput/>
-                        </View>
-                        <View style={{justifyContent: 'center'}}>
-                            <TextButton text={'DONE'} color={color.primary} onPress={() => setEdit(false)}/>
-                        </View>
-                    </View>
-                ) : null}
         </View>
     )
 };
