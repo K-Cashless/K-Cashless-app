@@ -42,7 +42,7 @@ const NormalTextInput = ({errorStatus = null, errorRule = [], placeholder, onCha
                 style={[MainStyles.textInput, {marginTop: 5, borderBottomColor: borderColor}, style]}
                 onFocus={() => {
                     setBorderColor(colors.primary);
-                    setErrorMsg('');
+                    setFirstTime(false);
                 }}
                 onBlur={() => setFirstTime(false)}
                 onChangeText={onChangeText}
