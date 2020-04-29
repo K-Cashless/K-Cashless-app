@@ -143,7 +143,6 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setConfirm}) =
     };
     const handleConfirmResult = () => {
         return new Promise((resolve, reject) => {
-            // TEST
             const tempData = {
                 number: topUpInfo.number,
                 value: topUpInfo.value,
@@ -159,7 +158,7 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setConfirm}) =
                 .then(() => {
                     refRBSheet.current.close();
                 })
-                .then(value => {
+                .then(() => {
                     navigation.replace('TopUpComplete', {topUpValue: tempData.value});
                     resolve();
                 })

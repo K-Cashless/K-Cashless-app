@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as ImagePicker from 'expo-image-picker';
-import {Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import SubScreenHeader from "../components/SubScreenHeader";
 import MInfoSection from '../components/MInfoSection';
 import MainStyles from '../styles/MainStyles';
@@ -13,6 +13,8 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import API_URL from "../firebase/apiLinks";
 import axios from 'axios';
 import {BallIndicator} from "react-native-indicators";
+import NormalTextInput from "../components/NormalTextInput";
+import TransparentButton from "../components/TransparentButton";
 
 
 const ManageAccount = ({navigation, User}) => {
@@ -22,60 +24,55 @@ const ManageAccount = ({navigation, User}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <KeyboardAwareScrollView>
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        Keyboard.dismiss();
-                    }}>
-                    <View style={{marginHorizontal: 20, top: 0, justifyContent: 'flex-end'}}>
-                        <View style={{marginTop: '10%', width: '100%'}}>
-                            <View style={{flexDirection: 'row'}}>
-                                <SubScreenHeader navigation={navigation} title={'Manage Account'} backButton={true}/>
+                <View style={{marginHorizontal: 20, top: 0, justifyContent: 'flex-end'}}>
+                    <View style={{marginTop: '10%', width: '100%'}}>
+                        <View style={{flexDirection: 'row'}}>
+                            <SubScreenHeader navigation={navigation} title={'Manage Account'} backButton={true}/>
+                            {
+                                showLoading ? (
+                                    <View style={{position: 'absolute', right: 0, alignSelf: 'center'}}>
+                                        <BallIndicator size={20} color={'white'}/>
+                                    </View>
+                                ) : null
+                            }
+                        </View>
+
+
+                        <View style={{marginTop: 20, alignItems: 'center'}}>
+                            <View style={{width: 100, height: 100, borderRadius: 100, backgroundColor: 'white'}}>
                                 {
-                                    showLoading ? (
-                                        <View style={{position: 'absolute', right: 0, alignSelf: 'center'}}>
-                                            <BallIndicator size={20} color={'white'}/>
-                                        </View>
-                                    ) : null
+                                    User.pic &&
+                                    <Image source={{uri: User.pic}}
+                                           style={{width: 100, height: 100, borderRadius: 100}}
+                                           resizeMode='cover'/>
                                 }
                             </View>
 
-
-                            <View style={{marginTop: 20, alignItems: 'center'}}>
-                                <View style={{width: 100, height: 100, borderRadius: 100, backgroundColor: 'white'}}>
-                                    {
-                                        User.pic &&
-                                        <Image source={{uri: User.pic}}
-                                               style={{width: 100, height: 100, borderRadius: 100}}
-                                               resizeMode='cover'/>
-                                    }
-                                </View>
-
-                                <View style={{margin: 20}}>
-                                    <TextButton text={'Edit'} color={color.primary}
-                                                onPress={() => handleImagePicking(User.token, setShowLoading)}/>
-                                </View>
+                            <View style={{margin: 20}}>
+                                <TextButton text={'Edit'} color={color.primary}
+                                            onPress={() => handleImagePicking(User.token, setShowLoading)}/>
                             </View>
-
-
-                            <UserInfo title={'Student ID'} value={User.id} refRBSheet={refRBSheet}
-                                      setEditedField={setEditedField}/>
-                            <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
-                                      setEditedField={setEditedField}/>
-                            <UserInfo title={'First Name'} value={User.firstName} refRBSheet={refRBSheet}
-                                      setEditedField={setEditedField}/>
-                            <UserInfo title={'Last Name'} value={User.lastName} refRBSheet={refRBSheet}
-                                      setEditedField={setEditedField}/>
-                            <UserInfo title={'Phone'} value={User.phone} refRBSheet={refRBSheet}
-                                      setEditedField={setEditedField}/>
                         </View>
+
+
+                        <UserInfo title={'Student ID'} value={User.id} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField} editable={false}/>
+                        <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField}/>
+                        <UserInfo title={'First Name'} value={User.firstName} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField}/>
+                        <UserInfo title={'Last Name'} value={User.lastName} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField}/>
+                        <UserInfo title={'Phone'} value={User.phone} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField}/>
                     </View>
-                </TouchableWithoutFeedback>
+                </View>
             </KeyboardAwareScrollView>
             <RBSheet
                 ref={refRBSheet}
                 animationType={'fade'}
                 duration={200}
-                height={320}
+                height={250}
                 closeOnDragDown={true}
                 customStyles={{
                     wrapper: {
@@ -89,42 +86,164 @@ const ManageAccount = ({navigation, User}) => {
                     }
                 }}
             >
-                <EditingSheet editedField={editedField}/>
+                {/*<TouchableWithoutFeedback onPress={() => Keyboard.dismiss}>*/}
+                <EditingSheet editedField={editedField} refRBSheet={refRBSheet}/>
+                {/*</TouchableWithoutFeedback>*/}
             </RBSheet>
         </View>
     )
 };
 
-const EditingSheet = ({editedField}) => {
+const EditingSheet = ({editedField, refRBSheet}) => {
+    const [field, setField] = useState('');
+    const errorState = useState(true);
+
     switch (editedField) {
-        case 'Student ID':
-            return (
-                <View style={{marginHorizontal: 20}}>
-                    <Text style={[MainStyles.bodyText]}>Please Enter Student ID</Text>
-                </View>
-            );
         case 'Email':
             return (
                 <View style={{marginHorizontal: 20}}>
                     <Text style={[MainStyles.bodyText]}>Please Enter Email</Text>
+                    <NormalTextInput
+                        placeholder={'Enter your new email*'}
+                        onChangeText={(text) => setField(text)}
+                        value={field}
+                        errorStatus={errorState}
+                        errorRule={[
+                            {
+                                pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                message: 'Incorrect Email Format'
+                            },
+                            {pattern: /^\w+([.-]?\w+)*@kmitl.ac.th/, message: 'KMITL Email Only'},
+                        ]}
+                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+                            <Text style={[MainStyles.bodyText, {
+                                fontFamily: 'proxima-bold',
+                                color: 'red',
+                                marginTop: 20,
+                                right: 25
+                            }]}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TransparentButton
+                            text={'Done'}
+                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
+                            onPress={() => {
+                                return new Promise((resolve, reject) => {
+                                    const infoToSend = {email: field};
+                                    axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
+                                        'headers': {
+                                            'Authorization': 'Bearer ' + store.getState().User.token
+                                        }
+                                    })
+                                        .then(() => {
+                                            store.dispatch(actions.User.setEmail(field));
+                                            resolve();
+                                        })
+                                        .catch(error => {
+                                            console.log(error.response);
+                                            Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                                            reject();
+                                        })
+                                });
+                            }}
+                        />
+                    </View>
                 </View>
             );
         case 'First Name':
             return (
                 <View style={{marginHorizontal: 20}}>
                     <Text style={[MainStyles.bodyText]}>Please Enter First Name</Text>
+                    <NormalTextInput
+                        placeholder={'Enter your first name*'}
+                        onChangeText={(text) => setField(text)}
+                        value={field}
+                        errorStatus={errorState}
+                        errorRule={[
+                            {pattern: /.+/, message: 'First Name Must Not Be Empty'},
+                        ]}
+                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+                            <Text style={[MainStyles.bodyText, {
+                                fontFamily: 'proxima-bold',
+                                color: 'red',
+                                marginTop: 20,
+                                right: 25
+                            }]}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TransparentButton
+                            text={'Done'}
+                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
+                            onPress={() => {
+                            }}
+                        />
+                    </View>
                 </View>
             );
         case 'Last Name':
             return (
+
                 <View style={{marginHorizontal: 20}}>
                     <Text style={[MainStyles.bodyText]}>Please Enter Last Name</Text>
+                    <NormalTextInput
+                        placeholder={'Enter your last name*'}
+                        onChangeText={(text) => setField(text)}
+                        value={field}
+                        errorStatus={errorState}
+                        errorRule={[
+                            {pattern: /.+/, message: 'Last Name Must Not Be Empty'},
+                        ]}
+                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+                            <Text style={[MainStyles.bodyText, {
+                                fontFamily: 'proxima-bold',
+                                color: 'red',
+                                marginTop: 20,
+                                right: 25
+                            }]}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TransparentButton
+                            text={'Done'}
+                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
+                            onPress={() => {
+                            }}
+                        />
+                    </View>
                 </View>
             );
         case 'Phone':
             return (
                 <View style={{marginHorizontal: 20}}>
                     <Text style={[MainStyles.bodyText]}>Please Enter Phone</Text>
+                    <NormalTextInput
+                        placeholder={'Enter your new phone number*'}
+                        onChangeText={(text) => setField(text)}
+                        value={field}
+                        errorStatus={errorState}
+                        errorRule={[
+                            {pattern: /.+/, message: 'Phone Number Must Not Be Empty'},
+                            {pattern: /\d+/, message: 'Phone Number Must Not Be Empty'},
+                        ]}
+                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+                            <Text style={[MainStyles.bodyText, {
+                                fontFamily: 'proxima-bold',
+                                color: 'red',
+                                marginTop: 20,
+                                right: 25
+                            }]}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TransparentButton
+                            text={'Done'}
+                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
+                            onPress={() => {
+                            }}
+                        />
+                    </View>
                 </View>
             );
         default:
@@ -132,7 +251,7 @@ const EditingSheet = ({editedField}) => {
     }
 };
 
-const UserInfo = ({title, value, setEditedField, refRBSheet}) => {
+const UserInfo = ({title, value, setEditedField, refRBSheet, editable = true}) => {
     return (
         <View style={{marginBottom: 10}}>
             <View style={{flexDirection: 'row', marginTop: 5}}>
@@ -140,13 +259,17 @@ const UserInfo = ({title, value, setEditedField, refRBSheet}) => {
                     <MInfoSection title={title} value={value}/>
                 </View>
                 <View style={{justifyContent: 'center'}}>
-                    <TextButton
-                        text='Edit'
-                        color={color.primary}
-                        onPress={() => {
-                            setEditedField(title);
-                            refRBSheet.current.open();
-                        }}/>
+                    {
+                        editable ?
+                            <TextButton
+                                text='Edit'
+                                color={color.primary}
+                                onPress={() => {
+                                    setEditedField(title);
+                                    refRBSheet.current.open();
+                                }}/> : null
+                    }
+
                 </View>
             </View>
         </View>
