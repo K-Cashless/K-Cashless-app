@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
@@ -17,13 +17,23 @@ const SignUpP1 = ({navigation}) => {
         lastName: '',
         phone: ''
     });
+    const [allowProceed, setAllowProceed] = useState(false);
 
     let errorState = {
-        studentID: useState(false),
-        email: useState(false),
-        password: useState(false),
-        confirmPassword: useState(false),
+        studentID: useState(true),
+        email: useState(true),
+        password: useState(true),
+        confirmPassword: useState(true),
     };
+
+    useEffect(() => {
+        setAllowProceed(
+            errorState.studentID[0] === false &&
+            errorState.email[0] === false &&
+            errorState.password[0] === false &&
+            errorState.confirmPassword[0] === false
+        );
+    });
 
     const handleButtonPress = () => {
         return new Promise((resolve, reject) => {
@@ -48,8 +58,8 @@ const SignUpP1 = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
                 <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
-                    <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                     <KeyboardAwareScrollView>
+                        <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please provide your
                                 information</Text>
@@ -99,7 +109,12 @@ const SignUpP1 = ({navigation}) => {
                                 secureTextEntry={true}
                                 errorStatus={errorState.confirmPassword}
                             />
-                            <TransparentButton text={'Next'} onPress={handleButtonPress}/>
+                            <TransparentButton
+                                text={'Next'}
+                                disabled={!allowProceed}
+                                style={{backgroundColor: allowProceed ? 'rgb(38,115,226)' : 'rgb(150,150,150)'}}
+                                onPress={handleButtonPress}
+                            />
                         </View>
                     </KeyboardAwareScrollView>
                 </View>
