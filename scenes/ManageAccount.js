@@ -175,7 +175,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         </TouchableOpacity>
                         <TransparentButton
                             text={'Done'}
-                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
+                            style={{backgroundColor: errorState[0] ? 'rgba(150,150,150,0.5)' : 'rgb(38,115,226)'}}
                             onPress={() => {
                             }}
                         />
@@ -225,7 +225,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         errorStatus={errorState}
                         errorRule={[
                             {pattern: /.+/, message: 'Phone Number Must Not Be Empty'},
-                            {pattern: /\d+/, message: 'Phone Number Must Not Be Empty'},
+                            {pattern: /^\d+$/, message: 'Phone Number Must Contains Numbers Only'},
                         ]}
                     />
                     <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
