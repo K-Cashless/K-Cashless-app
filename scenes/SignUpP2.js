@@ -106,6 +106,7 @@ const SignUpP2 = ({navigation}) => {
                                 errorStatus={errorState.phone}
                                 errorRule={[
                                     {pattern: /.+/, message: 'Phone Number Must Not Be Empty'},
+                                    {pattern: /^\d+$/, message: 'Phone Number Must Contains Numbers Only'},
                                 ]}
                             />
                         </View>
