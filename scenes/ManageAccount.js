@@ -98,6 +98,213 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const [field, setField] = useState('');
     const errorState = useState(true);
 
+    const handleEmailUpdate = async () => {
+        return new Promise(async (resolve, reject) => {
+            let infoToSend = null;
+            await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+                .then(res => {
+                    // Update User Data
+                    store.dispatch(actions.User.setId(res.data[0].userId));
+                    store.dispatch(actions.User.setFirstName(res.data[0].firstName));
+                    store.dispatch(actions.User.setLastName(res.data[0].lastName));
+                    store.dispatch(actions.User.setBalance(res.data[0].deposit));
+                    store.dispatch(actions.User.setKpoints(res.data[0].point));
+                    store.dispatch(actions.User.setEmail(res.data[0].email));
+                    store.dispatch(actions.User.setPhone(res.data[0].phone));
+                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
+
+                    const tempInfo = res.data[0];
+                    infoToSend = {
+                        email: field,
+                        password: "",
+                        confirmPassword: "",
+                        handle: tempInfo.handle,
+                        firstName: tempInfo.firstName,
+                        lastName: tempInfo.lastName,
+                        phone: tempInfo.phone,
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
+            await console.log(infoToSend);
+            resolve();
+
+            await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
+                'headers': {
+                    'Authorization': 'Bearer ' + store.getState().User.token
+                }
+            })
+                .then(() => {
+                    store.dispatch(actions.User.setEmail(field));
+                    refRBSheet.current.close();
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                })
+        });
+    };
+
+    const handleFirstNameUpdate = async () => {
+        return new Promise(async (resolve, reject) => {
+            let infoToSend = null;
+            await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+                .then(res => {
+                    // Update User Data
+                    store.dispatch(actions.User.setId(res.data[0].userId));
+                    store.dispatch(actions.User.setFirstName(res.data[0].firstName));
+                    store.dispatch(actions.User.setLastName(res.data[0].lastName));
+                    store.dispatch(actions.User.setBalance(res.data[0].deposit));
+                    store.dispatch(actions.User.setKpoints(res.data[0].point));
+                    store.dispatch(actions.User.setEmail(res.data[0].email));
+                    store.dispatch(actions.User.setPhone(res.data[0].phone));
+                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
+
+                    const tempInfo = res.data[0];
+                    infoToSend = {
+                        email: tempInfo.email,
+                        password: "",
+                        confirmPassword: "",
+                        handle: tempInfo.handle,
+                        firstName: field,
+                        lastName: tempInfo.lastName,
+                        phone: tempInfo.phone,
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
+            await console.log(infoToSend);
+            resolve();
+
+            await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
+                'headers': {
+                    'Authorization': 'Bearer ' + store.getState().User.token
+                }
+            })
+                .then(() => {
+                    store.dispatch(actions.User.setFirstName(field));
+                    refRBSheet.current.close();
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                })
+        });
+    };
+    const handleLastNameUpdate = async () => {
+        return new Promise(async (resolve, reject) => {
+            let infoToSend = null;
+            await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+                .then(res => {
+                    // Update User Data
+                    store.dispatch(actions.User.setId(res.data[0].userId));
+                    store.dispatch(actions.User.setFirstName(res.data[0].firstName));
+                    store.dispatch(actions.User.setLastName(res.data[0].lastName));
+                    store.dispatch(actions.User.setBalance(res.data[0].deposit));
+                    store.dispatch(actions.User.setKpoints(res.data[0].point));
+                    store.dispatch(actions.User.setEmail(res.data[0].email));
+                    store.dispatch(actions.User.setPhone(res.data[0].phone));
+                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
+
+                    const tempInfo = res.data[0];
+                    infoToSend = {
+                        email: tempInfo.email,
+                        password: "",
+                        confirmPassword: "",
+                        handle: tempInfo.handle,
+                        firstName: tempInfo.firstName,
+                        lastName: field,
+                        phone: tempInfo.phone,
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
+            await console.log(infoToSend);
+            resolve();
+
+            await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
+                'headers': {
+                    'Authorization': 'Bearer ' + store.getState().User.token
+                }
+            })
+                .then(() => {
+                    store.dispatch(actions.User.setLastName(field));
+                    refRBSheet.current.close();
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                })
+        });
+    };
+
+    const handlePhoneUpdate = async () => {
+        return new Promise(async (resolve, reject) => {
+            let infoToSend = null;
+            await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+                .then(res => {
+                    // Update User Data
+                    store.dispatch(actions.User.setId(res.data[0].userId));
+                    store.dispatch(actions.User.setFirstName(res.data[0].firstName));
+                    store.dispatch(actions.User.setLastName(res.data[0].lastName));
+                    store.dispatch(actions.User.setBalance(res.data[0].deposit));
+                    store.dispatch(actions.User.setKpoints(res.data[0].point));
+                    store.dispatch(actions.User.setEmail(res.data[0].email));
+                    store.dispatch(actions.User.setPhone(res.data[0].phone));
+                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
+
+                    const tempInfo = res.data[0];
+                    infoToSend = {
+                        email: tempInfo.email,
+                        password: "",
+                        confirmPassword: "",
+                        handle: tempInfo.handle,
+                        firstName: tempInfo.firstName,
+                        lastName: tempInfo.lastName,
+                        phone: field,
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
+            await console.log(infoToSend);
+            resolve();
+
+            await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
+                'headers': {
+                    'Authorization': 'Bearer ' + store.getState().User.token
+                }
+            })
+                .then(() => {
+                    store.dispatch(actions.User.setPhone(field));
+                    refRBSheet.current.close();
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                })
+        });
+    };
+
     switch (editedField) {
         case 'Email':
             return (
@@ -128,25 +335,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         <TransparentButton
                             text={'Done'}
                             style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
-                            onPress={() => {
-                                return new Promise((resolve, reject) => {
-                                    const infoToSend = {email: field};
-                                    axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
-                                        'headers': {
-                                            'Authorization': 'Bearer ' + store.getState().User.token
-                                        }
-                                    })
-                                        .then(() => {
-                                            store.dispatch(actions.User.setEmail(field));
-                                            resolve();
-                                        })
-                                        .catch(error => {
-                                            console.log(error.response);
-                                            Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-                                            reject();
-                                        })
-                                });
-                            }}
+                            onPress={handleEmailUpdate}
                         />
                     </View>
                 </View>
@@ -176,8 +365,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         <TransparentButton
                             text={'Done'}
                             style={{backgroundColor: errorState[0] ? 'rgba(150,150,150,0.5)' : 'rgb(38,115,226)'}}
-                            onPress={() => {
-                            }}
+                            onPress={handleFirstNameUpdate}
                         />
                     </View>
                 </View>
@@ -208,8 +396,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         <TransparentButton
                             text={'Done'}
                             style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
-                            onPress={() => {
-                            }}
+                            onPress={handleLastNameUpdate}
                         />
                     </View>
                 </View>
@@ -240,8 +427,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         <TransparentButton
                             text={'Done'}
                             style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
-                            onPress={() => {
-                            }}
+                            onPress={handlePhoneUpdate}
                         />
                     </View>
                 </View>
