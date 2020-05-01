@@ -15,6 +15,7 @@ import axios from 'axios';
 import {BallIndicator} from "react-native-indicators";
 import NormalTextInput from "../components/NormalTextInput";
 import TransparentButton from "../components/TransparentButton";
+import * as mime from 'react-native-mime-types';
 
 
 const ManageAccount = ({navigation, User}) => {
@@ -178,7 +179,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                 })
                 .catch(error => {
                     console.log(error.response);
-                    Alert.alert('Error Trying to Update Your Info (GET DATA)', 'Please Try Again');
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
                     reject();
                 });
             await console.log(infoToSend);
@@ -195,7 +196,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                 })
                 .catch(error => {
                     console.log(error.response);
-                    Alert.alert('Error Trying to Update Your Info (UPDATE)', 'Please Try Again');
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
                     reject();
                 })
         });
@@ -483,10 +484,12 @@ const handleImagePicking = async (token, setShowLoading) => {
         if (result.cancelled === false) {
             let infoToSend = new FormData();
             const imgUri = result.uri;
+            const mimeType = mime.lookup(imgUri);
+            const imgExtension = mime.extension(mimeType);
             infoToSend.append('image', {
                 uri: imgUri,
-                name: 'userProfile.jpg',
-                type: 'image/jpg'
+                name: 'userProfile.' + imgExtension,
+                type: mimeType
             });
             console.log("uploading: ", infoToSend);
             setShowLoading(true);
@@ -498,7 +501,6 @@ const handleImagePicking = async (token, setShowLoading) => {
             })
                 .then(res => {
                     setShowLoading(false);
-                    console.log(res);
                     store.dispatch(actions.User.setPic(result.uri));
                 })
                 .catch(error => {
