@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
@@ -11,7 +11,7 @@ const RedeemPointComplete = ({navigation, User}) => {
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
                 <View style={{flex: 1, width: '100%', top: 50}}>
                     <View style={{flex: 1, width: '100%'}}>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
                             <Icon name={'check-circle'} size={100} color={'#2AC062'}/>
                         </View>
                         <Text style={[MainStyles.head2Text, {
@@ -19,26 +19,14 @@ const RedeemPointComplete = ({navigation, User}) => {
                             width: '100%',
                             textAlign: 'center',
                             flex: 0.5
-                        }]}>Redeem
-                            Point Successful</Text>
+                        }]}>Redeem Point Successful</Text>
                     </View>
-
-                    <View style={{flex: 2, width: '100%', top: 50}}>
-                        <Text style={MainStyles.head2Text}>YOUR BALANCE IS</Text>
-                        <Text style={[MainStyles.head2Text, {
-                            fontSize: 50,
-                            textAlign: 'right',
-                            justifyContent: 'center',
-                            paddingBottom: 20,
-                        }]}>{User.balance} <Text style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
-                        <Text style={[MainStyles.head2Text]}>YOUR K
-                            POINT BALANCE IS</Text>
-                        <Text style={[MainStyles.head2Text, {
-                            fontSize: 50,
-                            textAlign: 'right',
-                            justifyContent: 'center'
-                        }]}>{User.kpoints} <Text style={{fontSize: 30}}>Points</Text></Text>
-                    </View>
+                    <Text style={[MainStyles.bodyText, {flex: 1, textAlign: 'center'}]}>
+                        You've redeem {123} points, earned {123} {'\u0E3F'}.{'\n'}
+                        Your new balance is {User.balance} {'\u0E3F'}.
+                    </Text>
+                </View>
+                <View style={{width: '100%', bottom: 20}}>
                     <DoneButton navigation={navigation}/>
                 </View>
             </View>

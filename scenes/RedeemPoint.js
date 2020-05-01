@@ -1,25 +1,16 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from "../styles/MainStyles";
 import BlueButton from '../components/BlueButton';
 import SubScreenHeader from "../components/SubScreenHeader";
 import KPointRect from "../components/KPointRect";
-import NumberTextInput from "../components/NumberTextInput";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import store from '../store';
 
 const RedeemPoint = ({navigation}) => {
-    const [redeemValue, setRedeemValue] = useState('');
-    const [isChanged, setIsChanged] = useState(false);
     const state = store.getState();
-    const redeemValueError = (redeemValue > state.User.kpoints || redeemValue < 1 || redeemValue.length === 0) && isChanged;
-    const value = () => {
-        return (redeemValueError) ? ('0.00') : ((redeemValue / 25).toFixed(2))
-    };
-    let placeholderMsg;
-    if (state.User.kpoints === 0) placeholderMsg = 'No Points';
-    else placeholderMsg = '1 - ' + state.User.kpoints;
-
+    const redeemValue = Math.floor(state.User.kpoints / 200) + 1000;
+    const redeemable = !(redeemValue < 1);
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -30,52 +21,44 @@ const RedeemPoint = ({navigation}) => {
                 }}>
                     <SubScreenHeader navigation={navigation} title={'Redeem Points'} backButton={true}/>
                     <KPointRect style={{paddingTop: 10}}/>
-                    <Text style={[MainStyles.bodyText, {top: 20, justifyContent: 'center'}]}>
-                        <Icon name={'info-circle'} color={'white'} size={18}/> 25 Points = 1 {'\u0E3F'}
+                    <Text style={[MainStyles.bodyText, {paddingTop: 20, justifyContent: 'center'}]}>
+                        <Icon name={'info-circle'} color={'white'} size={18}/> 200 Points = 1 {'\u0E3F'}
                     </Text>
+                    {
+                        redeemable ? (
+                            <View style={{paddingTop: 50}}>
+                                <Text style={MainStyles.head2Text}>YOUR K POINT WORTH</Text>
+                                <Text style={[MainStyles.head2Text, {
+                                    fontSize: 50,
+                                    textAlign: 'right',
+                                    justifyContent: 'center'
+                                }]}>{redeemValue} <Text
+                                    style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
+                            </View>
+                        ) : (
+                            <Text style={[MainStyles.bodyText, {
+                                color: 'red',
+                                paddingTop: 10,
+                                fontSize: 18
+                            }]}>
+                                You can't redeem point as the minimum point to redeem is 200.
+                            </Text>
+                        )
+                    }
 
-                    <View style={{paddingTop: 50}}>
-                        {/*Points to Redeem Input*/}
-                        <Text style={MainStyles.head2Text}>POINTS TO REDEEM</Text>
-                        <NumberTextInput
-                            style={{fontSize: 30, textAlign: 'right'}}
-                            onChangeText={(text) => {
-                                setRedeemValue(text);
-                                setIsChanged(true);
-                            }}
-                            value={redeemValue}
-                            placeholder={placeholderMsg}
-                            error={redeemValueError}
-                            editable={state.User.kpoints !== 0}
-                        />
-                        <Text style={{
-                            top: 5,
-                            fontFamily: 'proxima-bold',
-                            color: 'red',
-                        }}>{redeemValueError ? 'Please Enter the Correct Amount of Points' : ' '}</Text>
+                    <RedeemButton disable={!redeemable} navigation={navigation}/>
 
-                        <View style={{top: 20}}>
-                            <Text style={MainStyles.head2Text}>EQUAL TO</Text>
-                            <Text style={[MainStyles.head2Text, {
-                                fontSize: 50,
-                                textAlign: 'right',
-                                justifyContent: 'center'
-                            }]}>{value()} <Text style={{fontSize: 30}}>{'\u0E3F'}</Text></Text>
-                        </View>
-                    </View>
-                    <RedeemButton value={redeemValue} disable={redeemValueError || !isChanged} navigation={navigation}/>
                 </View>
             </View>
         </TouchableWithoutFeedback>
     );
 };
 
-const RedeemButton = ({value, disable, navigation}) => {
+const RedeemButton = ({disable, navigation}) => {
     return (
-        <BlueButton text={'Redeem ' + value + ' Points'} disable={disable}
+        <BlueButton text={'Redeem All Points'} disable={disable}
                     onPress={() => {
                         return new Promise((resolve, reject) => {
-                            // store.dispatch(actions.User.setKpoints(store.getState().User.kpoints - value));
                             setTimeout(() => {
                                 navigation.replace('RedeemPointComplete');
                                 resolve('success');
