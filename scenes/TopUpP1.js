@@ -94,13 +94,13 @@ const TopUpP1 = ({navigation, User}) => {
                 }}
             >
                 <TopUpInfoCard topUpInfo={topUpInfo} navigation={navigation} refRBSheet={refRBSheet}
-                               token={User.token} setConfirm={setConfirm}/>
+                               token={User.token} setConfirm={setConfirm} setScanned={setScanned}/>
             </RBSheet>
         </View>
     )
 };
 
-const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token}) => {
+const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setScanned}) => {
     const logo = require('../assets/logo.png');
     const gradient = require('../assets/13561.png');
     const TopUpCard = () => {
@@ -146,7 +146,7 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token}) => {
         )
     };
     const handleConfirmResult = () => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
             const tempData = {
                 number: topUpInfo.number,
                 value: topUpInfo.value,
@@ -160,7 +160,14 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token}) => {
                 })
                 .catch(error => {
                     console.log(error.response);
-                    Alert.alert('Error');
+                    Alert.alert('Error', 'Please Try Again',
+                        [
+                            {
+                                text: 'OK', onPress: () => {
+                                    setScanned(false);
+                                }
+                            }
+                        ]);
                 });
             resolve();
         });

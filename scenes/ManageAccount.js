@@ -129,8 +129,8 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
                     reject();
                 });
+
             await console.log(infoToSend);
-            resolve();
 
             await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
                 'headers': {
@@ -178,11 +178,10 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                 })
                 .catch(error => {
                     console.log(error.response);
-                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    Alert.alert('Error Trying to Update Your Info (GET DATA)', 'Please Try Again');
                     reject();
                 });
             await console.log(infoToSend);
-            resolve();
 
             await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
                 'headers': {
@@ -196,7 +195,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                 })
                 .catch(error => {
                     console.log(error.response);
-                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    Alert.alert('Error Trying to Update Your Info (UPDATE)', 'Please Try Again');
                     reject();
                 })
         });
@@ -233,7 +232,6 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     reject();
                 });
             await console.log(infoToSend);
-            resolve();
 
             await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
                 'headers': {
@@ -285,7 +283,6 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     reject();
                 });
             await console.log(infoToSend);
-            resolve();
 
             await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
                 'headers': {
@@ -485,12 +482,13 @@ const handleImagePicking = async (token, setShowLoading) => {
         });
         if (result.cancelled === false) {
             let infoToSend = new FormData();
+            const imgUri = result.uri;
             infoToSend.append('image', {
-                uri: result.uri,
+                uri: imgUri,
                 name: 'userProfile.jpg',
                 type: 'image/jpg'
             });
-            console.log("uploading: ", result);
+            console.log("uploading: ", infoToSend);
             setShowLoading(true);
             axios.post(API_URL.UPLOAD_IMAGE, infoToSend, {
                 'headers': {
@@ -503,7 +501,11 @@ const handleImagePicking = async (token, setShowLoading) => {
                     console.log(res);
                     store.dispatch(actions.User.setPic(result.uri));
                 })
-                .catch(error => console.log(error));
+                .catch(error => {
+                    setShowLoading(false);
+                    Alert.alert('Error Changing Your Picture');
+                    console.log(error.response);
+                });
         }
     }
 };
