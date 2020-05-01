@@ -10,14 +10,14 @@ const {
   reduceUserDetails,
 } = require("../utility/validators");
 
-exports.merchantSignup = (req, res) => {
-  const newMerchant = {
+exports.adminSignup = (req, res) => {
+  const newAdmin = {
     email: req.body.email,
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
     handle: req.body.handle,
-    storeName: req.body.storeName,
-    ownerName: req.body.ownerName,
+    firstName: req.body.firstName,
+    lastName: req.body.firstName,
     phone: req.body.phone,
   };
 
@@ -53,12 +53,11 @@ exports.merchantSignup = (req, res) => {
     .then((idtoken) => {
       token = idtoken;
       const userCredentials = {
-        handle: newMerchant.handle,
-        email: newMerchant.email,
-        storeName: newMerchant.storeName,
-        ownerName: newMerchant.ownerName,
-        phone: newMerchant.phone,
-        total: 0,
+        handle: newAdmin.handle,
+        email: newAdmin.email,
+        firstName: newAdmin.firstName,
+        lastName: newAdmin.lastName,
+        phone: newAdmin.phone,
         createdAt: new Date().toISOString(),
         imageUrl:
           "https://firebasestorage.googleapis.com/v0/b/" +
@@ -84,17 +83,17 @@ exports.merchantSignup = (req, res) => {
     });
 };
 
-exports.merchantLogin = (req, res) => {
-  const merchant = {
+exports.adminLogin = (req, res) => {
+  const admin = {
     email: req.body.email,
     password: req.body.password,
   };
-  const { valid, errors } = validateLoginData(merchant);
+  const { valid, errors } = validateLoginData(admin);
   if (!valid) return res.status(400).json(errors);
 
   firebase
     .auth()
-    .signInWithEmailAndPassword(merchant.email, merchant.password)
+    .signInWithEmailAndPassword(admin.email, admin.password)
     .then((data) => {
       return data.user.getIdToken();
     })
@@ -111,7 +110,7 @@ exports.merchantLogin = (req, res) => {
     });
 };
 //Get Merchant Data
-exports.getMerchantData = (req, res) => {
+exports.getAdminData = (req, res) => {
   let merchantData = [];
   db.doc(`/merchants/${req.merchant.handle}`)
     .get()
@@ -122,10 +121,9 @@ exports.getMerchantData = (req, res) => {
         userId: doc.id,
         handle: doc.data().handle,
         email: doc.data().email,
-        storeName: doc.data().storeName,
-        ownerName: doc.data().ownerName,
+        firstName: doc.data().firstName,
+        lastName: doc.data().lastName,
         phone: doc.data().phone,
-        total: doc.data().total,
         imageUrl: doc.data().imageUrl,
         createdAt: doc.data().createdAt,
       });
@@ -137,62 +135,51 @@ exports.getMerchantData = (req, res) => {
       res.status(500).json({ error: err.code });
     });
 };
-//Get Merchant user
-exports.getAllMerchantData = (req, res) => {
-  let merchantData = [];
-  db.collection("merchants")
-    .get()
-    .then((data) => {
-      data.forEach((doc) => {
-        merchantData.push({
-          userId: doc.id,
-          handle: doc.data().handle,
-          email: doc.data().email,
-          storeName: doc.data().storeName,
-          ownerName: doc.data().ownerName,
-          phone: doc.data().phone,
-          total: doc.data().total,
-          imageUrl: doc.data().imageUrl,
-          createdAt: doc.data().createdAt,
-        });
-      });
-      console.log(merchantData);
 
-      return res.json(merchantData);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json({ error: err.code });
-    });
-};
-
-exports.moneyRequest = (req, res) => {
-  const request = {
-    handle: req.merchant.handle,
-    amount: req.body.amount,
-    requestedAt: new Date().toISOString(),
-    status:"Pending",
-    accept: false,
+exports.acceptRequest = (req, res) => {
+  const data = {
+    handle: req.body.handle,
   };
-  db.doc(`/merchants/${req.merchant.handle}`)
+  db.doc(`/RequestToAdmins/${data.handle}`)
     .get()
     .then((doc) => {
-      //console.log('mer'+req.merchant.handle);
-      
-      if(doc.data().total > request.amount)
-      {
-        db.doc("/RequestToAdmins/" + req.merchant.handle).set(request)
-        .then(()=>{
-          return res.json({ message:"Request Successful"});
-        })
-
+      let temp = doc.data().amount;
+      if (!doc.exists) {
+        check = false;
+        return res.status(404).json({ error: "Not Found" });
       }
-      else
-      res.status(500).json({ error:"Money Request less than total"});
+      else if (doc.data().accept === false && doc.data().status === "Pending")
+      {
+        db.doc(`/merchants/${data.handle}`)
+        .get()
+        .then((doc) => {
+          const total = Number(doc.data().total) - temp;
+          db.doc(`/merchants/${data.handle}`).update({ total });
+          return res.json({ message: "Received money" });
+        })
+        .then((doc) => {
+          const status = "Done";
+          return db.doc(`/RequestToAdmins/${data.handle}`).update({ status });
+        })
+        .then((doc) => {
+          const accept = true;
+          return db.doc(`/RequestToAdmins/${data.handle}`).update({ accept });
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).json({ error: err.code });
+        });
+      }
+      else 
+      {
+        return res.json({ error: "Accepted Already, Please Contract to Admin" });
+      }
     })
     .catch((err) => {
       console.error(err);
       res.status(500).json({ error: err.code });
     });
 };
-
+//Notification
+//Promotion
+//Generate card

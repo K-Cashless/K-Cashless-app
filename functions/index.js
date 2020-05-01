@@ -12,14 +12,11 @@ app.use(cors());
 const { db } = require("./utility/admin");
 
 const {
-  getAllScreams,
-  postOneScream,
-  getScream,
-  commentOnScream,
-  likeScream,
-  unlikeScream,
-  deleteScream,
-} = require("./handlers/screams");
+  adminSignup,
+  adminLogin,
+  getAdminData,
+  acceptRequest,
+} = require("./handlers/admins");
 const {
   signup,
   login,
@@ -31,28 +28,37 @@ const {
   topup,
   transfer,
   getAllUserData,
+  updateUserDetails,
+  redeemPoint,
+  userGetMerchant,
 } = require("./handlers/users");
 const {
   merchantSignup,
   merchantLogin,
   getMerchantData,
   getAllMerchantData,
+  moneyRequest,
 } = require("./handlers/merchants");
 
+const {
+  getAllTransactions,
+  getOneTransaction,
+} = require("./handlers/transaction");
+
+//Transaction route
+app.get("/getAllTransactions", getAllTransactions);
+app.get("/getOneTransaction", FBAuth, getOneTransaction);
+//Admin route
+app.post("/adminSignup", adminSignup);
+app.post("/adminLogin", adminLogin);
+app.get("/getAdminData", FBAuth, getAdminData);
+app.post("/merchant/acceptRequest", acceptRequest);
 //Merchants route
 app.post("/merchantSignup", merchantSignup);
 app.post("/merchantLogin", merchantLogin);
 app.get("/getMerchantData", FBAuth, getMerchantData);
 app.get("/getAllMerchantData", getAllMerchantData);
-
-//Scream route
-app.get("/screams", getAllScreams);
-app.post("/scream", FBAuth, postOneScream);
-app.get("/scream/:screamId", getScream);
-app.delete("/scream/:screamId", FBAuth, deleteScream);
-app.get("/scream/:screamId/like", FBAuth, likeScream);
-app.get("/scream/:screamId/unlike", FBAuth, unlikeScream);
-app.post("/scream/:screamId/comment", FBAuth, commentOnScream);
+app.post("/merchant/moneyRequest", FBAuth, moneyRequest);
 
 //Users route
 app.post("/signup", signup);
@@ -63,11 +69,14 @@ app.post("/user/image", FBAuth, uploadImage);
 app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getAuthenticatedUser);
 app.post("/prepaidCard/:cardID", FBAuth, topup);
-app.post("/merchant/:merchantID", FBAuth, transfer);
+app.post("/paid/:merchantID", FBAuth, transfer);
 app.get("/getAllUserData", getAllUserData);
+app.post("/user/updateData", FBAuth, updateUserDetails);
+app.post("/user/redeemPoint", FBAuth, redeemPoint);
+app.get("/user/getMerchant/:merchantID", FBAuth, userGetMerchant);
 
 exports.api = functions.region("asia-east2").https.onRequest(app);
-
+/*
 exports.createNotificationOnLike = functions
   .region("asia-east2")
   .firestore.document("likes/{id}")
@@ -188,7 +197,7 @@ exports.onScreamDelete = functions
       })
       .catch((err) => console.error(err));
   });
-
+*/
 exports.helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello world");
 });

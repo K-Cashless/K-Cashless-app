@@ -113,6 +113,8 @@ exports.login = (req, res) => {
 //Get user Data
 exports.getUserData = (req, res) => {
   let userData = [];
+  console.log("lol" + req.user.handle);
+
   db.doc(`/users/${req.user.handle}`)
     .get()
     .then((doc) => {
@@ -130,6 +132,10 @@ exports.getUserData = (req, res) => {
       });
       console.log(userData);
       return res.json(userData);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
     });
 };
 //Get All user
@@ -297,7 +303,7 @@ exports.uploadImage = (req, res) => {
   });
   busboy.end(req.rawBody);
 };
-
+//Done
 exports.topup = (req, res) => {
   const prepaidCard = {
     number: req.body.number,
@@ -311,57 +317,66 @@ exports.topup = (req, res) => {
       if (!doc.exists) {
         return res.status(404).json({ error: "Wrong CardID" });
       }
-      if (
+      else if (
         prepaidCard.value !== doc.data().value ||
         prepaidCard.number !== doc.data().number
       ) {
-        return res.status(404).json({ error: "Wrong value or number of card" });
+        return res.status(500).json({ error: "Wrong value or number of card" });
       }
-      if (doc.data().used === true) {
-        return res.status(404).json({ error: "This card is already use" });
+      else if (doc.data().used === true) {
+        return res.status(500).json({ error: "This card is already use" });
       }
-    })
-    .then(() => {
-      //Fix for easy don't forget change used = True
-      const used = false;
-      return db.doc(`/prepaidCard/${req.params.cardID}`).update({ used });
-    })
-    .then(() => {
-      const whoUsed = req.user.handle;
-      return db.doc(`/prepaidCard/${req.params.cardID}`).update({ whoUsed });
-    })
-    .then(() => {
-      db.doc(`/users/${req.user.handle}`)
+      else
+      {
+        db.doc(`/prepaidCard/${req.params.cardID}`)
         .get()
-        .then((doc) => {
-          console.log("tester " + doc.data().deposit);
-          const deposit =
-            Number(doc.data().deposit) + Number(prepaidCard.value);
-          return db.doc(`/users/${req.user.handle}`).update({ deposit });
+        .then(() => {
+          const used = false;
+          return db.doc(`/prepaidCard/${req.params.cardID}`).update({ used });
+        })
+        .then(() => {
+          const whoUsed = req.user.handle;
+          return db.doc(`/prepaidCard/${req.params.cardID}`).update({ whoUsed });
+        })
+        .then(() => {
+          db.doc(`/users/${req.user.handle}`)
+            .get()
+            .then((doc) => {
+              console.log("tester " + doc.data().deposit);
+              const deposit =
+                Number(doc.data().deposit) + Number(prepaidCard.value);
+              return db.doc(`/users/${req.user.handle}`).update({ deposit });
+            });
+        })
+        .then(() => {
+          const transaction = {
+            createdAt: new Date().toISOString(),
+            from: req.params.cardID,
+            to: req.user.handle,
+            amount: prepaidCard.value,
+            info: "Top-Up Money",
+          };
+          return db.doc(`/transactions/${transaction.createdAt}`).set(transaction);
+        })
+        .then((data) => {
+          console.log("done");
+          return res.json({ message: "Top-Up Successful" });
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).json({ error: err.code });
         });
+      }
     })
-    .then(() => {
-      const transaction = {
-        createdAt: new Date().toISOString(),
-        from: req.params.cardID,
-        to: req.user.handle,
-        amount: prepaidCard.value,
-        info: "Top-Up Money",
-      };
-      return db.doc(`/transactions/${transaction.createdAt}`).set(transaction);
-    })
-    .then((data) => {
-      console.log("done");
-      return res.json({ message: "Top-Up Successful" });
-    })
+    
     .catch((err) => {
       console.error(err);
       res.status(500).json({ error: err.code });
     });
 };
-
+//
 exports.transfer = (req, res) => {
-  let check = false;
+  let check = true
   const merchant = {
     cost: req.body.cost,
   };
@@ -369,14 +384,13 @@ exports.transfer = (req, res) => {
     .get()
     .then((doc) => {
       console.log("num store " + req.params.merchantID);
-      check = true;
       if (!doc.exists) {
+        check = false;
         return res.status(404).json({ error: "Wrong MerchantID" });
       }
     })
+
     .then(() => {
-      console.log('check'+check);
-      
       db.doc(`/users/${req.user.handle}`)
         .get()
         .then((doc) => {
@@ -386,8 +400,13 @@ exports.transfer = (req, res) => {
             console.log("tester " + doc.data().deposit);
 
             const deposit = Number(doc.data().deposit) - Number(merchant.cost);
-            return db.doc(`/users/${req.user.handle}`).update({ deposit });
+            const point = Number(doc.data().point) + Number(merchant.cost);
+            return db.doc(`/users/${req.user.handle}`).update({ deposit ,point});
           }
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
         });
     })
     .then(() => {
@@ -406,11 +425,17 @@ exports.transfer = (req, res) => {
               return db
                 .doc(`/merchants/${req.params.merchantID}`)
                 .update({ total });
+            })
+            .catch((err) => {
+              console.error(err);
+              return res.status(500).json({ error: err.code });
             });
         });
     })
-    .then(() => {
-      db.doc(`/users/${req.user.handle}`)
+    .then((doc) => {
+      if(check === true)
+      {
+        db.doc(`/users/${req.user.handle}`)
         .get()
         .then((doc) => {
           if (Number(doc.data().deposit) < Number(merchant.cost)) {
@@ -423,12 +448,21 @@ exports.transfer = (req, res) => {
               amount: merchant.cost,
               info: "Paid Merchant",
             };
-            return db
+            db
               .doc(`/transactions/${transaction.createdAt}`)
-              .set(transaction);
+              .set(transaction)
+              .then(()=>{
+                return res.json({transaction});
+              })
           }
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
         });
+      }
     })
+    /*
     .then(() => {
       db.doc(`/users/${req.user.handle}`)
         .get()
@@ -439,14 +473,19 @@ exports.transfer = (req, res) => {
             console.log("done");
             return res.json({ message: "Paid Successful" });
           }
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
         });
     })
+    */
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
+    
 };
-
 exports.redeemPoint = (req, res) => {
   let tempDeposit;
   let tempMoney;
@@ -454,33 +493,64 @@ exports.redeemPoint = (req, res) => {
   db.doc(`/users/${req.user.handle}`)
     .get()
     .then((doc) => {
-      if (Number(doc.data().point) >= 10) {
+      if (Number(doc.data().point) >= 200) {
+        console.log("ss");
+
         tempPoint = Number(doc.data().point);
         tempDeposit = Number(doc.data().deposit);
-        tempMoney = tempPoint / 10;
-        tempPoint = tempPoint % 10;
+        tempMoney = tempPoint % 200;
+        tempPoint = tempPoint - 200 * tempMoney;
         tempDeposit = tempDeposit + tempMoney;
         const updatePoint = {
           point: tempPoint,
           deposit: tempDeposit,
         };
         return db.doc(`/users/${req.user.handle}`).update(updatePoint);
-      } else return res.status(404).json({ err: "Point less than 10" });
+      } else return res.status(404).json({ err: "Point less than 200" });
     })
     .then((doc) => {
-        const transaction = {
-          createdAt: new Date().toISOString(),
-          from: req.user.handle,
-          to: req.user.handle,
-          amount: tempMoney,
-          info: "Redeem Point",
-        };
-        return db
-          .doc(`/transactions/${transaction.createdAt}`)
-          .set(transaction);
+      const transaction = {
+        createdAt: new Date().toISOString(),
+        from: req.user.handle,
+        to: req.user.handle,
+        amount: tempMoney,
+        info: "Redeem Point",
+      };
+      db.doc(`/transactions/${transaction.createdAt}`)
+        .set(transaction)
+        .then(() => {
+          return res.json({ message: "Redeem Successful" });
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
+        });
+    })
+    .catch((err) => {
+      console.log("ee");
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+exports.userGetMerchant = (req, res) => {
+  let merchantData = [];
+  db.doc(`/merchants/${req.params.merchantID}`)
+    .get()
+    .then((doc) => {
+
+      merchantData.push({
+        handle: doc.data().handle,
+        storeName: doc.data().storeName,
+        ownerName: doc.data().ownerName,
+        phone: doc.data().phone,
+        imageUrl: doc.data().imageUrl,
+      });
+      console.log(merchantData);
+      return res.json(merchantData);
     })
     .catch((err) => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      res.status(500).json({ error: err.code });
     });
 };
