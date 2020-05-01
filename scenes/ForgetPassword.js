@@ -48,7 +48,8 @@ const ForgetPassword = ({navigation}) => {
                                                 })
                                                 .catch(error => {
                                                     console.log(error.response);
-                                                    Alert.alert('Error', error.response.data);
+                                                    // alert("ERROR");
+                                                    Alert.alert('Error', 'Please check your email and try again.');
                                                     reject();
                                                 })
                                         })

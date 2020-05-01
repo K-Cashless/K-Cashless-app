@@ -5,8 +5,16 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
 import {connect} from 'react-redux';
 
-const PaymentComplete = ({navigation, User}) => {
-    const data = navigation.getParam('data', {});
+const PaymentComplete = ({navigation}) => {
+    const data = navigation.getParam('data', {
+        id: null,
+        time: null,
+        from: null,
+        senderName: null,
+        receiverName: null,
+        to: null,
+        amount: null,
+    });
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
@@ -25,18 +33,18 @@ const PaymentComplete = ({navigation, User}) => {
                     </View>
                     <View style={{flex: 0.3}}>
                         {/*sample data*/}
-                        <Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>25 Mar 2020 - 10:05</Text>
-                        <Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>ID: foabFFI31NVshv</Text>
+                        <Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>{data.time}</Text>
+                        <Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>ID: {data.id}</Text>
                     </View>
                     <View style={{flex: 4, width: '100%', top: 50, justifyContent: 'flex-start'}}>
                         <View style={{flex: 1}}>
-                            <InfoSection title={'FROM'} value={User.name}/>
+                            <InfoSection title={'FROM'} value={data.senderName} id={data.from}/>
                             <View style={{paddingTop: 20}}>
-                                <InfoSection title={'TO'} value={data.shopInfo.name}/>
+                                <InfoSection title={'TO'} value={data.receiverName} id={data.to}/>
                             </View>
                         </View>
                         <View style={{flex: 1, justifyContent: 'flex-start'}}>
-                            <InfoSection title={'AMOUNT'} value={(data.amount * 1).toFixed(2)}/>
+                            <InfoSection title={'AMOUNT'} value={data.amount}/>
                         </View>
                     </View>
                 </View>
@@ -48,7 +56,7 @@ const PaymentComplete = ({navigation, User}) => {
     );
 };
 
-const InfoSection = ({title, value}) => {
+const InfoSection = ({title, value, id}) => {
     return (
         <View>
             <Text style={[MainStyles.head2Text, {fontSize: 20}]}>{title}</Text>
@@ -59,6 +67,12 @@ const InfoSection = ({title, value}) => {
                     textAlign: 'right',
                     textTransform: 'uppercase',
                 }]}>{value}</Text>
+                <Text style={[MainStyles.head2Text, {
+                    fontFamily: 'proxima-regular',
+                    fontSize: 18,
+                    textAlign: 'right',
+                    color: 'rgb(150,150,150)'
+                }]}>{id}</Text>
             </View>
         </View>
     )
@@ -66,9 +80,7 @@ const InfoSection = ({title, value}) => {
 
 function mapStateToProps(state) {
     return {
-        User: {
-            name: state.User.name,
-        }
+        User: state.User
     }
 }
 

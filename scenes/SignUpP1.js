@@ -69,7 +69,7 @@ const SignUpP1 = ({navigation}) => {
                                         pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                                         message: 'Incorrect Email Format'
                                     },
-                                    {pattern: /^\w+([.-]?\w+)*@kmitl.ac.th/, message: 'KMITL Email Only'},
+                                    {pattern: /^\w+([.-]?\w+)*@kmitl.ac.th$/, message: 'KMITL Email Only'},
                                 ]}
                                 onChangeText={(text) => setInfo({...info, email: text})}
                                 value={info.email}

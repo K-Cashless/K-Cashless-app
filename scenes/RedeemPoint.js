@@ -9,7 +9,7 @@ import store from '../store';
 
 const RedeemPoint = ({navigation}) => {
     const state = store.getState();
-    const redeemValue = Math.floor(state.User.kpoints / 200) + 1000;
+    const redeemValue = Math.floor(state.User.kpoints / 200);
     const redeemable = !(redeemValue < 1);
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -58,7 +58,7 @@ const RedeemButton = ({disable, navigation}) => {
     return (
         <BlueButton text={'Redeem All Points'} disable={disable}
                     onPress={() => {
-                        return new Promise((resolve, reject) => {
+                        return new Promise((resolve) => {
                             setTimeout(() => {
                                 navigation.replace('RedeemPointComplete');
                                 resolve('success');

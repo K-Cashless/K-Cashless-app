@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import axios from 'axios';
 import {BallIndicator} from "react-native-indicators";
 import API_URL from '../firebase/apiLinks';
 import * as actions from '../actions';
 import store from '../store';
-
 
 const SignInButton = ({navigation, email, password}) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +21,7 @@ const SignInButton = ({navigation, email, password}) => {
     const onPressAction = () => {
         setIsLoading(true);
         setButtonStyle(styles.buttonContainerOutline);
+        Keyboard.dismiss();
         let tempToken = '';
         signIn(email, password)
             .then(res => {

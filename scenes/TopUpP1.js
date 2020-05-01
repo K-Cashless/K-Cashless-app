@@ -25,16 +25,20 @@ const TopUpP1 = ({navigation, User}) => {
     const handleBarCodeScanned = ({type, data}) => {
         Vibration.vibrate(500);
         setScanned(true);
-        data = JSON.parse(data);
-        console.log("Scanned: ", type);
-        console.log(data);
-        data = {
-            cardId: data.cardId,
-            number: data.number,
-            value: data.value
-        };
-        setTopUpInfo(data);
-        refRBSheet.current.open();
+        try {
+            data = JSON.parse(data);
+            console.log("Scanned: ", type);
+            console.log(data);
+            data = {
+                cardId: data.cardId,
+                number: data.number,
+                value: data.value
+            };
+            setTopUpInfo(data);
+            refRBSheet.current.open();
+        } catch (error) {
+            Alert.alert('Error');
+        }
     };
     if (!hasCameraPermission) {
         return (
@@ -96,7 +100,7 @@ const TopUpP1 = ({navigation, User}) => {
     )
 };
 
-const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setConfirm}) => {
+const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token}) => {
     const logo = require('../assets/logo.png');
     const gradient = require('../assets/13561.png');
     const TopUpCard = () => {
@@ -142,32 +146,23 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setConfirm}) =
         )
     };
     const handleConfirmResult = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const tempData = {
                 number: topUpInfo.number,
                 value: topUpInfo.value,
             };
-            console.log(tempData);
-            const link = API_URL.TOP_UP + "/" + topUpInfo.cardId;
-            console.log(link, token);
-            axios.post(link, tempData, {'headers': {'Authorization': 'Bearer ' + token}})
-                .then(res => {
+            console.log('tempData = ', tempData);
+            await axios.post(API_URL.TOP_UP + '/' + topUpInfo.cardId, tempData, {'headers': {'Authorization': 'Bearer ' + token}})
+                .then(async (res) => {
                     console.log(res);
-                    setConfirm(true);
-                })
-                .then(() => {
-                    refRBSheet.current.close();
-                })
-                .then(() => {
+                    await refRBSheet.current.close();
                     navigation.replace('TopUpComplete', {topUpValue: tempData.value});
-                    resolve();
                 })
                 .catch(error => {
-                    Alert.alert('Error', error);
-                    refRBSheet.current.close();
-                    reject();
+                    console.log(error.response);
+                    Alert.alert('Error');
                 });
-
+            resolve();
         });
     };
     return (

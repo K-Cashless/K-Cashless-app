@@ -320,7 +320,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                                 pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                                 message: 'Incorrect Email Format'
                             },
-                            {pattern: /^\w+([.-]?\w+)*@kmitl.ac.th/, message: 'KMITL Email Only'},
+                            {pattern: /^\w+([.-]?\w+)*@kmitl.ac.th$/, message: 'KMITL Email Only'},
                         ]}
                     />
                     <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
@@ -334,6 +334,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         </TouchableOpacity>
                         <TransparentButton
                             text={'Done'}
+                            disabled={errorState[0]}
                             style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
                             onPress={handleEmailUpdate}
                         />
@@ -364,6 +365,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         </TouchableOpacity>
                         <TransparentButton
                             text={'Done'}
+                            disabled={errorState[0]}
                             style={{backgroundColor: errorState[0] ? 'rgba(150,150,150,0.5)' : 'rgb(38,115,226)'}}
                             onPress={handleFirstNameUpdate}
                         />
@@ -395,6 +397,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         </TouchableOpacity>
                         <TransparentButton
                             text={'Done'}
+                            disabled={errorState[0]}
                             style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
                             onPress={handleLastNameUpdate}
                         />
@@ -426,6 +429,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                         </TouchableOpacity>
                         <TransparentButton
                             text={'Done'}
+                            disabled={errorState[0]}
                             style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
                             onPress={handlePhoneUpdate}
                         />

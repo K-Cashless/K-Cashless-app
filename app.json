@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "K-Cashless",
-    "slug": "K-Cashless",
+    "name": "K-Cashless-app",
+    "slug": "K-Cashless-app",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [

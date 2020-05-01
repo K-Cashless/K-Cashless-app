@@ -1,26 +1,35 @@
-import React, {useState} from 'react';
-import {Image, Keyboard, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, Image, Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NumberTextInput from "../components/NumberTextInput";
 import LInfoSectionTHB from '../components/LInfoSectionTHB';
 import BlueButton from '../components/BlueButton';
 import {connect} from 'react-redux';
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import axios from 'axios';
+import API_URL from '../firebase/apiLinks';
+import store from '../store';
+import * as actions from '../actions';
 
 const PaymentInfo = ({navigation, balance}) => {
     const shopInfo = navigation.getParam('shopInfo', {});
 
     const [payValue, setPayValue] = useState('');
     const [isChanged, setIsChanged] = useState(false);
-    const payValueError = (payValue > balance || payValue <= 0) && isChanged;
-    console.log(shopInfo);
+    const [payValueError, setPayValueError] = useState('');
+
+    useEffect(() => {
+        if (!(/^[0-9]*\.[0-9]{2}$/.test(payValue)) && isChanged) {
+            setPayValueError('Please Enter the Correct Amount (i.e. 25.00)');
+        } else {
+            setPayValueError('');
+        }
+    });
     return (
         <>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <KeyboardAvoidingView
-                    behavior={Platform.Os === "ios" ? "padding" : "height"}
-                    style={{flex: 1}}
-                >
+                <KeyboardAwareScrollView>
                     <TouchableWithoutFeedback
                         onPress={() => {
                             setPayValue(payValue);
@@ -43,24 +52,22 @@ const PaymentInfo = ({navigation, balance}) => {
                                         placeholder={'Enter amount to pay'}
                                         error={payValueError}
                                     />
-                                    <Text style={{
-                                        top: 5,
-                                        fontFamily: 'proxima-bold',
-                                        color: 'red',
-                                    }}>{payValueError ? 'Please Enter the Correct Amount' : ' '}</Text>
+                                    <Text style={[MainStyles.bodyText, {marginTop: 5, color: 'red', fontSize: 15}]}>
+                                        {payValueError}
+                                    </Text>
                                 </View>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
             </View>
             <View style={{marginHorizontal: 20, bottom: '5%'}}>
                 <BlueButton
-                    text={'Pay ' + (payValue * 1).toFixed(2) + ' ' + '\u0E3F'}
+                    text={'Pay ' + Math.floor(payValue * 100) / 100 + ' ' + '\u0E3F'}
                     navigation={navigation}
-                    disable={payValueError || !isChanged}
+                    disable={payValueError.length > 0 || !isChanged}
                     onPress={() => {
-                        handlePayment(navigation, {shopInfo: shopInfo, amount: payValue})
+                        return handlePayment(navigation, {shopInfo: shopInfo, amount: payValue})
                     }}
                 />
             </View>
@@ -68,41 +75,66 @@ const PaymentInfo = ({navigation, balance}) => {
     )
 };
 const handlePayment = (navigation, dataToSend) => {
-    // TODO - firebase
-    navigation.replace('PaymentComplete', {data: dataToSend});
+    return new Promise(async (resolve, reject) => {
+        const infoToSend = {cost: dataToSend.amount};
+        await axios.post(API_URL.TRANSFER_TO_MERCHANT + '/' + dataToSend.shopInfo.id, infoToSend, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+            .then(res => {
+                console.log(res.data.transaction);
+                const infoToPass = {
+                    id: 'We have no ID, just yet!',
+                    time: res.data.transaction.createdAt,
+                    from: res.data.transaction.from,
+                    senderName: store.getState().User.firstName + " " + store.getState().User.lastName,
+                    receiverName: dataToSend.shopInfo.name,
+                    to: res.data.transaction.to,
+                    amount: res.data.transaction.amount,
+                };
+                navigation.replace('PaymentComplete', {data: infoToPass});
+                resolve();
+            })
+            .catch(error => {
+                Alert.alert('Payment Error');
+                console.log(error.response);
+                reject();
+            });
+        axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+            .then(res => {
+                console.log(res);
+                store.dispatch(actions.User.setId(res.data[0].userId));
+                store.dispatch(actions.User.setFirstName(res.data[0].firstName));
+                store.dispatch(actions.User.setLastName(res.data[0].lastName));
+                store.dispatch(actions.User.setBalance(res.data[0].deposit));
+                store.dispatch(actions.User.setKpoints(res.data[0].point));
+                store.dispatch(actions.User.setEmail(res.data[0].email));
+                store.dispatch(actions.User.setPhone(res.data[0].phone));
+                store.dispatch(actions.User.setPic(res.data[0].imageUrl));
+            })
+            .catch(error => {
+                Alert.alert('Error Update Your Data');
+                console.log(error);
+            });
+    });
+
 };
 
 const ShopInfoComponent = ({shopInfo}) => {
     return (
         <View style={{width: '100%', marginTop: 20, marginBottom: 20, flexDirection: 'row'}}>
-            {/*sample data*/}
-            <Image source={require('../assets/demoPic.png')}
-                   style={{width: 90, height: 90, borderRadius: 5}}
+            <Image source={{uri: shopInfo.pic}}
+                   style={{width: 90, height: 90, borderRadius: 90}}
                    resizeMode='cover'/>
             <View style={{flex: 1, justifyContent: 'center'}}>
                 <Text
-                    numberOfLines={1}
+                    numberOfLines={2}
                     ellipsizeMode='middle'
                     style={{
                         fontFamily: 'proxima-bold',
                         color: 'white',
                         fontSize: 25,
-                        marginLeft: 10,
+                        marginLeft: 20,
                         textAlign: 'left',
                     }}>
                     {shopInfo.name}
-                </Text>
-                <Text
-                    numberOfLines={1}
-                    ellipsizeMode='middle'
-                    style={{
-                        fontFamily: 'proxima-regular',
-                        color: 'white',
-                        fontSize: 20,
-                        marginLeft: 10,
-                        textAlign: 'left',
-                    }}>
-                    {shopInfo.location}
                 </Text>
             </View>
         </View>

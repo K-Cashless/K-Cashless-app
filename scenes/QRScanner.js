@@ -1,16 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, Vibration, View} from 'react-native';
+import {Alert, Image, StyleSheet, Text, TouchableOpacity, Vibration, View} from 'react-native';
 import {BarCodeScanner} from 'expo-barcode-scanner';
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as color from '../styles/Colors';
 import MainStyles from '../styles/MainStyles';
 import * as Icon from 'react-native-vector-icons';
+import API_URL from '../firebase/apiLinks';
+import {connect} from 'react-redux';
+import axios from 'axios';
 
-const QRScanner = ({navigation}) => {
+const QRScanner = ({navigation, User}) => {
     const refRBSheet = useRef();
     const [hasCameraPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [shopInfo, setShopInfo] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [confirmResult, setConfirmResult] = useState(false);
     useEffect(() => {
         (async () => {
             const {status} = await BarCodeScanner.requestPermissionsAsync();
@@ -20,15 +25,31 @@ const QRScanner = ({navigation}) => {
     const handleBarCodeScanned = ({type, data}) => {
         Vibration.vibrate(500);
         setScanned(true);
-        console.log("Scanned: ", type, data);
-        // TODO - fetch shop data from firebase
-        setShopInfo({
-            id: '12345',
-            name: data,
-            location: 'Building ABC',
-            pic: ''
-        }); // sample data
-        refRBSheet.current.open();
+        setIsLoading(true);
+        console.log("Scanned: ", type, data, API_URL.GET_MERCHANT_DATA + '/' + data);
+        axios.get(API_URL.GET_MERCHANT_DATA + '/' + data, {'headers': {'Authorization': 'Bearer ' + User.token}})
+            .then(res => {
+                console.log(res.data[0]);
+                setShopInfo({
+                    id: res.data[0].handle,
+                    name: res.data[0].storeName,
+                    pic: res.data[0].imageUrl
+                });
+                setIsLoading(false);
+                refRBSheet.current.open();
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                console.log(error);
+                Alert.alert('Error Trying to Fetch Information', 'Please Try Again',
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                setScanned(false);
+                            }
+                        }
+                    ]);
+            });
     };
     if (!hasCameraPermission) {
         return (
@@ -60,7 +81,9 @@ const QRScanner = ({navigation}) => {
                 backgroundColor: 'rgba(0,0,0,0.5)',
                 alignItems: 'center'
             }}>
-                <Text style={[MainStyles.bodyText, {textAlign: 'center'}]}>Scan QR code to pay</Text>
+                <Text style={[MainStyles.bodyText, {textAlign: 'center', color: isLoading ? color.blue : 'white'}]}>
+                    {isLoading ? ('Loading... Please Wait') : ('Scan QR code to pay')}
+                </Text>
             </View>
             <RBSheet
                 ref={refRBSheet}
@@ -80,29 +103,31 @@ const QRScanner = ({navigation}) => {
                     }
                 }}
                 onClose={() => {
-                    setScanned(false);
+                    if (!confirmResult) setScanned(false);
                 }}
             >
-                <ShopInfoCard shopInfo={shopInfo} navigation={navigation} refRBSheet={refRBSheet}/>
+                <ShopInfoCard shopInfo={shopInfo} navigation={navigation} refRBSheet={refRBSheet}
+                              setConfirmResult={setConfirmResult}/>
             </RBSheet>
         </View>
     )
 };
 
-const ShopInfoCard = ({navigation, refRBSheet, shopInfo}) => {
+const ShopInfoCard = ({navigation, refRBSheet, shopInfo, setConfirmResult}) => {
     const handleConfirmResult = async () => {
+        await setConfirmResult(true);
         refRBSheet.current.close();
         navigation.replace('PaymentInfo', {shopInfo: shopInfo});
     };
+
     return (
         <TouchableOpacity
             style={{marginHorizontal: 20, height: 200, justifyContent: 'center'}}
             onPress={handleConfirmResult}
         >
             <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
-                {/*sample data*/}
-                <Image source={require('../assets/demoPic.png')}
-                       style={{width: 75, height: 75, borderRadius: 5}}
+                <Image source={{uri: shopInfo.pic}}
+                       style={{width: 75, height: 75, borderRadius: 75}}
                        resizeMode='cover'/>
             </View>
             <View style={{flex: 1.5, justifyContent: 'flex-start'}}>
@@ -142,4 +167,10 @@ const CancelButton = ({navigation}) => {
     )
 };
 
-export default QRScanner;
+function mapStateToProps(state) {
+    return {
+        User: state.User
+    };
+}
+
+export default connect(mapStateToProps)(QRScanner);
