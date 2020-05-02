@@ -32,7 +32,6 @@ const PaymentComplete = ({navigation}) => {
                         }]}>Payment Successful</Text>
                     </View>
                     <View style={{flex: 0.3}}>
-                        {/*sample data*/}
                         <Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>{data.time}</Text>
                         <Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>ID: {data.id}</Text>
                     </View>
