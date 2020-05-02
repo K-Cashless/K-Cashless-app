@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "K-Cashless",
-    "slug": "K-Cashless",
+    "name": "K-Cashless-app",
+    "slug": "K-Cashless-app",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -24,7 +24,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.k-cashless.k-cashless-alpha",
+      "buildNumber": "0.1.0"
+    },
+    "android": {
+      "package": "com.kcashless.kcashless_alpha",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "VIBRATE"
+      ]
     }
   }
 }

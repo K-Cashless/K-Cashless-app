@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import * as Colors from '../styles/Colors';
 
 const MainStyles = StyleSheet.create({
@@ -78,7 +78,7 @@ export const BlueButton = StyleSheet.create({
     },
     buttonText: {
         fontFamily: 'proxima-bold',
-        fontSize: 25,
+        fontSize: 23,
         fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',

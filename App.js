@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import Navigator from './navigations/Navigator';
-import {AppLoading} from 'expo';
+import {AppLoading, Notifications} from 'expo';
+import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
-import * as firebase from 'firebase';
-import firebaseConfig from './firebase/firebaseConfig';
 
 import {Provider} from 'react-redux';
 import store from './store';
+import * as action from './actions';
 
 const AppContainer = createAppContainer(Navigator);
 
@@ -21,10 +21,26 @@ const fetchFonts = async () => {
     });
 };
 
-firebase.initializeApp(firebaseConfig);
+async function registerNotification() {
+    let status = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (status.status !== 'granted') return;
+
+    const token = await Notifications.getExpoPushTokenAsync();
+    console.log('Permission: ');
+    console.log(status.status, token);
+}
 
 export default function App() {
     const [dataLoaded, setDataLoaded] = useState(false);
+    useEffect(() => {
+        registerNotification().then();
+        Notifications.addListener(({origin, data}) => {
+            console.log('NOTIFICATIONS: ', origin, data);
+            store.dispatch(action.User.pushNotificationsList(data));
+            store.dispatch(action.User.setNotificationsUnread(true));
+        });
+    }, []);
+
     if (!dataLoaded) {
         return (
             <AppLoading
@@ -33,6 +49,7 @@ export default function App() {
             />
         );
     }
+
     StatusBar.setBarStyle('light-content', true);
     return (
         <Provider store={store}>

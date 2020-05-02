@@ -3,10 +3,15 @@ import {createStackNavigator} from 'react-navigation-stack';
 import MainApp from '../scenes/MainApp';
 import RedeemPoint from '../scenes/RedeemPoint';
 import RedeemPointComplete from '../scenes/RedeemPointComplete';
-import TopUp from '../scenes/TopUp';
+import TopUpP1 from '../scenes/TopUpP1';
 import TopUpComplete from '../scenes/TopUpComplete';
 import NotificationView from '../scenes/NotificationView';
 import History from '../scenes/History';
+import QRScanner from '../scenes/QRScanner';
+import PaymentInfo from "../scenes/PaymentInfo";
+import PaymentComplete from '../scenes/PaymentComplete';
+import Profile from '../scenes/Profile';
+import ManageAccount from '../scenes/ManageAccount';
 
 const AppNavigator = createStackNavigator(
     {
@@ -19,8 +24,8 @@ const AppNavigator = createStackNavigator(
         RedeemPointComplete: {
             screen: RedeemPointComplete
         },
-        TopUp: {
-            screen: TopUp
+        TopUpP1: {
+            screen: TopUpP1
         },
         TopUpComplete: {
             screen: TopUpComplete
@@ -30,11 +35,26 @@ const AppNavigator = createStackNavigator(
         },
         History: {
             screen: History
+        },
+        QRScanner: {
+            screen: QRScanner
+        },
+        PaymentInfo: {
+            screen: PaymentInfo
+        },
+        PaymentComplete: {
+            screen: PaymentComplete
+        },
+        Profile: {
+            screen: Profile
+        },
+        ManageAccount: {
+            screen: ManageAccount
         }
     },
     {
         initialRouteName: 'MainApp',
-        // initialRouteName: 'NotificationView', // for Development Only
+        // initialRouteName: 'Profile', // for Development Only
         headerMode: 'none',
         gesturesEnabled: false,
     }

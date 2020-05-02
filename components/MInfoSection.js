@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {Text, View} from 'react-native';
 import MainStyles from "../styles/MainStyles";
 
-const MInfoSectionTHB = ({title, value}) => {
+const MInfoSection = ({title, value}) => {
     return (
         <View>
-            <Text style={[MainStyles.head2Text]}>{title}</Text>
+            <Text style={[MainStyles.head2Text, {fontSize: 18}]}>{title}</Text>
             <Text style={[MainStyles.head2Text, {
                 fontFamily: 'proxima-regular',
-                fontSize: 30,
+                fontSize: 18,
                 textAlign: 'left',
                 justifyContent: 'center'
             }]}>{value}</Text>
@@ -16,4 +16,4 @@ const MInfoSectionTHB = ({title, value}) => {
     );
 };
 
-export default MInfoSectionTHB;
+export default MInfoSection;

@@ -1,11 +1,20 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useEffect} from 'react';
+import {Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
 import {connect} from 'react-redux';
+import {getAllUserData} from "../firebase/functions";
 
-const TopUpComplete = ({navigation, balance}) => {
+const TopUpComplete = ({navigation, User}) => {
+    const topUpValue = navigation.getParam('topUpValue', '??');
+    useEffect(() => {
+        getAllUserData()
+            .catch(err => {
+                console.log(err);
+                Alert.alert('Error Trying To Update Data');
+            });
+    }, []);
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
@@ -22,7 +31,7 @@ const TopUpComplete = ({navigation, balance}) => {
                         }]}>Top Up Successful</Text>
                     </View>
                     <Text style={[MainStyles.bodyText, {flex: 1, textAlign: 'center'}]}>Your account has been topped up
-                        with {'??'} {'\u0E3F'}. Your new balance is {balance} {'\u0E3F'}.</Text>
+                        with {topUpValue} {'\u0E3F'}. Your new balance is {User.balance} {'\u0E3F'}.</Text>
                 </View>
                 <View style={{width: '100%', bottom: 20}}>
                     <DoneButton navigation={navigation}/>
@@ -34,7 +43,7 @@ const TopUpComplete = ({navigation, balance}) => {
 
 function mapStateToProps(state) {
     return {
-        balance: state.User.balance
+        User: state.User
     }
 }
 

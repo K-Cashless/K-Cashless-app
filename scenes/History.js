@@ -1,53 +1,17 @@
-import React, {useState} from 'react';
-import {
-    View,
-    Image,
-    Text,
-    SafeAreaView,
-    Dimensions,
-    RefreshControl,
-    TouchableHighlight,
-    FlatList
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Dimensions, FlatList, RefreshControl, SafeAreaView, Text, TouchableHighlight, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import store from '../store';
-import * as actions from '../actions';
 import {connect} from 'react-redux';
-
-let test = 0;
+import {getAllUserData} from '../firebase/functions'
 
 async function HistoryLoader() {
-    let i;
-    test += 1;
-    test %= 2;
-    let list = [];
-    for (i = 0; i < 10 * test; ++i) {
-        list.push({
-            id: i.toString(),
-            pic: require('../assets/demoPic.png'),
-            time: '1/2/2020 10:00 AM',
-            title: 'Shop ' + i,
-            transaction: '-' + (Math.random() * 1000).toFixed(2),
-            type: 'pay'
-        });
-    }
-    store.dispatch(actions.User.setHistoryList(list));
-    console.log(store.getState().User.history);
-}
-
-function wait(timeout) {
-    return new Promise(resolve => {
-        setTimeout(resolve, timeout);
-    });
+    await getAllUserData()
+        .catch(error => console.log(error));
 }
 
 const History = ({navigation, list}) => {
-    const [isDataPulled, setDataPulled] = useState(false);
-
-    if (!isDataPulled) {
-        HistoryLoader().then(setDataPulled(true));
-    }
 
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -59,7 +23,7 @@ const History = ({navigation, list}) => {
     );
 };
 
-const HistoryList = ({list}) => {
+const HistoryList = () => {
     const [refreshing, setRefreshing] = useState(false);
 
     const ListEmptyComponent = () => {
@@ -78,23 +42,26 @@ const HistoryList = ({list}) => {
         )
     };
 
-    const onRefresh = async () => {
+    const onRefresh = () => {
         setRefreshing(true);
-        HistoryLoader().then(() => wait(3000)).then(() => setRefreshing(false)); // wait(3000) to simulate fetching data from server
+        HistoryLoader()
+            .then(() => setRefreshing(false));
     };
+    useEffect(() => {
+        onRefresh();
+    }, []);
 
     return (
         <SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
             <FlatList
-                data={list}
+                data={store.getState().User.history}
                 renderItem={({item}) => {
                     return (
-                        <HistoryCard pic={item.pic} title={item.title} time={item.time}
-                                     transaction={item.transaction} type={item.type}/>
+                        <HistoryCard title={item.info} time={item.createdAt}
+                                     transaction={item.amount} type={item.info}/>
                     );
-                }
-                }
-                keyExtractor={item => item.id}
+                }}
+                keyExtractor={item => item.key}
                 refreshControl={
                     <RefreshControl
                         tintColor='white'
@@ -109,7 +76,11 @@ const HistoryList = ({list}) => {
 
 };
 
-const HistoryCard = ({time, title, borderTop, type, transaction, pic}) => {
+const HistoryCard = ({time, title, borderTop, type, transaction}) => {
+    const [green, setGreen] = useState(false);
+    useEffect(() => {
+        if (type === 'Redeem Point' || type === 'Top-Up Money') setGreen(true);
+    }, []);
     return (
         <TouchableHighlight>
             <View style={{
@@ -121,13 +92,8 @@ const HistoryCard = ({time, title, borderTop, type, transaction, pic}) => {
                 borderBottomWidth: 1,
                 justifyContent: 'center'
             }}>
-                <View style={{marginHorizontal: 20, flexDirection: 'row', justifyItems: 'center'}}>
-                    <View style={{flexWrap: 'wrap', alignItems: 'right', justifyContent: 'center'}}>
-                        <Image source={pic}
-                               style={{width: 50, height: 50, borderRadius: 5}}
-                               resizeMode='cover'/>
-                    </View>
-                    <View style={{flex: 1, paddingLeft: 20, justifyContent: 'center'}}>
+                <View style={{marginHorizontal: 20, height: '80%', flexDirection: 'row', justifyItems: 'center'}}>
+                    <View style={{flex: 1, justifyContent: 'center'}}>
                         <Text style={{
                             flex: 2,
                             fontFamily: 'proxima-bold',
@@ -136,23 +102,20 @@ const HistoryCard = ({time, title, borderTop, type, transaction, pic}) => {
                         }}>{title}</Text>
                         <Text style={{
                             flex: 1,
-                            // backgroundColor:'blue',
                             fontFamily: 'proxima-regular',
                             color: 'rgb(150,150,150)',
-                            fontSize: 12,
+                            fontSize: 14,
                         }}>{time}</Text>
                     </View>
-                    <View style={{flex: 1}}>
+                    <View style={{flexWrap: 'wrap'}}>
                         <Text style={{
-                            // backgroundColor:'yellow',
                             fontFamily: 'proxima-bold',
                             textAlign: 'right',
-                            color: type === 'pay' ? 'red' : 'green',
+                            color: green ? 'rgb(77, 240, 96)' : 'red',
                             fontSize: 18
-                        }}>{transaction} {'\u0E3F'}</Text>
+                        }}>{green ? '+ ' : '- '}{transaction} {'\u0E3F'}</Text>
                     </View>
                 </View>
-
             </View>
         </TouchableHighlight>
     );

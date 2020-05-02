@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import * as colors from '../styles/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {withNavigation} from 'react-navigation';
 
-const ScanButton = () => {
-    return(
+const ScanButton = ({navigation}) => {
+    return (
         <View>
             <TouchableOpacity style={{
                 width: 90,
@@ -16,9 +17,13 @@ const ScanButton = () => {
                 borderColor: 'white',
                 borderWidth: 3,
                 top: -15,
+                shadowRadius: 20,
+                shadowColor: 'black',
+                shadowOpacity: 0.5,
             }}
             onPress= {()=>{
                 console.log('scan');
+                navigation.navigate('QRScanner');
             }}>
                 <Icon name='qrcode' size={40} color='white'/>
             </TouchableOpacity>
@@ -26,4 +31,4 @@ const ScanButton = () => {
     );
 };
 
-export default ScanButton;
+export default withNavigation(ScanButton);

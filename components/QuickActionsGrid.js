@@ -6,20 +6,19 @@ const QuickActionsGrid = ({navigation}) => {
     return (
         <View style={{
             width: '100%',
-            height: '70%',
+            height: 300,
         }}>
             {/*ROW 1*/}
             <View style={style.gridRowContainer}>
                 <GridButton text={'Top Up'} iconName={'money-bill-wave'} onPress={() => {
-                    navigation.navigate('TopUp');
+                    navigation.navigate('TopUpP1');
                 }}/>
                 <GridButton
                     text={'History'}
                     iconName={'hourglass-half'}
-                    onPress={() =>{navigation.navigate('History')}}/>
-            </View>
-            {/*ROW 2*/}
-            <View style={style.gridRowContainer}>
+                    onPress={() => {
+                        navigation.navigate('History')
+                    }}/>
                 <GridButton text={'Library'} iconName={'book-reader'} onPress={() => {
                     navigation.navigate('Library')
                 }}/>
@@ -53,10 +52,11 @@ const style = StyleSheet.create({
     },
     descriptionContainer: {
         flex: 2,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
     descriptionText: {
         fontFamily: 'proxima-bold',
+        paddingTop: 20,
         justifyContent: 'flex-start',
         fontSize: 18,
         color: 'white',

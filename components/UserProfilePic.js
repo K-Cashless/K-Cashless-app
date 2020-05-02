@@ -1,22 +1,30 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
-import * as firebase from 'firebase';
+import {connect} from 'react-redux';
 
-const UserProfilePic = ({navigation}) => {
-    const [cnt, setCnt] = useState(0);
+const UserProfilePic = ({navigation, pic}) => {
     return (
         <View>
             <TouchableOpacity
                 onPress={() => {
-                    console.log("PRESS" + cnt);
-                    setCnt(cnt + 1);
-                    firebase.auth().signOut().then(() => navigation.navigate('SignIn'));
-                }}>
-                <Image source={require('../assets/demoPic.png')} style={{width: 40, height: 40, borderRadius: 40}}
-                       resizeMode='cover'/>
+                    navigation.navigate('Profile');
+                }}
+                style={{width: 40, height: 40, borderRadius: 40, backgroundColor: 'white'}}
+            >
+                {
+                    pic &&
+                    <Image source={{uri: pic}} style={{width: 40, height: 40, borderRadius: 40}}
+                           resizeMode='cover'/>
+                }
             </TouchableOpacity>
         </View>
     );
 };
 
-export default UserProfilePic;
+function mapStateToProps(state) {
+    return {
+        pic: state.User.pic
+    }
+}
+
+export default connect(mapStateToProps)(UserProfilePic);

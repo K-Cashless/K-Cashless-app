@@ -1,37 +1,25 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {SignInButton} from '../components';
 import NormalTextInput from '../components/NormalTextInput';
 import * as colors from '../styles/Colors';
 
 const SignIn = ({navigation}) => {
-    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [errorMsg, setErrorMsg] = useState("");
 
     return (
-        <TouchableWithoutFeedback onPress={() => {
-            Keyboard.dismiss
-        }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={MainStyles.container}>
                 <View style={styles.signInContainer}>
-                    <Text style={[MainStyles.head1Text, {textAlign: 'left', paddingBottom: 50}]}>Sign in</Text>
-                    <Text style={{
-                        position: 'absolute',
-                        top: '7%',
-                        fontFamily: 'proxima-bold',
-                        color: 'red',
-                    }}>{errorMsg}</Text>
+                    <Text style={[MainStyles.head1Text, {textAlign: 'left', paddingBottom: 50}]}>Sign In</Text>
 
                     {/*Username Input*/}
                     <NormalTextInput
                         placeholder={'Email'}
-                        onChangeText={(text) => {
-                            setErrorMsg('');
-                            setUserName(text);
-                        }}
-                        value={userName}
+                        onChangeText={(text) => setEmail(text)}
+                        value={email}
                     />
 
                     {/*Password Input*/}
@@ -39,7 +27,6 @@ const SignIn = ({navigation}) => {
                         placeholder={'Password'}
                         secureTextEntry={true}
                         onChangeText={(text) => {
-                            setErrorMsg('');
                             setPassword(text);
                         }}
                         value={password}
@@ -48,17 +35,19 @@ const SignIn = ({navigation}) => {
                     {/*Sign in Button*/}
                     <SignInButton
                         navigation={navigation}
-                        setErrorMsg={setErrorMsg}
-                        userName={userName}
+                        email={email}
                         password={password}
                     />
 
                     {/*Forget Password Button*/}
                     <View style={{paddingTop: 20, flexWrap: 'wrap'}}>
-                        <TouchableOpacity style={{
-                            justifyContent: 'left',
-                            flexWrap: 'wrap',
-                        }}>
+                        <TouchableOpacity
+                            style={{
+                                justifyContent: 'flex-start',
+                                flexWrap: 'wrap',
+                            }}
+                            onPress={() => navigation.navigate('ForgetPassword')}
+                        >
                             <Text style={[MainStyles.textButton, {textAlign: 'left'}]}>Forget
                                 Password?</Text>
                         </TouchableOpacity>
@@ -75,7 +64,7 @@ const SignIn = ({navigation}) => {
                     }}>
                         <Text style={[MainStyles.bodyText, {textAlign: 'center'}]}>Don't have an account?</Text>
                         <View style={{flexWrap: 'wrap', alignSelf: 'center'}}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate('SignUpP1')}>
                                 <Text style={[MainStyles.textButton, {textAlign: 'center', color: colors.primary}]}>Sign
                                     Up Now</Text>
                             </TouchableOpacity>
