@@ -37,7 +37,7 @@ const RecentActivity = () => {
                             fontSize: 14,
                         }}>{recentData.createdAt}</Text>
                     </View>
-                    <View style={{flex: 1, justifyContent: 'center'}}>
+                    <View style={{flexWrap: 'wrap', justifyContent: 'center'}}>
                         <Text style={{
                             fontFamily: 'proxima-bold',
                             textAlign: 'right',

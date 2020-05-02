@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
 import {connect} from 'react-redux';
+import {getAllUserData} from "../firebase/functions";
 
 const PaymentComplete = ({navigation}) => {
     const data = navigation.getParam('data', {
@@ -15,6 +16,15 @@ const PaymentComplete = ({navigation}) => {
         to: null,
         amount: null,
     });
+
+    useEffect(() => {
+        getAllUserData()
+            .catch(err => {
+                console.log(err);
+                Alert.alert('Error Trying To Update Data');
+            });
+    }, []);
+
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>

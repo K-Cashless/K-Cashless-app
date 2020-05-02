@@ -8,11 +8,11 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import store from '../store';
 import axios from 'axios';
 import API_URL from '../firebase/apiLinks';
-import * as actions from '../actions';
+import {getAllUserData} from "../firebase/functions";
 
 const RedeemPoint = ({navigation}) => {
     const [redeemValue, setRedeemValue] = useState(Math.floor(store.getState().User.kpoints / 200));
-    const [redeemable, setRedeemable] = useState(store.getState().User.kpoints >= 200);
+    const [redeemable, setRedeemable] = useState(false);
 
     const ValueTable = () => {
         if (redeemable) {
@@ -59,26 +59,15 @@ const RedeemPoint = ({navigation}) => {
     };
 
     useEffect(() => {
-        (async () => {
-            await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
-                .then(async (res) => {
-                    console.log(res);
-                    store.dispatch(actions.User.setId(res.data[0].userId));
-                    store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-                    store.dispatch(actions.User.setLastName(res.data[0].lastName));
-                    store.dispatch(actions.User.setBalance(res.data[0].deposit));
-                    store.dispatch(actions.User.setKpoints(res.data[0].point));
-                    store.dispatch(actions.User.setEmail(res.data[0].email));
-                    store.dispatch(actions.User.setPhone(res.data[0].phone));
-                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
-                    setRedeemValue(Math.floor(store.getState().User.kpoints / 200));
-                    setRedeemable(store.getState().User.kpoints >= 200);
-                })
-                .catch(error => {
-                    Alert.alert('Error Updating K Point');
-                    console.log(error);
-                });
-        })();
+        getAllUserData()
+            .then(() => {
+                setRedeemValue(Math.floor(store.getState().User.kpoints / 200));
+                setRedeemable(store.getState().User.kpoints >= 200);
+            })
+            .catch(err => {
+                console.log(err);
+                Alert.alert('Error Trying To Update Data');
+            });
     }, []);
 
     return (

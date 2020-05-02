@@ -9,37 +9,23 @@ import LibraryHeader from '../components/LibraryHeader';
 import MInfoSection from '../components/MInfoSection';
 import QRCode from 'react-native-qrcode-svg';
 import * as colors from '../styles/Colors';
-import * as actions from '../actions';
 import RedDot from '../components/RedDot';
 import PromotionsList from '../components/PromotionsList';
 import RecentActivity from '../components/RecentActivity';
-import axios from 'axios';
-import API_URL from '../firebase/apiLinks';
 import store from '../store';
+import {getAllUserData} from "../firebase/functions";
 
 const HomeScreen = ({navigation}) => {
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = () => {
         setRefreshing(true);
-        const token = store.getState().User.token;
-        axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + token}})
-            .then(res => {
-                const infoToSet = {
-                    id: res.data[0].userId,
-                    firstName: res.data[0].firstName,
-                    lastName: res.data[0].lastName,
-                    balance: res.data[0].deposit,
-                    kpoints: res.data[0].point,
-                    email: res.data[0].email,
-                    phone: res.data[0].phone,
-                    pic: res.data[0].imageUrl,
-                };
-                store.dispatch(actions.User.updateUserData(infoToSet));
+        getAllUserData()
+            .catch(err => {
+                console.log(err);
+                Alert.alert('Error Trying To Update Data');
             })
-            .catch(err => console.log(err))
             .finally(() => setRefreshing(false));
-
     };
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>

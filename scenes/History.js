@@ -93,7 +93,7 @@ const HistoryCard = ({time, title, borderTop, type, transaction}) => {
                 justifyContent: 'center'
             }}>
                 <View style={{marginHorizontal: 20, height: '80%', flexDirection: 'row', justifyItems: 'center'}}>
-                    <View style={{flex: 1, paddingLeft: 20, justifyContent: 'center'}}>
+                    <View style={{flex: 1, justifyContent: 'center'}}>
                         <Text style={{
                             flex: 2,
                             fontFamily: 'proxima-bold',
@@ -107,7 +107,7 @@ const HistoryCard = ({time, title, borderTop, type, transaction}) => {
                             fontSize: 14,
                         }}>{time}</Text>
                     </View>
-                    <View style={{flex: 1}}>
+                    <View style={{flexWrap: 'wrap'}}>
                         <Text style={{
                             fontFamily: 'proxima-bold',
                             textAlign: 'right',

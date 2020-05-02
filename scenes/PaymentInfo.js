@@ -10,7 +10,6 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import axios from 'axios';
 import API_URL from '../firebase/apiLinks';
 import store from '../store';
-import * as actions from '../actions';
 
 const PaymentInfo = ({navigation, balance}) => {
     const shopInfo = navigation.getParam('shopInfo', {});
@@ -96,22 +95,6 @@ const handlePayment = (navigation, dataToSend) => {
                 Alert.alert('Payment Error');
                 console.log(error.response);
                 reject();
-            });
-        axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
-            .then(res => {
-                console.log(res);
-                store.dispatch(actions.User.setId(res.data[0].userId));
-                store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-                store.dispatch(actions.User.setLastName(res.data[0].lastName));
-                store.dispatch(actions.User.setBalance(res.data[0].deposit));
-                store.dispatch(actions.User.setKpoints(res.data[0].point));
-                store.dispatch(actions.User.setEmail(res.data[0].email));
-                store.dispatch(actions.User.setPhone(res.data[0].phone));
-                store.dispatch(actions.User.setPic(res.data[0].imageUrl));
-            })
-            .catch(error => {
-                Alert.alert('Error Update Your Data');
-                console.log(error);
             });
     });
 
