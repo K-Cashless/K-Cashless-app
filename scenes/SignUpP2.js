@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import * as color from '../styles/Colors';
 import axios from 'axios';
 import TransparentButton from "../components/TransparentButton";
 import API_URL from '../firebase/apiLinks';
@@ -68,13 +67,14 @@ const SignUpP2 = ({navigation}) => {
                     <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start'}}>
                         <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
-                            <View style={{marginTop: 20, alignItems: 'center'}}>
-                                <Image source={imgUri.length === 0 ? demoPic : {uri: imgUri}}
-                                       style={{width: 100, height: 100, borderRadius: 100}}
-                                       resizeMode='cover'/>
-                                <TextButton text={'Add Your Photo'} color={color.primary}
-                                            onPress={() => handleImagePicking(setImgUri)}/>
-                            </View>
+                            {/*ADDING PHOTO*/}
+                            {/*<View style={{marginTop: 20, alignItems: 'center'}}>*/}
+                            {/*    <Image source={imgUri.length === 0 ? demoPic : {uri: imgUri}}*/}
+                            {/*           style={{width: 100, height: 100, borderRadius: 100}}*/}
+                            {/*           resizeMode='cover'/>*/}
+                            {/*    <TextButton text={'Add Your Photo'} color={color.primary}*/}
+                            {/*                onPress={() => handleImagePicking(setImgUri)}/>*/}
+                            {/*</View>*/}
                             <NormalTextInput
                                 placeholder={'First Name*'}
                                 onChangeText={(text) => setInfo({...info, firstName: text})}
