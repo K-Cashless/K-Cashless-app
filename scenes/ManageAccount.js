@@ -38,7 +38,6 @@ const ManageAccount = ({navigation, User}) => {
                             }
                         </View>
 
-
                         <View style={{marginTop: 20, alignItems: 'center'}}>
                             <View style={{width: 100, height: 100, borderRadius: 100, backgroundColor: 'white'}}>
                                 {
@@ -503,7 +502,7 @@ const handleImagePicking = async (token, setShowLoading) => {
                     'Authorization': 'Bearer ' + token
                 }
             })
-                .then(res => {
+                .then(() => {
                     setShowLoading(false);
                     store.dispatch(actions.User.setPic(result.uri));
                 })

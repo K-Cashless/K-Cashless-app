@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, ScrollView, Text, View} from 'react-native';
 import MainStyles from "../styles/MainStyles";
 import BlueButton from '../components/BlueButton';
 import SubScreenHeader from "../components/SubScreenHeader";
@@ -17,7 +17,7 @@ const RedeemPoint = ({navigation}) => {
     const ValueTable = () => {
         if (redeemable) {
             return (
-                <View style={{marginTop: 50}}>
+                <View style={{marginTop: 25}}>
                     <View>
                         <Text style={[MainStyles.head2Text, {
                             fontSize: 18,
@@ -30,7 +30,7 @@ const RedeemPoint = ({navigation}) => {
                             justifyContent: 'center'
                         }]}>{redeemValue * 200}</Text>
                     </View>
-                    <Icon style={{alignSelf: 'center', margin: 40}} name={'arrow-down'} size={35} color={'white'}/>
+                    <Icon style={{alignSelf: 'center', margin: 20}} name={'arrow-down'} size={35} color={'white'}/>
                     <View>
                         <Text style={[MainStyles.head2Text, {
                             fontSize: 18,
@@ -71,25 +71,24 @@ const RedeemPoint = ({navigation}) => {
     }, []);
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <View style={{
-                    marginHorizontal: 20,
-                    top: '5%',
-                    height: '100%',
-                }}>
-                    <SubScreenHeader navigation={navigation} title={'Redeem Points'} backButton={true}/>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <View style={{
+                marginHorizontal: 20,
+                marginTop: '7%',
+                height: '100%',
+            }}>
+                <SubScreenHeader navigation={navigation} title={'Redeem Points'} backButton={true}/>
+                <ScrollView>
                     <KPointRect style={{paddingTop: 10}}/>
                     <Text style={[MainStyles.bodyText, {paddingTop: 20, justifyContent: 'center'}]}>
                         <Icon name={'info-circle'} color={'white'} size={18}/> 200 Points = 1 {'\u0E3F'}
                     </Text>
-
                     <ValueTable/>
-
-                    <RedeemButton disable={!redeemable} navigation={navigation} redeemAmount={redeemValue * 200}/>
-                </View>
+                    <View style={{height: 150}}/>
+                </ScrollView>
+                <RedeemButton disable={!redeemable} navigation={navigation} redeemAmount={redeemValue * 200}/>
             </View>
-        </TouchableWithoutFeedback>
+        </View>
     );
 };
 
