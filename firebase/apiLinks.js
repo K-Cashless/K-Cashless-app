@@ -7,7 +7,9 @@ const API_URL = {
     UPLOAD_IMAGE: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/user/image',
     UPDATE_USER_DATA: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/user/updateData',
     GET_MERCHANT_DATA: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/user/getMerchant', //append with merchant id
-    TRANSFER_TO_MERCHANT: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/paid' // append with merchant id
+    TRANSFER_TO_MERCHANT: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/paid', // append with merchant id
+    REDEEM_POINT: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/user/redeemPoint', // TOKEN
+    GET_TRANSACTIONS: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/getOneTransaction' // TOKEN
 };
 
 export default API_URL;
