@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as ImagePicker from 'expo-image-picker';
-import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Image, Keyboard, Text, TouchableOpacity, View} from 'react-native';
 import SubScreenHeader from "../components/SubScreenHeader";
 import MInfoSection from '../components/MInfoSection';
 import MainStyles from '../styles/MainStyles';
@@ -102,6 +102,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const handleEmailUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
+            Keyboard.dismiss();
             await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
                 .then(res => {
                     // Update User Data
@@ -138,9 +139,9 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     'Authorization': 'Bearer ' + store.getState().User.token
                 }
             })
-                .then(() => {
+                .then(async () => {
                     store.dispatch(actions.User.setEmail(field));
-                    refRBSheet.current.close();
+                    await refRBSheet.current.close();
                     resolve();
                 })
                 .catch(error => {
@@ -154,6 +155,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const handleFirstNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
+            Keyboard.dismiss();
             await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
                 .then(res => {
                     // Update User Data
@@ -189,9 +191,9 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     'Authorization': 'Bearer ' + store.getState().User.token
                 }
             })
-                .then(() => {
+                .then(async () => {
                     store.dispatch(actions.User.setFirstName(field));
-                    refRBSheet.current.close();
+                    await refRBSheet.current.close();
                     resolve();
                 })
                 .catch(error => {
@@ -204,6 +206,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const handleLastNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
+            Keyboard.dismiss();
             await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
                 .then(res => {
                     // Update User Data
@@ -239,9 +242,9 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     'Authorization': 'Bearer ' + store.getState().User.token
                 }
             })
-                .then(() => {
+                .then(async () => {
                     store.dispatch(actions.User.setLastName(field));
-                    refRBSheet.current.close();
+                    await refRBSheet.current.close();
                     resolve();
                 })
                 .catch(error => {
@@ -255,6 +258,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const handlePhoneUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
+            Keyboard.dismiss();
             await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
                 .then(res => {
                     // Update User Data
@@ -290,9 +294,9 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     'Authorization': 'Bearer ' + store.getState().User.token
                 }
             })
-                .then(() => {
+                .then(async () => {
                     store.dispatch(actions.User.setPhone(field));
-                    refRBSheet.current.close();
+                    await refRBSheet.current.close();
                     resolve();
                 })
                 .catch(error => {
