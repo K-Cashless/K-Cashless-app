@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
+import store from '../store';
 
 
 const RecentActivity = () => {
-    const recentData = {
-        id: 1,
-        date: '1/2/2020',
-        time: '10:00 AM',
-        transaction: '+' + (Math.random() * 1000).toFixed(2),
-    };
+    const recentData = store.getState().User.history[0];
+    console.log('recentData ', recentData);
+    const [green, setGreen] = useState(false);
+
+    useEffect(() => {
+        recentData && setGreen(recentData.info === 'Redeem Point' || recentData.info === 'Top-Up Money');
+    });
 
     const ListGenerator = () => {
         return (
@@ -18,36 +20,31 @@ const RecentActivity = () => {
                 height: 60,
                 borderColor: 'rgb(100,100,100)',
                 borderBottomWidth: 1,
-                justifyContent: 'center',
+                justifyContent: 'center'
             }}>
-                <View style={{flexDirection: 'row', flex: 1}}>
+                <View style={{height: '80%', flexDirection: 'row', justifyItems: 'center'}}>
                     <View style={{flex: 1, justifyContent: 'center'}}>
                         <Text style={{
-                            flexWrap: 'wrap',
+                            flex: 2,
                             fontFamily: 'proxima-regular',
                             color: 'white',
-                            fontSize: 16,
-                        }}>
-                            {recentData.date}
-                        </Text>
-                        <Text style={{
-                            flexWrap: 'wrap',
-                            fontFamily: 'proxima-regular',
-                            color: 'white',
-                            fontSize: 16,
-                        }}>
-                            {recentData.time}
-                        </Text>
-                    </View>
-                    <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
-                        <Text style={{
-                            flexWrap: 'wrap',
-                            fontFamily: 'proxima-bold',
-                            color: 'rgb(77, 240, 96)',
                             fontSize: 18,
-                        }}>
-                            {recentData.transaction} {'\u0E3F'}
-                        </Text>
+                        }}>{recentData.info}</Text>
+                        <Text style={{
+                            flex: 1,
+                            fontFamily: 'proxima-regular',
+                            color: 'rgb(150,150,150)',
+                            fontSize: 14,
+                        }}>{recentData.createdAt}</Text>
+                    </View>
+                    <View style={{flex: 1, justifyContent: 'center'}}>
+                        <Text style={{
+                            fontFamily: 'proxima-bold',
+                            textAlign: 'right',
+                            color: green ? 'rgb(77, 240, 96)' : 'red',
+                            fontSize: 18,
+                            height: '100%',
+                        }}>{green ? '+ ' : '- '}{recentData.amount} {'\u0E3F'}</Text>
                     </View>
                 </View>
             </View>

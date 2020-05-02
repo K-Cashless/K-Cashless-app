@@ -5,6 +5,7 @@ import {BallIndicator} from "react-native-indicators";
 import API_URL from '../firebase/apiLinks';
 import * as actions from '../actions';
 import store from '../store';
+import {getAllUserData} from '../firebase/functions';
 
 const SignInButton = ({navigation, email, password}) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -12,10 +13,6 @@ const SignInButton = ({navigation, email, password}) => {
 
     function signIn(email, password) {
         return axios.post(API_URL.SIGN_IN, {email: email, password: password});
-    }
-
-    function getUserData(token) {
-        return axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + token}})
     }
 
     const onPressAction = () => {
@@ -27,39 +24,25 @@ const SignInButton = ({navigation, email, password}) => {
             .then(res => {
                 store.dispatch(actions.User.setToken(res.data.token));
                 tempToken = res.data.token;
-            })
-            .then(async () => {
-                await getUserData(tempToken)
-                    .then(res => {
-                        console.log(res.data[0]);
-                        store.dispatch(actions.User.setId(res.data[0].userId));
-                        store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-                        store.dispatch(actions.User.setLastName(res.data[0].lastName));
-                        store.dispatch(actions.User.setBalance(res.data[0].deposit));
-                        store.dispatch(actions.User.setKpoints(res.data[0].point));
-                        store.dispatch(actions.User.setEmail(res.data[0].email));
-                        store.dispatch(actions.User.setPhone(res.data[0].phone));
-                        store.dispatch(actions.User.setPic(res.data[0].imageUrl));
+                getAllUserData()
+                    .then(() => {
+                        setButtonStyle(styles.buttonContainer);
+                        setIsLoading(false);
+                        navigation.navigate('App');
                     })
                     .catch(error => {
-                        console.log('FAILED');
                         setButtonStyle(styles.buttonContainer);
                         setIsLoading(false);
                         console.log(error.response);
-                        Alert.alert('Error Getting User Data', error.response.message);
+                        Alert.alert('Error', 'Please Try Again');
                     });
-            })
-            .then(() => {
-                setButtonStyle(styles.buttonContainer);
-                setIsLoading(false);
-                navigation.navigate('App');
             })
             .catch(error => {
                 setButtonStyle(styles.buttonContainer);
                 setIsLoading(false);
                 console.log(error.response);
                 Alert.alert('Error', 'Please Try Again');
-            })
+            });
     };
 
     return (

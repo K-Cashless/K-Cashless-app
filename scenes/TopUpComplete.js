@@ -4,31 +4,16 @@ import MainStyles from '../styles/MainStyles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
 import {connect} from 'react-redux';
-import axios from 'axios';
-import API_URL from '../firebase/apiLinks';
-import * as actions from '../actions';
-import store from '../store';
+import {getAllUserData} from "../firebase/functions";
 
 const TopUpComplete = ({navigation, User}) => {
     const topUpValue = navigation.getParam('topUpValue', '??');
     useEffect(() => {
-        (async () => {
-            await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + User.token}})
-                .then(res => {
-                    console.log(res);
-                    store.dispatch(actions.User.setId(res.data[0].userId));
-                    store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-                    store.dispatch(actions.User.setLastName(res.data[0].lastName));
-                    store.dispatch(actions.User.setBalance(res.data[0].deposit));
-                    store.dispatch(actions.User.setKpoints(res.data[0].point));
-                    store.dispatch(actions.User.setEmail(res.data[0].email));
-                    store.dispatch(actions.User.setPhone(res.data[0].phone));
-                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        })();
+        getAllUserData()
+            .catch(err => {
+                console.log(err);
+                Alert.alert('Error Trying To Update Data');
+            });
     }, []);
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
