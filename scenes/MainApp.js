@@ -50,7 +50,7 @@ const HomeScreen = ({navigation}) => {
                         <KPointRect style={{shadowRadius: 10, shadowOpacity: 0.9}} navigation={navigation}
                                     redeemButton={true}/>
                     </View>
-                    <View style={{marginTop: 40, marginHorizontal: 20, height: 100}}>
+                    <View style={{marginTop: 40, marginHorizontal: 20, height: 160}}>
                         <RecentActivity/>
                     </View>
                     {/*Quick Actions*/}

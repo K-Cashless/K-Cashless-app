@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions, RefreshControl, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
@@ -83,27 +83,19 @@ const NotificationList = ({list}) => {
             borderBottomWidth: 1
         }}>
             <Text style={{
-                fontFamily: 'proxima-regular',
                 marginLeft: 60,
                 marginRight: 20,
-                color: 'rgb(150,150,150)',
-                fontSize: 12
-            }}>{data.item.time}</Text>
-            <Text style={{
-                fontFamily: 'proxima-regular',
-                marginTop: 5,
-                marginLeft: 60,
-                marginRight: 20,
+                fontFamily: 'proxima-bold',
                 color: 'white',
-                fontSize: 25
+                fontSize: 18,
             }}>{data.item.title}</Text>
             <Text style={{
                 fontFamily: 'proxima-regular',
                 marginLeft: 60,
                 marginRight: 20,
-                color: 'rgb(150,150,150)',
+                color: 'rgb(200,200,200)',
                 fontSize: 16
-            }}>{data.item.description}</Text>
+            }}>{data.item.body}</Text>
         </View>
     );
 

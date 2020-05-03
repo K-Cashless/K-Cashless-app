@@ -46,7 +46,7 @@ export default function App() {
             store.dispatch(action.User.pushNotificationsList(data));
             store.dispatch(action.User.setNotificationsUnread(true));
 
-            // store.dispatch(action.User.setAnimationSignal(true));
+            store.dispatch(action.User.setAnimationSignal(true));
             const soundObject = new Audio.Sound();
             try {
                 console.log('sound');
@@ -56,7 +56,7 @@ export default function App() {
             } catch (error) {
                 // An error occurred!
             }
-            // store.dispatch(action.User.setAnimationSignal(false));
+            store.dispatch(action.User.setAnimationSignal(false));
         });
     }, []);
 
