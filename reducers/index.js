@@ -99,7 +99,7 @@ const reducer = (state = initialState, action) => {
                     ...state.User,
                     notifications: {
                         ...state.User.notifications,
-                        list: [...state.User.notifications.list, action.payload]
+                        list: [action.payload, ...state.User.notifications.list]
                     }
                 }
             };

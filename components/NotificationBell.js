@@ -13,7 +13,7 @@ const NotificationBell = ({navigation, haveUnread, animationSignal}) => {
             scale: 1,
         },
         0.5: {
-            scale: 1.5,
+            scale: 1.25,
         },
         1: {
             scale: 1,

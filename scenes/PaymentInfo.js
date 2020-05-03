@@ -19,7 +19,7 @@ const PaymentInfo = ({navigation, balance}) => {
     const [payValueError, setPayValueError] = useState('');
 
     useEffect(() => {
-        if (!(/^[0-9]*\.[0-9]{2}$/.test(payValue)) && isChanged) {
+        if (!(/^[0-9]*\.[0-9]{2}$/.test(payValue)) && isChanged && payValue > store.getState().User.balance) {
             setPayValueError('Please Enter the Correct Amount (i.e. 25.00)');
         } else {
             setPayValueError('');

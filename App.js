@@ -42,21 +42,28 @@ export default function App() {
         registerNotification().then();
         registerAudio().then();
         Notifications.addListener(async ({origin, data}) => {
-            console.log('NOTIFICATIONS: ', origin, data);
-            store.dispatch(action.User.pushNotificationsList(data));
+            console.log('NOTIFICATIONS: ', origin, data, Date.now());
+            const infoToPush = {
+                id: Date.now().toString(),
+                read: false,
+                title: data.title,
+                body: data.body
+            };
+            store.dispatch(action.User.pushNotificationsList(infoToPush));
             store.dispatch(action.User.setNotificationsUnread(true));
 
             store.dispatch(action.User.setAnimationSignal(true));
             const soundObject = new Audio.Sound();
             try {
-                console.log('sound');
                 await soundObject.loadAsync(require('./assets/notification.wav'));
                 await soundObject.playAsync();
                 // Your sound is playing!
             } catch (error) {
                 // An error occurred!
             }
-            store.dispatch(action.User.setAnimationSignal(false));
+            setTimeout(() => {
+                store.dispatch(action.User.setAnimationSignal(false))
+            }, 500);
         });
     }, []);
 
