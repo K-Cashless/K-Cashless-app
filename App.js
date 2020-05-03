@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {StatusBar} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import Navigator from './navigations/Navigator';
 import {AppLoading, Notifications} from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
-import {BlurView} from 'expo-blur';
-import * as Animatable from 'react-native-animatable';
+import {Audio} from 'expo-av';
 
 import {Provider} from 'react-redux';
 import store from './store';
@@ -32,70 +31,32 @@ async function registerNotification() {
     console.log(status.status, token);
 }
 
+async function registerAudio() {
+    await Audio.requestPermissionsAsync();
+}
+
 export default function App() {
     const [dataLoaded, setDataLoaded] = useState(false);
-    const [showNotification, setShowNotification] = useState(false);
-    const [notificationData, setNotificationData] = useState({});
-    const [timer, setTimer] = useState(setTimeout(() => {
-    }, 0));
-
-    const InAppNotification = ({title = null, body = null}) => {
-        return (
-            <Animatable.View animation={showNotification ? 'slideInDown' : 'slideOutUp'} duration={500}
-                             onAnimationEnd={() => {
-                                 if (showNotification) {
-                                     setTimer(
-                                         setTimeout(() => {
-                                             setShowNotification(false);
-                                         }, 5000)
-                                     );
-                                 }
-                             }}
-                             style={{position: 'absolute', width: '100%', shadowRadius: 10, shadowOpacity: 0.5}}>
-                <SafeAreaView>
-                    <TouchableOpacity onPress={() => {
-                        setShowNotification(false);
-                    }}>
-                        <BlurView tint={'dark'} intensity={95}
-                                  style={{marginHorizontal: 10, flexWrap: 'wrap', borderRadius: 10}}>
-                            <View style={{padding: 20, justifyContent: 'center', height: '100%'}}>
-                                {
-                                    title &&
-                                    <Text style={{
-                                        fontFamily: 'proxima-bold',
-                                        fontSize: 18,
-                                        color: 'white',
-                                    }}>{title}</Text>
-                                }
-                                {
-                                    body &&
-                                    <Text style={{
-                                        fontFamily: 'proxima-regular',
-                                        fontSize: 18,
-                                        color: 'white'
-                                    }}>{body}</Text>
-                                }
-                            </View>
-                        </BlurView>
-                    </TouchableOpacity>
-                </SafeAreaView>
-            </Animatable.View>
-        )
-    };
-
-    const showInAppNotification = async () => {
-        clearTimeout(timer);
-        setShowNotification(true);
-    };
 
     useEffect(() => {
         registerNotification().then();
-        Notifications.addListener(({origin, data}) => {
+        registerAudio().then();
+        Notifications.addListener(async ({origin, data}) => {
             console.log('NOTIFICATIONS: ', origin, data);
-            setNotificationData(data);
             store.dispatch(action.User.pushNotificationsList(data));
             store.dispatch(action.User.setNotificationsUnread(true));
-            showInAppNotification().then();
+
+            // store.dispatch(action.User.setAnimationSignal(true));
+            const soundObject = new Audio.Sound();
+            try {
+                console.log('sound');
+                await soundObject.loadAsync(require('./assets/notification.wav'));
+                await soundObject.playAsync();
+                // Your sound is playing!
+            } catch (error) {
+                // An error occurred!
+            }
+            // store.dispatch(action.User.setAnimationSignal(false));
         });
     }, []);
 
@@ -112,7 +73,6 @@ export default function App() {
     return (
         <Provider store={store}>
             <AppContainer/>
-            <InAppNotification title={notificationData.title} body={notificationData.body}/>
         </Provider>
     );
 }

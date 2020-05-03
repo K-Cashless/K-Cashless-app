@@ -11,6 +11,7 @@ export const initialState = {
         balance: 0,
         kpoints: 0,
         notifications: {
+            animationSignal: false,
             haveUnread: false,
             list: []
         },
@@ -153,6 +154,17 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 User: initialState.User
+            };
+        case actionType.SET_ANIMATION_SIGNAL:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    notifications: {
+                        ...state.User.notifications,
+                        animationSignal: action.payload
+                    }
+                }
             };
         default:
             return state;
