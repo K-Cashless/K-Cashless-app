@@ -9,7 +9,7 @@ const API_URL = {
     GET_MERCHANT_DATA: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/user/getMerchant', //append with merchant id
     TRANSFER_TO_MERCHANT: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/paid', // append with merchant id
     REDEEM_POINT: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/user/redeemPoint', // TOKEN
-    GET_TRANSACTIONS: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/getOneTransaction' // TOKEN
+    GET_TRANSACTIONS: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/getOneUserTransaction' // TOKEN
 };
 
 export default API_URL;

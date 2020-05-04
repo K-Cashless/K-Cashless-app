@@ -58,7 +58,7 @@ const ManageAccount = ({navigation, User}) => {
                         <UserInfo title={'Student ID'} value={User.id} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField} editable={false}/>
                         <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
-                                  setEditedField={setEditedField}/>
+                                  setEditedField={setEditedField} editable={false}/>
                         <UserInfo title={'First Name'} value={User.firstName} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
                         <UserInfo title={'Last Name'} value={User.lastName} refRBSheet={refRBSheet}
@@ -97,59 +97,6 @@ const ManageAccount = ({navigation, User}) => {
 const EditingSheet = ({editedField, refRBSheet}) => {
     const [field, setField] = useState('');
     const errorState = useState(true);
-
-    const handleEmailUpdate = async () => {
-        return new Promise(async (resolve, reject) => {
-            let infoToSend = null;
-            Keyboard.dismiss();
-            await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
-                .then(res => {
-                    // Update User Data
-                    store.dispatch(actions.User.setId(res.data[0].userId));
-                    store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-                    store.dispatch(actions.User.setLastName(res.data[0].lastName));
-                    store.dispatch(actions.User.setBalance(res.data[0].deposit));
-                    store.dispatch(actions.User.setKpoints(res.data[0].point));
-                    store.dispatch(actions.User.setEmail(res.data[0].email));
-                    store.dispatch(actions.User.setPhone(res.data[0].phone));
-                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
-
-                    const tempInfo = res.data[0];
-                    infoToSend = {
-                        email: field,
-                        password: "",
-                        confirmPassword: "",
-                        handle: tempInfo.handle,
-                        firstName: tempInfo.firstName,
-                        lastName: tempInfo.lastName,
-                        phone: tempInfo.phone,
-                    }
-                })
-                .catch(error => {
-                    console.log(error.response);
-                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-                    reject();
-                });
-
-            await console.log(infoToSend);
-
-            await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
-                'headers': {
-                    'Authorization': 'Bearer ' + store.getState().User.token
-                }
-            })
-                .then(async () => {
-                    store.dispatch(actions.User.setEmail(field));
-                    await refRBSheet.current.close();
-                    resolve();
-                })
-                .catch(error => {
-                    console.log(error.response);
-                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-                    reject();
-                })
-        });
-    };
 
     const handleFirstNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
@@ -307,41 +254,6 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     };
 
     switch (editedField) {
-        case 'Email':
-            return (
-                <View style={{marginHorizontal: 20}}>
-                    <Text style={[MainStyles.bodyText]}>Please Enter Email</Text>
-                    <NormalTextInput
-                        placeholder={'Enter your new email*'}
-                        onChangeText={(text) => setField(text)}
-                        value={field}
-                        errorStatus={errorState}
-                        errorRule={[
-                            {
-                                pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                                message: 'Incorrect Email Format'
-                            },
-                            {pattern: /^\w+([.-]?\w+)*@kmitl.ac.th$/, message: 'KMITL Email Only'},
-                        ]}
-                    />
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
-                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
-                            <Text style={[MainStyles.bodyText, {
-                                fontFamily: 'proxima-bold',
-                                color: 'red',
-                                marginTop: 20,
-                                right: 25
-                            }]}>Cancel</Text>
-                        </TouchableOpacity>
-                        <TransparentButton
-                            text={'Done'}
-                            disabled={errorState[0]}
-                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
-                            onPress={handleEmailUpdate}
-                        />
-                    </View>
-                </View>
-            );
         case 'First Name':
             return (
                 <View style={{marginHorizontal: 20}}>

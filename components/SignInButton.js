@@ -19,11 +19,9 @@ const SignInButton = ({navigation, email, password}) => {
         setIsLoading(true);
         setButtonStyle(styles.buttonContainerOutline);
         Keyboard.dismiss();
-        let tempToken = '';
         signIn(email, password)
             .then(res => {
                 store.dispatch(actions.User.setToken(res.data.token));
-                tempToken = res.data.token;
                 getAllUserData()
                     .then(() => {
                         setButtonStyle(styles.buttonContainer);

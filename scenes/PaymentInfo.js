@@ -19,8 +19,8 @@ const PaymentInfo = ({navigation, balance}) => {
     const [payValueError, setPayValueError] = useState('');
 
     useEffect(() => {
-        if (!(/^[0-9]*\.[0-9]{2}$/.test(payValue)) && isChanged && payValue > store.getState().User.balance) {
-            setPayValueError('Please Enter the Correct Amount (i.e. 25.00)');
+        if ((!(/^[0-9]*\.[0-9]{2}$/.test(payValue)) || payValue > store.getState().User.balance) && isChanged) {
+            setPayValueError('Please Enter the Correct Amount and Correct Format (i.e. 25.00)');
         } else {
             setPayValueError('');
         }
@@ -47,6 +47,7 @@ const PaymentInfo = ({navigation, balance}) => {
                                             setPayValue(text);
                                             setIsChanged(true);
                                         }}
+                                        onBlur={() => setPayValue((payValue * 1).toFixed(2))}
                                         value={payValue}
                                         placeholder={'Enter amount to pay'}
                                         error={payValueError}

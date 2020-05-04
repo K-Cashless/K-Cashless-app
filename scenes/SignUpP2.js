@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, Keyboard, TouchableWithoutFeedback, View} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
-import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
@@ -11,9 +10,8 @@ import TransparentButton from "../components/TransparentButton";
 import API_URL from '../firebase/apiLinks';
 
 const SignUpP2 = ({navigation}) => {
-    const [imgUri, setImgUri] = useState('');
+    // const [imgUri, setImgUri] = useState('');
     const [info, setInfo] = useState(navigation.getParam('info', {}));
-    const demoPic = require('../assets/solid-white.png');
     let errorState = {
         firstName: useState(true),
         lastName: useState(true),
@@ -116,28 +114,28 @@ const SignUpP2 = ({navigation}) => {
         </View>
     )
 };
-
-const TextButton = ({text, color, onPress}) => {
-    return (
-        <TouchableOpacity style={{margin: 20}} onPress={onPress}>
-            <Text style={[MainStyles.head2Text, {color: color}]}>{text}</Text>
-        </TouchableOpacity>
-    )
-};
-
-const handleImagePicking = async (setImgUri) => {
-    let permission = await ImagePicker.requestCameraRollPermissionsAsync();
-    if (permission.status === 'granted') {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1
-        });
-        if (result.cancelled === false) {
-            setImgUri(result.uri);
-        }
-    }
-};
+//
+// const TextButton = ({text, color, onPress}) => {
+//     return (
+//         <TouchableOpacity style={{margin: 20}} onPress={onPress}>
+//             <Text style={[MainStyles.head2Text, {color: color}]}>{text}</Text>
+//         </TouchableOpacity>
+//     )
+// };
+//
+// const handleImagePicking = async (setImgUri) => {
+//     let permission = await ImagePicker.requestCameraRollPermissionsAsync();
+//     if (permission.status === 'granted') {
+//         let result = await ImagePicker.launchImageLibraryAsync({
+//             mediaTypes: ImagePicker.MediaTypeOptions.All,
+//             allowsEditing: true,
+//             aspect: [1, 1],
+//             quality: 1
+//         });
+//         if (result.cancelled === false) {
+//             setImgUri(result.uri);
+//         }
+//     }
+// };
 
 export default SignUpP2;
