@@ -12,6 +12,7 @@ const API_URL = {
     REDEEM_POINT: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/user/redeemPoint', // TOKEN
     GET_TRANSACTIONS: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/getOneUserTransaction', // TOKEN
     PUSH_NOTIFICATION_TOKEN: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/user/pushUserDeviceToken',
+    GET_PROMOTIONS: 'https://asia-east2-k-cash-less.cloudfunctions.net/api/getAllPromotions'
 };
 
 export default API_URL;

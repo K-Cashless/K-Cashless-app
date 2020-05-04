@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dimensions, RefreshControl, ScrollView, Text, View} from 'react-native';
+import {Alert, Dimensions, RefreshControl, ScrollView, Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';

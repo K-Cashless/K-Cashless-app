@@ -46,7 +46,10 @@ const HistoryList = () => {
     const onRefresh = () => {
         setRefreshing(true);
         HistoryLoader()
-            .then(() => setRefreshing(false));
+            .then(() => {
+                setRefreshing(false);
+            });
+
     };
     useEffect(() => {
         onRefresh();

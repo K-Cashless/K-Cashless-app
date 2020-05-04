@@ -1,37 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, FlatList, Image, RefreshControl, SafeAreaView, Text, View} from 'react-native';
+import {Alert, Dimensions, FlatList, Image, RefreshControl, SafeAreaView, Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {BallIndicator} from "react-native-indicators";
-
-const msg = "Kagonoya Buffet Delivery 15 ถาดเริ่มต้นที่ 699.- สไตล์โอซาก้าแท้ๆ";
+import API_URL from '../firebase/apiLinks';
+import axios from 'axios';
 
 const PromotionLoader = (list, setList) => {
     // TODO - firebase
     return new Promise((resolve) => {
-        let tempList = [];
-        let i;
-        for (i = 0; i < 5; ++i) {
-            tempList.push({
-                id: i.toString(),
-                pic: 'https://scontent.fcnx2-1.fna.fbcdn.net/v/t1.0-9/92392559_3225470824155915_4525602040453267456_o.jpg?_nc_cat=1&_nc_sid=8024bb&_nc_ohc=JFIrHP1jFeMAX-xIcYP&_nc_ht=scontent.fcnx2-1.fna&oh=2f3a801cd263dc40dd8a704d1111dad2&oe=5EB454FD',
-                time: '1/2/2020 10:00 AM',
-                shopName: 'Shop ' + i,
-                shopPic: 'https://scontent.fcnx2-1.fna.fbcdn.net/v/t1.0-9/64642155_2447997465236592_9186722105960431616_n.jpg?_nc_cat=1&_nc_sid=85a577&_nc_ohc=J76Ok3XRLbMAX9z3dSe&_nc_ht=scontent.fcnx2-1.fna&oh=c0991a6489f5cb7e80de36e7fe7d148b&oe=5EB689E4',
-                description: msg,
-                end: false
+        axios.get(API_URL.GET_PROMOTIONS)
+            .then((res) => {
+                console.log(res.data);
+                const temp = (res.data);
+                temp.push({createdAt: '-1', end: true});
+                setList(temp);
+
+            })
+            .catch(error => {
+                console.log(error.response);
+                Alert.alert('Error Trying to Fetch Promotions', 'Please Try Again');
             });
-        }
-        tempList.push({
-            id: i.toString(),
-            pic: '',
-            time: '',
-            shopName: '',
-            shopPic: '',
-            description: '',
-            end: true
-        }); // add dummy for end space
-        console.log(tempList);
-        setList(tempList);
+
         return resolve();
     });
 };
@@ -58,7 +47,7 @@ const PromotionsList = ({topBarLayout}) => {
 
     const onRefresh = async () => {
         setRefreshing(true);
-        PromotionLoader(list, setList).then(() => setRefreshing(false));
+        await PromotionLoader(list, setList).then(() => setRefreshing(false));
     };
 
     useEffect(() => {
@@ -76,11 +65,11 @@ const PromotionsList = ({topBarLayout}) => {
                 data={list}
                 renderItem={({item}) => {
                     return (
-                        <PromotionCard end={item.end} pic={item.pic} shopPic={item.shopPic} title={item.shopName}
+                        <PromotionCard end={item.end} pic={null} shopPic={null} title={item.header}
                                        description={item.description}/>
                     );
                 }}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.createdAt}
                 refreshControl={
                     <RefreshControl
                         tintColor='white'
@@ -115,6 +104,7 @@ const PromotionCard = ({end, pic, shopPic, title, description}) => {
             </View>
         )
     }
+
     return (
         <View style={{
             flex: 1,
@@ -126,12 +116,16 @@ const PromotionCard = ({end, pic, shopPic, title, description}) => {
         }}>
             <View>
                 <View style={{marginHorizontal: 20, flexDirection: 'row', paddingBottom: 10}}>
-                    <View>
-                        <Image source={{uri: shopPic}}
-                               style={{width: 30, height: 30, borderRadius: 50}}
-                               resizeMode='cover'/>
-                    </View>
-                    <View style={{marginLeft: 10, justifyContent: 'center'}}>
+                    {
+                        shopPic &&
+                        <View>
+                            <Image source={{uri: shopPic}}
+                                   style={{width: 30, height: 30, borderRadius: 50}}
+                                   resizeMode='cover'/>
+                        </View>
+                    }
+
+                    <View style={{marginLeft: shopPic && 10, justifyContent: 'center'}}>
                         <Text style={[MainStyles.bodyText, {fontFamily: 'proxima-bold'}]}>
                             {title}
                         </Text>
@@ -139,7 +133,7 @@ const PromotionCard = ({end, pic, shopPic, title, description}) => {
                 </View>
 
                 {
-                    pic.length !== 0 ? (
+                    pic && (
                         <View style={{
                             flexWrap: 'wrap',
                             width: windowDimension,
@@ -154,7 +148,7 @@ const PromotionCard = ({end, pic, shopPic, title, description}) => {
                                    style={{width: windowDimension, height: windowDimension}}
                                    resizeMode='cover'/>
                         </View>
-                    ) : null
+                    )
                 }
                 <Text style={[MainStyles.bodyText, {marginHorizontal: 20, marginTop: 10}]}>
                     {description}
