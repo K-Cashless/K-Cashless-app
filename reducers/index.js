@@ -18,6 +18,7 @@ export const initialState = {
         history: [],
         phone: null,
     },
+    ExpoPushToken: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -134,6 +135,11 @@ const reducer = (state = initialState, action) => {
                     ...state.User,
                     phone: action.payload
                 }
+            };
+        case actionType.SET_EXPO_PUSH_TOKEN:
+            return {
+                ...state,
+                ExpoPushToken: action.payload
             };
         case actionType.UPDATE_USER_DATA:
             return {

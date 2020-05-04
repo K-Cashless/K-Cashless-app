@@ -24,9 +24,21 @@ const SignInButton = ({navigation, email, password}) => {
                 store.dispatch(actions.User.setToken(res.data.token));
                 getAllUserData()
                     .then(() => {
-                        setButtonStyle(styles.buttonContainer);
-                        setIsLoading(false);
-                        navigation.navigate('App');
+                        const infoToSend = {device: store.getState().ExpoPushToken};
+                        console.log(infoToSend);
+                        axios.post(API_URL.PUSH_NOTIFICATION_TOKEN, infoToSend, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+                            .then(res => {
+                                console.log(res);
+                                setButtonStyle(styles.buttonContainer);
+                                setIsLoading(false);
+                                navigation.navigate('App');
+                            })
+                            .catch(error => {
+                                setButtonStyle(styles.buttonContainer);
+                                setIsLoading(false);
+                                console.log("expoPushToken", error.response);
+                                Alert.alert('Error', 'Please Try Again');
+                            })
                     })
                     .catch(error => {
                         setButtonStyle(styles.buttonContainer);

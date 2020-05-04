@@ -29,6 +29,7 @@ async function registerNotification() {
     const token = await Notifications.getExpoPushTokenAsync();
     console.log('Permission: ');
     console.log(status.status, token);
+    store.dispatch(action.setExpoPushToken(token));
 }
 
 async function registerAudio() {
@@ -51,7 +52,6 @@ export default function App() {
             };
             store.dispatch(action.User.pushNotificationsList(infoToPush));
             store.dispatch(action.User.setNotificationsUnread(true));
-
             store.dispatch(action.User.setAnimationSignal(true));
             const soundObject = new Audio.Sound();
             try {
