@@ -135,7 +135,31 @@ exports.getAdminData = (req, res) => {
       res.status(500).json({ error: err.code });
     });
 };
+//GetRequest
+exports.getRequest = (req, res) => {
+  let requestData = [];
+  db.collection("RequestToAdmins")
+    .get()
+    .then((data) => {
+      data.forEach((doc) => {
+        requestData.push({
+          handle: doc.data().handle,
+          amount: doc.data().amount,
+          requestedAt: doc.data().requestedAt,
+          status: doc.data().status,
+          accept: doc.data().accept,
+        });
+      });
+      console.log(requestData);
 
+      return res.json(requestData);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+//AcceptRequest
 exports.acceptRequest = (req, res) => {
   const data = {
     handle: req.body.handle,
@@ -147,32 +171,33 @@ exports.acceptRequest = (req, res) => {
       if (!doc.exists) {
         check = false;
         return res.status(404).json({ error: "Not Found" });
-      }
-      else if (doc.data().accept === false && doc.data().status === "Pending")
-      {
+      } else if (
+        doc.data().accept === false &&
+        doc.data().status === "Pending"
+      ) {
         db.doc(`/merchants/${data.handle}`)
-        .get()
-        .then((doc) => {
-          const total = Number(doc.data().total) - temp;
-          db.doc(`/merchants/${data.handle}`).update({ total });
-          return res.json({ message: "Received money" });
-        })
-        .then((doc) => {
-          const status = "Done";
-          return db.doc(`/RequestToAdmins/${data.handle}`).update({ status });
-        })
-        .then((doc) => {
-          const accept = true;
-          return db.doc(`/RequestToAdmins/${data.handle}`).update({ accept });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).json({ error: err.code });
+          .get()
+          .then((doc) => {
+            const total = Number(doc.data().total) - temp;
+            db.doc(`/merchants/${data.handle}`).update({ total });
+            return res.json({ message: "Received money" });
+          })
+          .then((doc) => {
+            const status = "Done";
+            return db.doc(`/RequestToAdmins/${data.handle}`).update({ status });
+          })
+          .then((doc) => {
+            const accept = true;
+            return db.doc(`/RequestToAdmins/${data.handle}`).update({ accept });
+          })
+          .catch((err) => {
+            console.error(err);
+            res.status(500).json({ error: err.code });
+          });
+      } else {
+        return res.json({
+          error: "Accepted Already, Please Contract to Admin",
         });
-      }
-      else 
-      {
-        return res.json({ error: "Accepted Already, Please Contract to Admin" });
       }
     })
     .catch((err) => {
@@ -180,6 +205,100 @@ exports.acceptRequest = (req, res) => {
       res.status(500).json({ error: err.code });
     });
 };
-//Notification
-//Promotion
+//Create Notification
+/*
+const messaging = firebase.messaging();
+exports.createNotification = (req,res) => {
+  messaging.requestPermission()
+  .then(()=>{
+    console.log('Have permission');
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).json({ error: err.code });
+  });
+}*/
+
+//Create Promotion
+exports.createPromotion = (req, res) => {
+  const data = {
+    header: req.body.header,
+    description: req.body.description,
+    duration: req.body.duration,
+    createdAt: new Date().toISOString(),
+  };
+  db.doc(`/promotions/${data.header}`)
+    .set(data)
+    //send promotion
+    .then(() => {
+      return res.status(200).json({ message: "Created Successful" });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+//Get All Promotion
+exports.getAllPromotions = (req, res) => {
+  let promotionData = [];
+  db.collection("promotions")
+    .get()
+    .then((data) => {
+      data.forEach((doc) => {
+        promotionData.push({
+          header: doc.data().header,
+          description: doc.data().description,
+          duration: doc.data().duration,
+          createdAt: doc.data().createdAt,
+        });
+      });
+      console.log(promotionData);
+
+      return res.json(promotionData);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
 //Generate card
+exports.genaratePrepaidCard = (req, res) => {
+  const cardData = {
+    cost: req.body.cost,
+    number: req.body.number,
+    whoUsed: "None",
+    used: false,
+    createdAt: new Date().toISOString(),
+  };
+  var result = "";
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < 20; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  console.log(result);
+  db.doc(`/prepaidCard/${result}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        return res
+          .status(500)
+          .json({ error: "Has CardID Already,Please genarate agian" });
+      } else
+        db.doc(`/prepaidCard/${result}`)
+          .set(cardData)
+          .then((doc) => {
+            return res.json({ message: "Generate Card Successful" });
+          })
+          .catch((err) => {
+            console.error(err);
+            res.status(500).json({ error: err.code });
+          });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+//userId = data.user.uid

@@ -2,6 +2,7 @@ const { admin, db } = require("../utility/admin");
 
 const config = require("../utility/config.js");
 const { uuid } = require("uuidv4");
+const axios = require("axios");
 const firebase = require("firebase");
 firebase.initializeApp(config);
 
@@ -65,6 +66,7 @@ exports.signup = (req, res) => {
           "/o/" +
           noImg +
           "?alt=media",
+        device: "",
         userId,
       };
       return db.doc("/users/" + newUser.handle).set(userCredentials);
@@ -108,6 +110,19 @@ exports.login = (req, res) => {
           .status(403)
           .json({ message: "Wrong credentials,please try again" });
       } else return res.status(500).json({ error: err.code });
+    });
+};
+//logout
+exports.logout = (req, res) => {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      return res.json({ message: "Sign-out successful" });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
     });
 };
 //Get user Data
@@ -184,10 +199,6 @@ exports.addUserDetails = (req, res) => {
 };
 exports.updateUserDetails = (req, res) => {
   const userDetails = {
-    email: req.body.email,
-    password: req.body.password,
-    confirmPassword: req.body.confirmPassword,
-    handle: req.body.handle,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     phone: req.body.phone,
@@ -246,7 +257,7 @@ exports.resetPass = (req, res) => {
 };
 
 // Upload a profile image for user
-exports.uploadImage = (req, res) => {
+exports.uploadUserImage = (req, res) => {
   const BusBoy = require("busboy");
   const path = require("path");
   const os = require("os");
@@ -303,7 +314,7 @@ exports.uploadImage = (req, res) => {
   });
   busboy.end(req.rawBody);
 };
-//Done
+//Top-Up Done
 exports.topup = (req, res) => {
   const prepaidCard = {
     number: req.body.number,
@@ -316,59 +327,59 @@ exports.topup = (req, res) => {
       console.log(req.params.cardID);
       if (!doc.exists) {
         return res.status(404).json({ error: "Wrong CardID" });
-      }
-      else if (
+      } else if (
         prepaidCard.value !== doc.data().value ||
         prepaidCard.number !== doc.data().number
       ) {
         return res.status(500).json({ error: "Wrong value or number of card" });
-      }
-      else if (doc.data().used === true) {
+      } else if (doc.data().used === true) {
         return res.status(500).json({ error: "This card is already use" });
-      }
-      else
-      {
+      } else {
         db.doc(`/prepaidCard/${req.params.cardID}`)
-        .get()
-        .then(() => {
-          const used = false;
-          return db.doc(`/prepaidCard/${req.params.cardID}`).update({ used });
-        })
-        .then(() => {
-          const whoUsed = req.user.handle;
-          return db.doc(`/prepaidCard/${req.params.cardID}`).update({ whoUsed });
-        })
-        .then(() => {
-          db.doc(`/users/${req.user.handle}`)
-            .get()
-            .then((doc) => {
-              console.log("tester " + doc.data().deposit);
-              const deposit =
-                Number(doc.data().deposit) + Number(prepaidCard.value);
-              return db.doc(`/users/${req.user.handle}`).update({ deposit });
-            });
-        })
-        .then(() => {
-          const transaction = {
-            createdAt: new Date().toISOString(),
-            from: req.params.cardID,
-            to: req.user.handle,
-            amount: prepaidCard.value,
-            info: "Top-Up Money",
-          };
-          return db.doc(`/transactions/${transaction.createdAt}`).set(transaction);
-        })
-        .then((data) => {
-          console.log("done");
-          return res.json({ message: "Top-Up Successful" });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).json({ error: err.code });
-        });
+          .get()
+          .then(() => {
+            const used = false;
+            return db.doc(`/prepaidCard/${req.params.cardID}`).update({ used });
+          })
+          .then(() => {
+            const whoUsed = req.user.handle;
+            return db
+              .doc(`/prepaidCard/${req.params.cardID}`)
+              .update({ whoUsed });
+          })
+          .then(() => {
+            db.doc(`/users/${req.user.handle}`)
+              .get()
+              .then((doc) => {
+                console.log("tester " + doc.data().deposit);
+                const deposit =
+                  Number(doc.data().deposit) + Number(prepaidCard.value);
+                return db.doc(`/users/${req.user.handle}`).update({ deposit });
+              });
+          })
+          .then(() => {
+            const transaction = {
+              createdAt: new Date().toISOString(),
+              from: req.params.cardID,
+              to: req.user.handle,
+              amount: prepaidCard.value,
+              info: "Top-Up Money",
+            };
+            return db
+              .doc(`/transactions/${transaction.createdAt}`)
+              .set(transaction);
+          })
+          .then((data) => {
+            console.log("done");
+            return res.json({ message: "Top-Up Successful" });
+          })
+          .catch((err) => {
+            console.error(err);
+            res.status(500).json({ error: err.code });
+          });
       }
     })
-    
+
     .catch((err) => {
       console.error(err);
       res.status(500).json({ error: err.code });
@@ -376,7 +387,7 @@ exports.topup = (req, res) => {
 };
 //
 exports.transfer = (req, res) => {
-  let check = true
+  let check = true;
   const merchant = {
     cost: req.body.cost,
   };
@@ -401,7 +412,9 @@ exports.transfer = (req, res) => {
 
             const deposit = Number(doc.data().deposit) - Number(merchant.cost);
             const point = Number(doc.data().point) + Number(merchant.cost);
-            return db.doc(`/users/${req.user.handle}`).update({ deposit ,point});
+            return db
+              .doc(`/users/${req.user.handle}`)
+              .update({ deposit, point });
           }
         })
         .catch((err) => {
@@ -433,63 +446,75 @@ exports.transfer = (req, res) => {
         });
     })
     .then((doc) => {
-      if(check === true)
-      {
+      if (check === true) {
         db.doc(`/users/${req.user.handle}`)
-        .get()
-        .then((doc) => {
-          if (Number(doc.data().deposit) < Number(merchant.cost)) {
-            return res.status(404).json({ err: "Deposit less than cost" });
-          } else {
-            const transaction = {
-              createdAt: new Date().toISOString(),
-              from: req.user.handle,
-              to: req.params.merchantID,
-              amount: merchant.cost,
-              info: "Paid Merchant",
-            };
-            db
-              .doc(`/transactions/${transaction.createdAt}`)
-              .set(transaction)
-              .then(()=>{
-                return res.json({transaction});
-              })
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          return res.status(500).json({ error: err.code });
-        });
+          .get()
+          .then((doc) => {
+            if (Number(doc.data().deposit) < Number(merchant.cost)) {
+              return res.status(404).json({ err: "Deposit less than cost" });
+            } else {
+              const transaction = {
+                createdAt: new Date().toISOString(),
+                from: req.user.handle,
+                to: req.params.merchantID,
+                amount: merchant.cost,
+                info: "Paid Merchant",
+              };
+              db.doc(`/transactions/${transaction.createdAt}`)
+                .set(transaction)
+                .then(() => {
+                  db.doc(`merchants/${req.params.merchantID}`)
+                    .get()
+                    .then((doc) => {
+                      axios
+                        .post("https://exp.host/--/api/v2/push/send", {
+                          to: `ExponentPushToken[${doc.data().device}]`,
+                          sound: "default",
+                          titile: "It Marks",
+                          body: "Paid Merchant",
+                          data: {
+                            title: "Paid Merchant",
+                            body: Math.random().toString() + "THB",
+                          },
+                        })
+                        .then((res) => {
+                          console.log(res);
+                          console.log('device is'+doc.data().device);
+                          
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                })
+                .then(() => {
+                  return res.json({ transaction });
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+          });
       }
     })
-    /*
-    .then(() => {
-      db.doc(`/users/${req.user.handle}`)
-        .get()
-        .then((doc) => {
-          if (Number(doc.data().deposit) < Number(merchant.cost)) {
-            return res.status(404).json({ err: "Deposit less than cost" });
-          } else {
-            console.log("done");
-            return res.json({ message: "Paid Successful" });
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          return res.status(500).json({ error: err.code });
-        });
-    })
-    */
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
-    
 };
+//Redeem Done
 exports.redeemPoint = (req, res) => {
   let tempDeposit;
   let tempMoney;
   let tempPoint;
+  let check = false;
   db.doc(`/users/${req.user.handle}`)
     .get()
     .then((doc) => {
@@ -498,34 +523,61 @@ exports.redeemPoint = (req, res) => {
 
         tempPoint = Number(doc.data().point);
         tempDeposit = Number(doc.data().deposit);
-        tempMoney = tempPoint % 200;
-        tempPoint = tempPoint - 200 * tempMoney;
-        tempDeposit = tempDeposit + tempMoney;
+        tempMoney = tempPoint / 200;
+        tempPoint = tempPoint - 200 * parseInt(tempMoney);
+        tempDeposit = tempDeposit + parseInt(tempMoney);
         const updatePoint = {
           point: tempPoint,
           deposit: tempDeposit,
         };
+        console.log("point" + updatePoint.point);
+        console.log("deposit" + updatePoint.deposit);
+        check = true;
         return db.doc(`/users/${req.user.handle}`).update(updatePoint);
       } else return res.status(404).json({ err: "Point less than 200" });
     })
     .then((doc) => {
-      const transaction = {
-        createdAt: new Date().toISOString(),
-        from: req.user.handle,
-        to: req.user.handle,
-        amount: tempMoney,
-        info: "Redeem Point",
-      };
-      db.doc(`/transactions/${transaction.createdAt}`)
-        .set(transaction)
-        .then(() => {
-          return res.json({ message: "Redeem Successful" });
-        })
-        .catch((err) => {
-          console.error(err);
-          return res.status(500).json({ error: err.code });
-        });
+      if (check === true) {
+        console.log("check" + check);
+        console.log("token" + req.user.device);
+        const transaction = {
+          createdAt: new Date().toISOString(),
+          from: req.user.handle,
+          to: req.user.handle,
+          amount: parseInt(tempMoney),
+          info: "Redeem Point",
+        };
+        db.doc(`/transactions/${transaction.createdAt}`)
+          .set(transaction)
+          .then(() => {
+            axios
+              .post("https://exp.host/--/api/v2/push/send", {
+                to: `ExponentPushToken[${req.user.device}]`,
+                sound: "default",
+                titile: "It Marks",
+                body: "Yes",
+                data: {
+                  title: "Redeem Point",
+                  body: Math.random().toString() + "THB",
+                },
+              })
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .then(() => {
+            return res.json({ transaction });
+          })
+          .catch((err) => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+          });
+      }
     })
+
     .catch((err) => {
       console.log("ee");
       console.error(err);
@@ -538,7 +590,6 @@ exports.userGetMerchant = (req, res) => {
   db.doc(`/merchants/${req.params.merchantID}`)
     .get()
     .then((doc) => {
-
       merchantData.push({
         handle: doc.data().handle,
         storeName: doc.data().storeName,
@@ -548,6 +599,21 @@ exports.userGetMerchant = (req, res) => {
       });
       console.log(merchantData);
       return res.json(merchantData);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
+exports.pushUserDeviceToken = (req, res) => {
+  const tokenDevice = {
+    device: req.body.device,
+  };
+  db.doc(`/users/${req.user.handle}`)
+    .update(tokenDevice)
+    .then(() => {
+      return res.json({ message: "push token successful" });
     })
     .catch((err) => {
       console.error(err);

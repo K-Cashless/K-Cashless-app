@@ -46,10 +46,11 @@ module.exports = (req, res, next) => {
       req.user.firstName = data.docs[0].data().firstName;
       req.user.lastName = data.docs[0].data().lastName;
       req.user.imageUrl = data.docs[0].data().imageUrl;
+      req.user.device = data.docs[0].data().device;
       return next();
     })
     .catch((err) => {
-      console.error("Error while verifying token ", err);
+      console.error("Error while verifying token or It's not user", err);
       return res.status(403).json(err);
     });
   }
@@ -73,7 +74,7 @@ module.exports = (req, res, next) => {
       return next();
     })
     .catch((err) => {
-      console.error("Error while verifying token ", err);
+      console.error("Error while verifying token or It's not merchant", err);
       return res.status(403).json(err);
     });
   }
@@ -96,7 +97,7 @@ module.exports = (req, res, next) => {
       return next();
     })
     .catch((err) => {
-      console.error("Error while verifying token ", err);
+      console.error("Error while verifying token or It's not admin", err);
       return res.status(403).json(err);
     });
   }

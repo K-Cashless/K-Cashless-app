@@ -15,14 +15,19 @@ const {
   adminSignup,
   adminLogin,
   getAdminData,
+  getRequest,
   acceptRequest,
+  createPromotion,
+  getAllPromotions,
+  genaratePrepaidCard,
 } = require("./handlers/admins");
 const {
   signup,
   login,
+  logout,
   getUserData,
   resetPass,
-  uploadImage,
+  uploadUserImage,
   addUserDetails,
   getAuthenticatedUser,
   topup,
@@ -31,6 +36,7 @@ const {
   updateUserDetails,
   redeemPoint,
   userGetMerchant,
+  pushUserDeviceToken,
 } = require("./handlers/users");
 const {
   merchantSignup,
@@ -38,42 +44,59 @@ const {
   getMerchantData,
   getAllMerchantData,
   moneyRequest,
+  updateMerchantDetails,
+  uploadMerchantImage,
+  pushMerchantDeviceToken,
 } = require("./handlers/merchants");
 
 const {
   getAllTransactions,
-  getOneTransaction,
+  getOneUserTransaction,
+  getOneMerchantTransaction,
 } = require("./handlers/transaction");
 
 //Transaction route
 app.get("/getAllTransactions", getAllTransactions);
-app.get("/getOneTransaction", FBAuth, getOneTransaction);
+app.get("/getOneUserTransaction", FBAuth, getOneUserTransaction);
+app.get(
+  "/merchant/getOneMerchantTransaction",
+  FBAuth,
+  getOneMerchantTransaction
+);
 //Admin route
 app.post("/adminSignup", adminSignup);
 app.post("/adminLogin", adminLogin);
 app.get("/getAdminData", FBAuth, getAdminData);
+app.get("/getAllMerchantData", getAllMerchantData);
+app.get("/getAllUserData", getAllUserData);
+app.get("/merchant/getRequest", getRequest);
 app.post("/merchant/acceptRequest", acceptRequest);
+app.post("/admin/createPromotion",createPromotion);
+app.get("/getAllPromotions",getAllPromotions);
+app.post("/admin/genaratePrepaidCard", genaratePrepaidCard);
 //Merchants route
 app.post("/merchantSignup", merchantSignup);
 app.post("/merchantLogin", merchantLogin);
 app.get("/getMerchantData", FBAuth, getMerchantData);
-app.get("/getAllMerchantData", getAllMerchantData);
 app.post("/merchant/moneyRequest", FBAuth, moneyRequest);
-
+app.post("/merchant/updateMerchantData", FBAuth, updateMerchantDetails);
+app.post("/merchant/pushMerchantDeviceToken", FBAuth, pushMerchantDeviceToken);
+app.post("/merchant/image", FBAuth, uploadMerchantImage);
 //Users route
 app.post("/signup", signup);
 app.post("/login", login);
+app.post("/logout", FBAuth, logout);
 app.get("/getUserData", FBAuth, getUserData);
 app.post("/resetPass", resetPass);
-app.post("/user/image", FBAuth, uploadImage);
+app.post("/user/image", FBAuth, uploadUserImage);
 app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getAuthenticatedUser);
 app.post("/prepaidCard/:cardID", FBAuth, topup);
 app.post("/paid/:merchantID", FBAuth, transfer);
-app.get("/getAllUserData", getAllUserData);
 app.post("/user/updateData", FBAuth, updateUserDetails);
 app.post("/user/redeemPoint", FBAuth, redeemPoint);
 app.get("/user/getMerchant/:merchantID", FBAuth, userGetMerchant);
+app.post("/user/pushUserDeviceToken", FBAuth, pushUserDeviceToken);
 
 exports.api = functions.region("asia-east2").https.onRequest(app);
 /*
@@ -101,6 +124,33 @@ exports.createNotificationOnLike = functions
       })
       .catch((err) => console.error(err));
   });
+
+  exports.createNotificationOnMerchant = functions
+  .region("asia-east2")
+  .firestore.document("likes/{id}")
+  .onCreate((snapshot) => {
+    return db
+      .doc(`/screams/${snapshot.data().screamId}`)
+      .get()
+      .then((doc) => {
+        if (
+          doc.exists &&
+          doc.data().userHandle !== snapshot.data().userHandle
+        ) {
+          return db.doc(`/notifications/${snapshot.id}`).set({
+            createdAt: new Date().toISOString(),
+            recipient: doc.data().userHandle,
+            sender: snapshot.data().userHandle,
+            type: "like",
+            read: false,
+            screamId: doc.id,
+          });
+        }
+      })
+      .catch((err) => console.error(err));
+  });
+*/
+/*
 exports.deleteNotificationOnUnLike = functions
   .region("asia-east2")
   .firestore.document("likes/{id}")

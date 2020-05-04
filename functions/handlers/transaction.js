@@ -27,7 +27,7 @@ exports.getAllTransactions = (req, res) => {
       res.status(500).json({ error: err.code });
     });
 };
-exports.getOneTransaction = (req, res) => {
+exports.getOneUserTransaction = (req, res) => {
   db.collection("transactions")
     .orderBy("createdAt", "desc")
     .get()
@@ -47,6 +47,35 @@ exports.getOneTransaction = (req, res) => {
       console.log(userData);
 
       return res.json(userData);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
+exports.getOneMerchantTransaction = (req, res) => {
+  db.collection("transactions")
+    .orderBy("createdAt", "desc")
+    .get()
+    .then((data) => {
+      let merchantData = [];
+      data.forEach((doc) => {
+        console.log('log'+req.merchant.handle);
+        
+        if (doc.data().to === req.merchant.handle) {
+          merchantData.push({
+            createdAt: doc.data().createdAt,
+            from: doc.data().from,
+            to: doc.data().to,
+            amount: doc.data().amount,
+            info: doc.data().info,
+          });
+        }
+      });
+      console.log(merchantData);
+
+      return res.json(merchantData);
     })
     .catch((err) => {
       console.error(err);
