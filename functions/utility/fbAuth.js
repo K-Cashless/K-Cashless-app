@@ -12,10 +12,10 @@ module.exports = (req, res, next) => {
     idToken = req.headers.authorization.split("Bearer ")[1];
   } else if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith("Mearer ")
+    req.headers.authorization.startsWith("Merchant ")
   ) {
     checkMerchant = true;
-    idToken = req.headers.authorization.split("Mearer ")[1];
+    idToken = req.headers.authorization.split("Merchant ")[1];
   } 
   else if( req.headers.authorization &&
     req.headers.authorization.startsWith("Admin "))
@@ -30,6 +30,7 @@ module.exports = (req, res, next) => {
 
   if(checkUser === true)
   {
+    console.log('idToken'+idToken);
     admin
     .auth()
     .verifyIdToken(idToken)
@@ -56,6 +57,8 @@ module.exports = (req, res, next) => {
   }
   else if(checkMerchant === true)
   {
+    console.log('idToken'+idToken);
+    
     admin
     .auth()
     .verifyIdToken(idToken)

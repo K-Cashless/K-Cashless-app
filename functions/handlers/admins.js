@@ -262,9 +262,9 @@ exports.getAllPromotions = (req, res) => {
     });
 };
 //Generate card
-exports.genaratePrepaidCard = (req, res) => {
+exports.generatePrepaidCard = (req, res) => {
   const cardData = {
-    cost: req.body.cost,
+    value: Number(req.body.value),
     number: req.body.number,
     whoUsed: "None",
     used: false,
@@ -301,4 +301,30 @@ exports.genaratePrepaidCard = (req, res) => {
       res.status(500).json({ error: err.code });
     });
 };
+//Get All Prepaid Card
+exports.getAllPrepaidCard = (req, res) => {
+  let prepaidData = [];
+  db.collection("prepaidCard")
+    .get()
+    .then((data) => {
+      data.forEach((doc) => {
+        prepaidData.push({
+          pincode: doc.id,
+          value: doc.data().value,
+          number: doc.data().number,
+          whoUsed: doc.data().whoUsed,
+          used: doc.data().used,
+          createdAt: doc.data().createdAt,
+        });
+      });
+      console.log(prepaidData);
+      return res.json(prepaidData);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
+//database = doc.id
 //userId = data.user.uid

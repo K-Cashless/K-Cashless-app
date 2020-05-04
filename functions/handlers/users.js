@@ -468,7 +468,7 @@ exports.transfer = (req, res) => {
                     .then((doc) => {
                       axios
                         .post("https://exp.host/--/api/v2/push/send", {
-                          to: `ExponentPushToken[${doc.data().device}]`,
+                          to: doc.data().device,
                           sound: "default",
                           titile: "It Marks",
                           body: "Paid Merchant",
@@ -552,10 +552,10 @@ exports.redeemPoint = (req, res) => {
           .then(() => {
             axios
               .post("https://exp.host/--/api/v2/push/send", {
-                to: `ExponentPushToken[${req.user.device}]`,
+                to: req.user.device,
                 sound: "default",
                 titile: "It Marks",
-                body: "Yes",
+                body: "Yes Mark",
                 data: {
                   title: "Redeem Point",
                   body: Math.random().toString() + "THB",
