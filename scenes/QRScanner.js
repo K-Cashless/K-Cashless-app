@@ -8,6 +8,7 @@ import * as Icon from 'react-native-vector-icons';
 import API_URL from '../firebase/apiLinks';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import {BlurView} from 'expo-blur';
 
 const QRScanner = ({navigation, User}) => {
     const refRBSheet = useRef();
@@ -72,19 +73,18 @@ const QRScanner = ({navigation, User}) => {
             <View style={{position: 'absolute', top: 30, left: 20}}>
                 <CancelButton navigation={navigation}/>
             </View>
-            <View style={{
+            <BlurView intensity={100} tint={'dark'} style={{
                 position: 'absolute',
                 width: '100%',
                 justifyContent: 'center',
                 height: 50,
                 bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.5)',
                 alignItems: 'center'
             }}>
                 <Text style={[MainStyles.bodyText, {textAlign: 'center', color: isLoading ? color.blue : 'white'}]}>
                     {isLoading ? ('Loading... Please Wait') : ('Scan QR code to pay')}
                 </Text>
-            </View>
+            </BlurView>
             <RBSheet
                 ref={refRBSheet}
                 animationType={'fade'}

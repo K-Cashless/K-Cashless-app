@@ -53,19 +53,17 @@ const SignIn = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
 
-
                     {/*Sign Up Section with Button*/}
                     <View style={{
-                        position: 'absolute',
                         width: '100%',
                         justifyContent: 'center',
                         alignContent: 'center',
-                        bottom: '20%',
+                        marginTop: 30
                     }}>
-                        <Text style={[MainStyles.bodyText, {textAlign: 'center'}]}>Don't have an account?</Text>
-                        <View style={{flexWrap: 'wrap', alignSelf: 'center'}}>
+                        <Text style={[MainStyles.bodyText, {textAlign: 'left'}]}>Don't have an account?</Text>
+                        <View style={{flexWrap: 'wrap', alignSelf: 'flex-start'}}>
                             <TouchableOpacity onPress={() => navigation.navigate('SignUpP1')}>
-                                <Text style={[MainStyles.textButton, {textAlign: 'center', color: colors.primary}]}>Sign
+                                <Text style={[MainStyles.textButton, {textAlign: 'left', color: colors.primary}]}>Sign
                                     Up Now</Text>
                             </TouchableOpacity>
                         </View>

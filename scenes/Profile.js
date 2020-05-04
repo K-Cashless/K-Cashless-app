@@ -56,7 +56,6 @@ const ProfileCard = ({User}) => {
                     <Text style={{
                         fontFamily: 'proxima-bold',
                         fontSize: 18,
-                        fontWeight: 'bold',
                         color: 'white',
                     }}>{User.firstName} {User.lastName}</Text>
                     <Text style={{
@@ -68,7 +67,6 @@ const ProfileCard = ({User}) => {
                         <Text style={{
                             fontFamily: 'proxima-bold',
                             fontSize: 25,
-                            fontWeight: 'bold',
                             color: 'white',
                             textAlign: 'right'
                         }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
@@ -76,7 +74,6 @@ const ProfileCard = ({User}) => {
                     <Text style={{
                         fontFamily: 'proxima-regular',
                         fontSize: 18,
-                        fontWeight: 'bold',
                         color: 'white',
                         textAlign: 'right'
                     }}>{User.kpoints} Points</Text>

@@ -12,20 +12,17 @@ const MainStyles = StyleSheet.create({
         fontFamily: 'proxima-extrabold',
         fontSize: 35,
         color: Colors.primary,
-        fontWeight: 'bold',
         textAlign: 'center'
     },
     head2Text: {
         fontFamily: 'proxima-bold',
         fontSize: 20,
         color: 'white',
-        fontWeight: 'normal'
     },
     bodyText: {
         fontFamily: 'proxima-regular',
         fontSize: 18,
         color: 'white',
-        fontWeight: 'normal'
     },
     textInput: {
         fontFamily: 'proxima-regular',
@@ -43,12 +40,10 @@ const MainStyles = StyleSheet.create({
         textDecorationLine: 'underline',
         fontSize: 18,
         color: 'white',
-        fontWeight: 'bold',
     },
     mainAppHeaderLabel: {
         fontFamily: 'proxima-extrabold',
         color: 'white',
-        fontWeight: 'bold',
         fontSize: 30,
         textAlign: 'left',
     }
@@ -79,7 +74,6 @@ export const BlueButton = StyleSheet.create({
     buttonText: {
         fontFamily: 'proxima-bold',
         fontSize: 23,
-        fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',
         textAlignVertical: 'center',

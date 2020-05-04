@@ -73,7 +73,6 @@ const RecentActivity = () => {
             <Text style={{
                 fontFamily: 'proxima-bold',
                 fontSize: 20,
-                fontWeight: 'bold',
                 color: 'white',
             }}>Recent Activity</Text>
             {
