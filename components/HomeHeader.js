@@ -1,7 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import MainStyles from "../styles/MainStyles";
-import UserProfilePic from "./UserProfilePic";
 import NotificationBell from "./NotificationBell";
 
 const HomeHeader = ({navigation}) => {
@@ -20,10 +19,9 @@ const HomeHeader = ({navigation}) => {
                 position: 'absolute',
                 right: 0,
             }}>
-                <View style={{margin: 15}}>
+                <View>
                     <NotificationBell navigation={navigation}/>
                 </View>
-                <UserProfilePic navigation={navigation}/>
             </View>
         </View>
     );

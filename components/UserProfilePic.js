@@ -1,23 +1,26 @@
 import React from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
+import {withNavigation} from 'react-navigation';
 
 const UserProfilePic = ({navigation, pic}) => {
     return (
-        <View>
-            <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate('Profile');
-                }}
-                style={{width: 40, height: 40, borderRadius: 40, backgroundColor: 'white'}}
-            >
+        <TouchableOpacity
+            onPress={() => {
+                navigation.navigate('Profile');
+            }}
+            style={{
+                width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center'
+            }}
+        >
+            <View style={{width: 30, height: 30, borderRadius: 30, backgroundColor: 'white'}}>
                 {
                     pic &&
-                    <Image source={{uri: pic}} style={{width: 40, height: 40, borderRadius: 40}}
+                    <Image source={{uri: pic}} style={{width: 30, height: 30, borderRadius: 30}}
                            resizeMode='cover'/>
                 }
-            </TouchableOpacity>
-        </View>
+            </View>
+        </TouchableOpacity>
     );
 };
 
@@ -27,4 +30,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(UserProfilePic);
+export default withNavigation(connect(mapStateToProps)(UserProfilePic));
