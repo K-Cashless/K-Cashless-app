@@ -3,6 +3,7 @@ const { admin, db } = require("../utility/admin");
 const config = require("../utility/config.js");
 const { uuid } = require("uuidv4");
 const axios = require("axios");
+const cors = require("cors")({ origin: true });
 const firebase = require("firebase");
 firebase.initializeApp(config);
 
@@ -470,6 +471,8 @@ exports.transfer = (req, res) => {
                         .post("https://exp.host/--/api/v2/push/send", {
                           to: doc.data().device,
                           sound: "default",
+                          //title -> transaction.info
+                          //body -> transaction.amount
                           titile: "It Marks",
                           body: "Paid Merchant",
                           data: {
@@ -479,8 +482,7 @@ exports.transfer = (req, res) => {
                         })
                         .then((res) => {
                           console.log(res);
-                          console.log('device is'+doc.data().device);
-                          
+                          console.log("device is" + doc.data().device);
                         })
                         .catch((err) => {
                           console.log(err);
@@ -550,23 +552,32 @@ exports.redeemPoint = (req, res) => {
         db.doc(`/transactions/${transaction.createdAt}`)
           .set(transaction)
           .then(() => {
-            axios
-              .post("https://exp.host/--/api/v2/push/send", {
-                to: req.user.device,
-                sound: "default",
-                titile: "It Marks",
-                body: "Yes Mark",
-                data: {
-                  title: "Redeem Point",
-                  body: Math.random().toString() + "THB",
-                },
-              })
-              .then((res) => {
-                console.log(res);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            cors(req, res, () => {
+              if (req.method !== "POST") {
+                return res.status(401).json({
+                  message: "Not allowed",
+                });
+              }
+              return axios
+                .post("https://exp.host/--/api/v2/push/send", {
+                  to: req.user.device,
+                  sound: "default",
+                  //title -> transaction.info
+                  //body -> transaction.amount
+                  titile: "It Marks",
+                  body: "Yes Mark",
+                  data: {
+                    title: "Redeem Point",
+                    body: Math.random().toString() + "THB",
+                  },
+                })
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
           })
           .then(() => {
             return res.json({ transaction });

@@ -11,77 +11,107 @@ const {
 } = require("../utility/validators");
 
 exports.merchantSignup = (req, res) => {
-  const newMerchant = {
-    email: req.body.email,
-    password: req.body.password,
-    confirmPassword: req.body.confirmPassword,
-    handle: req.body.handle,
-    storeName: req.body.storeName,
-    ownerName: req.body.ownerName,
-    phone: req.body.phone,
-  };
-
-  const { valid, errors } = validateSignupData(newMerchant);
-
-  if (!valid) return res.status(400).json(errors);
-
-  const noImg = "no-img.jpg";
-
-  let token, userId;
-  db.doc("/merchants/" + newMerchant.handle)
+  let tempNum = 0;
+  let numMerchantID = 0;
+  db.collection("merchants")
     .get()
-    .then((doc) => {
-      if (doc.exists) {
-        return res
-          .status(400)
-          .json({ message: "This handle is already taken" });
-      } else {
-        return firebase
-          .auth()
-          .createUserWithEmailAndPassword(
-            newMerchant.email,
-            newMerchant.password
-          );
-      }
-    })
     .then((data) => {
-      console.log("pass");
-
-      userId = data.user.uid;
-      return data.user.getIdToken();
-    })
-    .then((idtoken) => {
-      token = idtoken;
-      const userCredentials = {
-        handle: newMerchant.handle,
-        email: newMerchant.email,
-        storeName: newMerchant.storeName,
-        ownerName: newMerchant.ownerName,
-        phone: newMerchant.phone,
-        total: 0,
-        createdAt: new Date().toISOString(),
-        imageUrl:
-          "https://firebasestorage.googleapis.com/v0/b/" +
-          config.storageBucket +
-          "/o/" +
-          noImg +
-          "?alt=media",
-        device:"",
-        userId,
-      };
-      return db.doc("/merchants/" + newMerchant.handle).set(userCredentials);
-    })
-    .then(() => {
-      return res.status(201).json({ token });
-    })
-
-    .catch((err) => {
-      console.error(err);
-      if (err.code === "auth/email-already-in-use") {
-        return res.status(500).json({ email: "Email is already in use" });
-      } else {
-        return res.status(500).json({ error: err.code });
+      data.forEach((doc) => {
+        if (Number(doc.id.split("M")[1]) >= tempNum) {
+          tempNum = Number(doc.id.split("M")[1]);
+        }
+        console.log("tempN" + tempNum);
+      });
+      numMerchantID = tempNum;
+      console.log("nummm" + numMerchantID);
+      let result = "";
+      numMerchantID = numMerchantID + 1;
+      let lengthMerchantID = numMerchantID.toString().length;
+      fixZero = 4;
+      if (fixZero - lengthMerchantID < 0) {
+        return res.json({ err: "Over form xxxx" });
       }
+      for (var i = 0; i < fixZero - lengthMerchantID; i++) {
+        result += "0";
+      }
+      strMerchant = "M" + result + numMerchantID;
+
+      const newMerchant = {
+        email: req.body.email,
+        password: req.body.password,
+        confirmPassword: req.body.confirmPassword,
+        //handle: req.body.handle,
+        handle: strMerchant,
+        storeName: req.body.storeName,
+        ownerName: req.body.ownerName,
+        phone: req.body.phone,
+      };
+
+      const { valid, errors } = validateSignupData(newMerchant);
+
+      if (!valid) return res.status(400).json(errors);
+
+      const noImg = "no-img.jpg";
+
+      let token, userId;
+      db.doc("/merchants/" + newMerchant.handle)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            return res
+              .status(400)
+              .json({ message: "This handle is already taken" });
+          } else {
+            return firebase
+              .auth()
+              .createUserWithEmailAndPassword(
+                newMerchant.email,
+                newMerchant.password
+              );
+          }
+        })
+        .then((data) => {
+          console.log("pass");
+
+          userId = data.user.uid;
+          return data.user.getIdToken();
+        })
+        .then((idtoken) => {
+          token = idtoken;
+          const userCredentials = {
+            handle: newMerchant.handle,
+            //handle: listMerchantID = listMerchantID + 1,
+            email: newMerchant.email,
+            storeName: newMerchant.storeName,
+            ownerName: newMerchant.ownerName,
+            phone: newMerchant.phone,
+            total: 0,
+            createdAt: new Date().toISOString(),
+            imageUrl:
+              "https://firebasestorage.googleapis.com/v0/b/" +
+              config.storageBucket +
+              "/o/" +
+              noImg +
+              "?alt=media",
+            device: "",
+            userId,
+          };
+          return db
+            .doc("/merchants/" + newMerchant.handle)
+            .set(userCredentials);
+        })
+        .then(() => {
+          return res.status(201).json({ token });
+        })
+
+        .catch((err) => {
+          console.error(err);
+          if (err.code === "auth/email-already-in-use") {
+            return res.status(500).json({ email: "Email is already in use" });
+          } else {
+            return res.status(500).json({ error: err.code });
+          }
+        });
     });
 };
 
@@ -247,25 +277,56 @@ exports.moneyRequest = (req, res) => {
   const request = {
     handle: req.merchant.handle,
     amount: req.body.amount,
-    requestedAt: new Date().toISOString(),
-    status:"Pending",
-    accept: false,
   };
   db.doc(`/merchants/${req.merchant.handle}`)
     .get()
     .then((doc) => {
+      const newRequest = {
+        handle: request.handle,
+        amount: request.amount,
+        requestedAt: new Date().toISOString(),
+        status: "Pending",
+        accept: false,
+        device: doc.data().device,
+      };
       //console.log('mer'+req.merchant.handle);
-      
-      if(doc.data().total > request.amount)
-      {
-        db.doc("/RequestToAdmins/" + req.merchant.handle).set(request)
-        .then(()=>{
-          return res.json({ message:"Request Successful"});
-        })
 
-      }
-      else
-      res.status(500).json({ error:"Money Request less than total"});
+      if (doc.data().total > request.amount) {
+        db.doc("/requestToAdmins/" + req.merchant.handle)
+          .get()
+          .then((doc) => {
+            if (!doc.exists)
+            {
+              db.doc("/requestToAdmins/" + req.merchant.handle)
+                .set(newRequest)
+                .then(() => {
+                  return res.json({ message: "Request Successful" });
+                })
+                .catch((err) => {
+                  console.error(err);
+                  res.status(500).json({ error: err.code });
+                });
+            }
+            else if (
+              doc.data().accept === false &&
+              doc.data().status === "Pending"
+            ) {
+              return res
+                .status(400)
+                .json({ message: "Your request is on pending" });
+            } else {
+              db.doc("/requestToAdmins/" + req.merchant.handle)
+                .set(newRequest)
+                .then(() => {
+                  return res.json({ message: "Request Successful" });
+                })
+                .catch((err) => {
+                  console.error(err);
+                  res.status(500).json({ error: err.code });
+                });
+            }
+          });
+      } else res.status(500).json({ error: "Money Request less than total" });
     })
     .catch((err) => {
       console.error(err);
@@ -287,4 +348,3 @@ exports.pushMerchantDeviceToken = (req, res) => {
       res.status(500).json({ error: err.code });
     });
 };
-

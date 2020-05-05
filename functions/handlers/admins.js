@@ -1,7 +1,7 @@
 const { admin, db } = require("../utility/admin");
 
 const config = require("../utility/config.js");
-
+const axios = require("axios");
 const firebase = require("firebase");
 
 const {
@@ -21,14 +21,14 @@ exports.adminSignup = (req, res) => {
     phone: req.body.phone,
   };
 
-  const { valid, errors } = validateSignupData(newMerchant);
+  const { valid, errors } = validateSignupData(newAdmin);
 
   if (!valid) return res.status(400).json(errors);
 
   const noImg = "no-img.jpg";
 
   let token, userId;
-  db.doc("/merchants/" + newMerchant.handle)
+  db.doc("/admins/" + newAdmin.handle)
     .get()
     .then((doc) => {
       if (doc.exists) {
@@ -39,8 +39,8 @@ exports.adminSignup = (req, res) => {
         return firebase
           .auth()
           .createUserWithEmailAndPassword(
-            newMerchant.email,
-            newMerchant.password
+            newAdmin.email,
+            newAdmin.password
           );
       }
     })
@@ -67,7 +67,7 @@ exports.adminSignup = (req, res) => {
           "?alt=media",
         userId,
       };
-      return db.doc("/merchants/" + newMerchant.handle).set(userCredentials);
+      return db.doc("/admins/" + newAdmin.handle).set(userCredentials);
     })
     .then(() => {
       return res.status(201).json({ token });
@@ -111,13 +111,13 @@ exports.adminLogin = (req, res) => {
 };
 //Get Merchant Data
 exports.getAdminData = (req, res) => {
-  let merchantData = [];
-  db.doc(`/merchants/${req.merchant.handle}`)
+  let adminData = [];
+  db.doc(`/admins/${req.admin.handle}`)
     .get()
     .then((doc) => {
-      console.log("mh" + req.merchant.handle);
+      console.log("mh" + req.admin.handle);
 
-      merchantData.push({
+      adminData.push({
         userId: doc.id,
         handle: doc.data().handle,
         email: doc.data().email,
@@ -127,8 +127,8 @@ exports.getAdminData = (req, res) => {
         imageUrl: doc.data().imageUrl,
         createdAt: doc.data().createdAt,
       });
-      console.log(merchantData);
-      return res.json(merchantData);
+      console.log(adminData);
+      return res.json(adminData);
     })
     .catch((err) => {
       console.error(err);
@@ -138,7 +138,7 @@ exports.getAdminData = (req, res) => {
 //GetRequest
 exports.getRequest = (req, res) => {
   let requestData = [];
-  db.collection("RequestToAdmins")
+  db.collection("requestToAdmins")
     .get()
     .then((data) => {
       data.forEach((doc) => {
@@ -164,7 +164,7 @@ exports.acceptRequest = (req, res) => {
   const data = {
     handle: req.body.handle,
   };
-  db.doc(`/RequestToAdmins/${data.handle}`)
+  db.doc(`/requestToAdmins/${data.handle}`)
     .get()
     .then((doc) => {
       let temp = doc.data().amount;
@@ -178,18 +178,59 @@ exports.acceptRequest = (req, res) => {
         db.doc(`/merchants/${data.handle}`)
           .get()
           .then((doc) => {
+            const tempDevice = doc.data().device;
             const total = Number(doc.data().total) - temp;
-            db.doc(`/merchants/${data.handle}`).update({ total });
-            return res.json({ message: "Received money" });
+            db.doc(`/merchants/${data.handle}`)
+              .update({ total })
+              .then((doc) => {
+                const transaction = {
+                  createdAt: new Date().toISOString(),
+                  from: "admin",
+                  to: data.handle,
+                  amount: parseInt(temp),
+                  info: "Accept request",
+                };
+                db.doc(`/transactions/${transaction.createdAt}`)
+                  .set(transaction)
+                  .then((doc) => {
+                    axios
+                      .post("https://exp.host/--/api/v2/push/send", {
+                        to: tempDevice,
+                        sound: "default",
+                        //title -> transaction.info
+                        //body -> transaction.amount
+                        titile: "It Marks",
+                        body: "Yes Mark",
+                        data: {
+                          title: "Redeem Point",
+                          body: Math.random().toString() + "THB",
+                        },
+                      })
+                      .then((res) => {
+                        console.log(res);
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  })
+                  .then(() => {
+                    return res.json({ transaction });
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                    return res.status(500).json({ error: err.code });
+                  });
+              });
           })
           .then((doc) => {
             const status = "Done";
-            return db.doc(`/RequestToAdmins/${data.handle}`).update({ status });
+            return db.doc(`/requestToAdmins/${data.handle}`).update({ status });
           })
           .then((doc) => {
             const accept = true;
-            return db.doc(`/RequestToAdmins/${data.handle}`).update({ accept });
+            return db.doc(`/requestToAdmins/${data.handle}`).update({ accept });
           })
+
           .catch((err) => {
             console.error(err);
             res.status(500).json({ error: err.code });
@@ -322,9 +363,20 @@ exports.getAllPrepaidCard = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).json({ error: err.code });
+      return res.status(500).json({ error: err.code });
     });
 };
-
+//Clear all Prepaid card
+exports.deleteOnePrepaidCards = (req, res) => {
+  db.doc(`/prepaidCard/${req.params.cardID}`)
+    .delete()
+    .then(() => {
+      return res.json({ message: "Delete successful" });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
 //database = doc.id
 //userId = data.user.uid
