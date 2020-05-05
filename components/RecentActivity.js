@@ -37,7 +37,7 @@ const RecentActivity = () => {
                             fontFamily: 'proxima-regular',
                             color: 'rgb(150,150,150)',
                             fontSize: 14,
-                        }}>{recentData.createdAt}</Text>
+                        }}>{new Date(recentData.createdAt).toLocaleString()}</Text>
                     </View>
                     <View style={{flexWrap: 'wrap', justifyContent: 'center'}}>
                         <Text style={{
