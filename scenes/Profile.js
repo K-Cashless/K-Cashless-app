@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import * as colors from '../styles/Colors';
@@ -101,10 +101,13 @@ const ManageAccountButton = ({navigation}) => {
 };
 
 const SignOutButton = ({navigation}) => {
+    const [isLoading, setIsLoading] = useState(false);
     return (
         <TouchableOpacity
+            disabled={isLoading}
             style={{position: 'absolute', bottom: 50, width: '100%'}}
             onPress={async () => {
+                setIsLoading(true);
                 await axios.post(API_URL.SIGN_OUT, {}, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
                     .then(res => {
                         console.log(res);
@@ -112,13 +115,14 @@ const SignOutButton = ({navigation}) => {
                         navigation.navigate('SignIn');
                     })
                     .catch(error => {
+                        setIsLoading(false);
                         console.log(error.response);
                         Alert.alert('Error Signing Out', 'Please Try Again');
                     });
             }}
         >
             <Text style={[MainStyles.head2Text, {fontSize: 20, textAlign: 'center', color: 'red'}]}>
-                Sign Out
+                {isLoading ? 'Signing Out...' : 'Sign Out'}
             </Text>
         </TouchableOpacity>
     );

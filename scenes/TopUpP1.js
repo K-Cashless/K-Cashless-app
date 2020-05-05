@@ -66,7 +66,7 @@ const TopUpP1 = ({navigation, User}) => {
                 position: 'absolute',
                 width: '100%',
                 justifyContent: 'center',
-                height: 50,
+                height: 70,
                 bottom: 0,
                 backgroundColor: 'rgba(0,0,0,0.5)',
                 alignItems: 'center'
@@ -202,22 +202,15 @@ const CancelButton = ({navigation}) => {
                 navigation.navigate('MainApp');
             }}
         >
-            <Icon.AntDesign
-                name={'closecircle'}
-                size={25}
-                color={'white'}
-                style={{
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 4,
-                    },
-                    shadowOpacity: 0.32,
-                    shadowRadius: 5.46,
-
-                    elevation: 9,
-                }}
-            />
+            <BlurView intensity={100}
+                      style={{width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}>
+                <Icon.AntDesign
+                    name={'close'}
+                    size={25}
+                    color={'rgba(255,255,255,0.7)'}
+                    style={{}}
+                />
+            </BlurView>
         </TouchableOpacity>
     )
 };
