@@ -6,7 +6,6 @@ import API_URL from '../firebase/apiLinks';
 import axios from 'axios';
 
 const PromotionLoader = (list, setList) => {
-    // TODO - firebase
     return new Promise((resolve) => {
         axios.get(API_URL.GET_PROMOTIONS)
             .then((res) => {
@@ -126,7 +125,7 @@ const PromotionCard = ({end, pic, shopPic, title, description}) => {
                     }
 
                     <View style={{marginLeft: shopPic && 10, justifyContent: 'center'}}>
-                        <Text style={[MainStyles.bodyText, {fontFamily: 'proxima-bold'}]}>
+                        <Text style={[MainStyles.bodyText, {fontFamily: 'proxima-bold', fontSize: 20}]}>
                             {title}
                         </Text>
                     </View>

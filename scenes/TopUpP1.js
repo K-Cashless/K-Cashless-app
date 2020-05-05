@@ -9,6 +9,7 @@ import TransparentButton from "../components/TransparentButton";
 import axios from 'axios';
 import API_URL from '../firebase/apiLinks';
 import {connect} from 'react-redux';
+import {BlurView} from 'expo-blur';
 
 const TopUpP1 = ({navigation, User}) => {
     const refRBSheet = useRef();
@@ -61,7 +62,7 @@ const TopUpP1 = ({navigation, User}) => {
             <View style={{position: 'absolute', top: 40, left: 20}}>
                 <CancelButton navigation={navigation}/>
             </View>
-            <View style={{
+            <BlurView intensity={100} tint={'dark'} style={{
                 position: 'absolute',
                 width: '100%',
                 justifyContent: 'center',
@@ -71,7 +72,7 @@ const TopUpP1 = ({navigation, User}) => {
                 alignItems: 'center'
             }}>
                 <Text style={[MainStyles.bodyText, {textAlign: 'center'}]}>Scan QR code to top up</Text>
-            </View>
+            </BlurView>
             <RBSheet
                 ref={refRBSheet}
                 animationType={'fade'}
@@ -129,12 +130,11 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setScanned}) =
                     }]}>{topUpInfo.value} {'\u0E3F'}</Text>
                 </View>
                 <View style={{position: 'absolute', bottom: 7, left: 7}}>
-                    <Text style={[MainStyles.bodyText, {fontSize: 12, color: 'white'}]}>Card No.</Text>
+                    <Text style={[MainStyles.bodyText, {fontSize: 12, color: 'white'}]}>No.</Text>
                     <Text style={[MainStyles.head2Text, {fontSize: 15, color: 'white'}]}>{topUpInfo.cardId}</Text>
                 </View>
                 <View style={{position: 'absolute', bottom: 7, right: 7}}>
-                    <Text style={[MainStyles.bodyText, {fontSize: 12, color: 'white', textAlign: 'right'}]}>Ref
-                        No.</Text>
+                    <Text style={[MainStyles.bodyText, {fontSize: 12, color: 'white', textAlign: 'right'}]}>LOT</Text>
                     <Text style={[MainStyles.head2Text, {
                         fontSize: 15,
                         color: 'white',
