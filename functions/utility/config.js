@@ -6,5 +6,5 @@ module.exports = {
   storageBucket: "k-cash-less.appspot.com",
   messagingSenderId: "39627483583",
   appId: "1:39627483583:web:ac1c711e2b4f421247190a",
-  measurementId: "G-7DC35RWHQR"
+  measurementId: "G-7DC35RWHQR",
 };
