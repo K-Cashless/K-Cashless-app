@@ -9,6 +9,7 @@ import TransparentButton from "../components/TransparentButton";
 import axios from 'axios';
 import API_URL from '../firebase/apiLinks';
 import {connect} from 'react-redux';
+import {BlurView} from 'expo-blur';
 
 const TopUpP1 = ({navigation, User}) => {
     const refRBSheet = useRef();
@@ -61,17 +62,17 @@ const TopUpP1 = ({navigation, User}) => {
             <View style={{position: 'absolute', top: 40, left: 20}}>
                 <CancelButton navigation={navigation}/>
             </View>
-            <View style={{
+            <BlurView intensity={100} tint={'dark'} style={{
                 position: 'absolute',
                 width: '100%',
                 justifyContent: 'center',
-                height: 50,
+                height: 70,
                 bottom: 0,
                 backgroundColor: 'rgba(0,0,0,0.5)',
                 alignItems: 'center'
             }}>
                 <Text style={[MainStyles.bodyText, {textAlign: 'center'}]}>Scan QR code to top up</Text>
-            </View>
+            </BlurView>
             <RBSheet
                 ref={refRBSheet}
                 animationType={'fade'}
@@ -129,12 +130,11 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setScanned}) =
                     }]}>{topUpInfo.value} {'\u0E3F'}</Text>
                 </View>
                 <View style={{position: 'absolute', bottom: 7, left: 7}}>
-                    <Text style={[MainStyles.bodyText, {fontSize: 12, color: 'white'}]}>Card No.</Text>
+                    <Text style={[MainStyles.bodyText, {fontSize: 12, color: 'white'}]}>No.</Text>
                     <Text style={[MainStyles.head2Text, {fontSize: 15, color: 'white'}]}>{topUpInfo.cardId}</Text>
                 </View>
                 <View style={{position: 'absolute', bottom: 7, right: 7}}>
-                    <Text style={[MainStyles.bodyText, {fontSize: 12, color: 'white', textAlign: 'right'}]}>Ref
-                        No.</Text>
+                    <Text style={[MainStyles.bodyText, {fontSize: 12, color: 'white', textAlign: 'right'}]}>LOT</Text>
                     <Text style={[MainStyles.head2Text, {
                         fontSize: 15,
                         color: 'white',
@@ -202,22 +202,15 @@ const CancelButton = ({navigation}) => {
                 navigation.navigate('MainApp');
             }}
         >
-            <Icon.AntDesign
-                name={'closecircle'}
-                size={25}
-                color={'white'}
-                style={{
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 4,
-                    },
-                    shadowOpacity: 0.32,
-                    shadowRadius: 5.46,
-
-                    elevation: 9,
-                }}
-            />
+            <BlurView intensity={100}
+                      style={{width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}>
+                <Icon.AntDesign
+                    name={'close'}
+                    size={25}
+                    color={'rgba(255,255,255,0.7)'}
+                    style={{}}
+                />
+            </BlurView>
         </TouchableOpacity>
     )
 };

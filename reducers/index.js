@@ -11,12 +11,14 @@ export const initialState = {
         balance: 0,
         kpoints: 0,
         notifications: {
+            animationSignal: false,
             haveUnread: false,
             list: []
         },
         history: [],
         phone: null,
     },
+    ExpoPushToken: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -98,7 +100,7 @@ const reducer = (state = initialState, action) => {
                     ...state.User,
                     notifications: {
                         ...state.User.notifications,
-                        list: [...state.User.notifications.list, action.payload]
+                        list: [action.payload, ...state.User.notifications.list]
                     }
                 }
             };
@@ -134,6 +136,11 @@ const reducer = (state = initialState, action) => {
                     phone: action.payload
                 }
             };
+        case actionType.SET_EXPO_PUSH_TOKEN:
+            return {
+                ...state,
+                ExpoPushToken: action.payload
+            };
         case actionType.UPDATE_USER_DATA:
             return {
                 ...state,
@@ -153,6 +160,17 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 User: initialState.User
+            };
+        case actionType.SET_ANIMATION_SIGNAL:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    notifications: {
+                        ...state.User.notifications,
+                        animationSignal: action.payload
+                    }
+                }
             };
         default:
             return state;

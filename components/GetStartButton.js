@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text , TouchableOpacity , StyleSheet} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 const GetStartButton = ({navigation}) =>{
     return(
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     buttonText:{
         fontFamily: 'proxima-bold',
         fontSize: 30,
-        fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',
         textAlignVertical: 'center',

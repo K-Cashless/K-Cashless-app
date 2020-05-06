@@ -25,7 +25,6 @@ const KPointRect = ({style, navigation, redeemButton, kpoints}) => {
                 <Text style={{
                     fontFamily: 'proxima-bold',
                     fontSize: 36,
-                    fontWeight: 'bold',
                     color: 'white',
                     textAlign: 'right',
                 }}>{kpoints}</Text>

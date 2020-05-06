@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions, RefreshControl, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
@@ -8,36 +8,37 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import store from '../store';
 import * as actions from '../actions';
 import {connect} from 'react-redux';
+import * as Animatable from 'react-native-animatable';
 
-let test = 0;
+// let test = 0;
 
 async function NotificationLoader() {
-    let i;
-    test += 1;
-    test %= 2;
-    let list = [];
-    for (i = 0; i < 10 * test; ++i) {
-        list.push({
-            id: i.toString(),
-            time: '1/2/2020 10:00 AM',
-            title: 'This is title ' + i,
-            description: 'This is description',
-        });
-    }
-    store.dispatch(actions.User.setNotificationsList(list));
-    console.log(list);
+    // let i;
+    // test += 1;
+    // test %= 2;
+    // let list = [];
+    // for (i = 0; i < 10 * test; ++i) {
+    //     list.push({
+    //         id: i.toString(),
+    //         time: '1/2/2020 10:00 AM',
+    //         title: 'This is title ' + i,
+    //         description: 'This is description',
+    //     });
+    // }
+    // store.dispatch(actions.User.setNotificationsList(list));
+    // console.log(list);
 }
 
-function wait(timeout) {
-    return new Promise(resolve => {
-        setTimeout(resolve, timeout);
-    });
-}
+// function wait(timeout) {
+//     return new Promise(resolve => {
+//         setTimeout(resolve, timeout);
+//     });
+// }
 
 const NotificationView = ({navigation, list}) => {
     useEffect(() => {
         store.dispatch(actions.User.setNotificationsUnread(false));
-    });
+    }, [store.getState().User.notifications.list]);
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, top: '5%', height: '95%'}}>
@@ -70,41 +71,39 @@ const NotificationList = ({list}) => {
 
     const onRefresh = async () => {
         setRefreshing(true);
-        NotificationLoader().then(() => wait(3000)).then(() => setRefreshing(false));
+        NotificationLoader().then(() => setRefreshing(false));
     };
 
     const renderItem = data => (
-        <View style={{
-            width: '100%',
-            paddingVertical: 10,
-            borderColor: 'rgb(100,100,100)',
-            backgroundColor: color.background,
-            borderTopWidth: 0,
-            borderBottomWidth: 1
-        }}>
-            <Text style={{
-                fontFamily: 'proxima-regular',
-                marginLeft: 60,
-                marginRight: 20,
-                color: 'rgb(150,150,150)',
-                fontSize: 12
-            }}>{data.item.time}</Text>
-            <Text style={{
-                fontFamily: 'proxima-regular',
-                marginTop: 5,
-                marginLeft: 60,
-                marginRight: 20,
-                color: 'white',
-                fontSize: 25
-            }}>{data.item.title}</Text>
-            <Text style={{
-                fontFamily: 'proxima-regular',
-                marginLeft: 60,
-                marginRight: 20,
-                color: 'rgb(150,150,150)',
-                fontSize: 16
-            }}>{data.item.description}</Text>
+        <View style={{backgroundColor: color.background}}>
+            <Animatable.View animation={data.item.read ? null : 'bounceIn'} duration={1000} delay={100}
+                             onAnimationEnd={() => data.item.read = true}>
+                <View style={{
+                    width: '100%',
+                    paddingVertical: 10,
+                    borderColor: 'rgb(100,100,100)',
+                    backgroundColor: data.item.read ? color.background : color.blue,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 1
+                }}>
+                    <Text style={{
+                        marginLeft: 60,
+                        marginRight: 20,
+                        fontFamily: 'proxima-bold',
+                        color: 'white',
+                        fontSize: 18,
+                    }}>{data.item.title}</Text>
+                    <Text style={{
+                        fontFamily: 'proxima-regular',
+                        marginLeft: 60,
+                        marginRight: 20,
+                        color: 'rgb(200,200,200)',
+                        fontSize: 16
+                    }}>{data.item.body}</Text>
+                </View>
+            </Animatable.View>
         </View>
+
     );
 
     const renderHiddenItem = (data) => {

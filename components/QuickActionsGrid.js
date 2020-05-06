@@ -43,15 +43,14 @@ const GridButton = ({iconName, text, onPress}) => {
 const style = StyleSheet.create({
     gridButton: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        marginTop: 30
     },
     iconContainer: {
-        flex: 3,
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         alignItems: 'center',
     },
     descriptionContainer: {
-        flex: 2,
         justifyContent: 'flex-start',
     },
     descriptionText: {
@@ -63,7 +62,6 @@ const style = StyleSheet.create({
         alignSelf: 'center',
     },
     gridRowContainer: {
-        flex: 1,
         flexDirection: 'row',
     }
 });

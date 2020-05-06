@@ -42,8 +42,9 @@ const PaymentComplete = ({navigation}) => {
                         }]}>Payment Successful</Text>
                     </View>
                     <View style={{flex: 0.3}}>
-                        <Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>{data.time}</Text>
-                        <Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>ID: {data.id}</Text>
+                        <Text
+                            style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>{(new Date(data.time)).toLocaleString()}</Text>
+                        {/*<Text style={[MainStyles.bodyText, {color: 'rgb(150,150,150)'}]}>ID: {data.id}</Text>*/}
                     </View>
                     <View style={{flex: 4, width: '100%', top: 50, justifyContent: 'flex-start'}}>
                         <View style={{flex: 1}}>

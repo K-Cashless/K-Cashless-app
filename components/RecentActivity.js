@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import store from '../store';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
 const RecentActivity = () => {
@@ -29,13 +30,14 @@ const RecentActivity = () => {
                             fontFamily: 'proxima-regular',
                             color: 'white',
                             fontSize: 18,
-                        }}>{recentData.info}</Text>
+                        }}>{recentData.info} {!green ? (<><Icon name='arrow-right' color={'white'}
+                                                                size={14}/> {recentData.to}</>) : null}</Text>
                         <Text style={{
                             flex: 1,
                             fontFamily: 'proxima-regular',
                             color: 'rgb(150,150,150)',
                             fontSize: 14,
-                        }}>{recentData.createdAt}</Text>
+                        }}>{new Date(recentData.createdAt).toLocaleString()}</Text>
                     </View>
                     <View style={{flexWrap: 'wrap', justifyContent: 'center'}}>
                         <Text style={{
@@ -71,7 +73,6 @@ const RecentActivity = () => {
             <Text style={{
                 fontFamily: 'proxima-bold',
                 fontSize: 20,
-                fontWeight: 'bold',
                 color: 'white',
             }}>Recent Activity</Text>
             {

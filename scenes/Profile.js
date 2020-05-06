@@ -1,5 +1,5 @@
-import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import * as colors from '../styles/Colors';
 import {connect} from 'react-redux'
@@ -7,6 +7,8 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import * as actions from '../actions';
 import store from '../store';
+import axios from 'axios';
+import API_URL from '../firebase/apiLinks';
 
 const Profile = ({navigation, User}) => {
     return (
@@ -54,7 +56,6 @@ const ProfileCard = ({User}) => {
                     <Text style={{
                         fontFamily: 'proxima-bold',
                         fontSize: 18,
-                        fontWeight: 'bold',
                         color: 'white',
                     }}>{User.firstName} {User.lastName}</Text>
                     <Text style={{
@@ -66,7 +67,6 @@ const ProfileCard = ({User}) => {
                         <Text style={{
                             fontFamily: 'proxima-bold',
                             fontSize: 25,
-                            fontWeight: 'bold',
                             color: 'white',
                             textAlign: 'right'
                         }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
@@ -74,7 +74,6 @@ const ProfileCard = ({User}) => {
                     <Text style={{
                         fontFamily: 'proxima-regular',
                         fontSize: 18,
-                        fontWeight: 'bold',
                         color: 'white',
                         textAlign: 'right'
                     }}>{User.kpoints} Points</Text>
@@ -102,19 +101,31 @@ const ManageAccountButton = ({navigation}) => {
 };
 
 const SignOutButton = ({navigation}) => {
+    const [isLoading, setIsLoading] = useState(false);
     return (
         <TouchableOpacity
+            disabled={isLoading}
             style={{position: 'absolute', bottom: 50, width: '100%'}}
             onPress={async () => {
-                await store.dispatch(actions.User.clearAllUser());
-                navigation.navigate('SignIn');
+                setIsLoading(true);
+                await axios.post(API_URL.SIGN_OUT, {}, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+                    .then(res => {
+                        console.log(res);
+                        store.dispatch(actions.User.clearAllUser());
+                        navigation.navigate('SignIn');
+                    })
+                    .catch(error => {
+                        setIsLoading(false);
+                        console.log(error.response);
+                        Alert.alert('Error Signing Out', 'Please Try Again');
+                    });
             }}
         >
             <Text style={[MainStyles.head2Text, {fontSize: 20, textAlign: 'center', color: 'red'}]}>
-                Sign Out
+                {isLoading ? 'Signing Out...' : 'Sign Out'}
             </Text>
         </TouchableOpacity>
-    )
+    );
 };
 
 function mapStateToProps(state) {

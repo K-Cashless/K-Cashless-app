@@ -10,6 +10,7 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import axios from 'axios';
 import API_URL from '../firebase/apiLinks';
 import store from '../store';
+import {getAllUserData} from "../firebase/functions";
 
 const PaymentInfo = ({navigation, balance}) => {
     const shopInfo = navigation.getParam('shopInfo', {});
@@ -19,12 +20,15 @@ const PaymentInfo = ({navigation, balance}) => {
     const [payValueError, setPayValueError] = useState('');
 
     useEffect(() => {
-        if (!(/^[0-9]*\.[0-9]{2}$/.test(payValue)) && isChanged) {
-            setPayValueError('Please Enter the Correct Amount (i.e. 25.00)');
+        if ((!(/^[0-9]*\.[0-9]{2}$/.test(payValue)) || payValue > store.getState().User.balance || payValue <= 0) && isChanged) {
+            setPayValueError('Please Enter the Correct Amount and Correct Format (i.e. 25.00)');
         } else {
             setPayValueError('');
         }
     });
+    useEffect(() => {
+        getAllUserData().then(null);
+    }, []);
     return (
         <>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -47,6 +51,7 @@ const PaymentInfo = ({navigation, balance}) => {
                                             setPayValue(text);
                                             setIsChanged(true);
                                         }}
+                                        onBlur={() => setPayValue((Math.floor(payValue * 1)).toFixed(2))}
                                         value={payValue}
                                         placeholder={'Enter amount to pay'}
                                         error={payValueError}

@@ -18,6 +18,8 @@ export const User = {
     setToken: (token) => ({type: actionType.SET_USER_TOKEN, payload: token}),
     setPhone: (phone) => ({type: actionType.SET_USER_PHONE, payload: phone}),
     updateUserData: (User) => ({type: actionType.UPDATE_USER_DATA, payload: User}),
-    clearAllUser: () => ({type: actionType.CLEAR_ALL_USER, payload: null})
+    clearAllUser: () => ({type: actionType.CLEAR_ALL_USER, payload: null}),
+    setAnimationSignal: (signal) => ({type: actionType.SET_ANIMATION_SIGNAL, payload: signal}),
 };
+export const setExpoPushToken = (token) => ({type: actionType.SET_EXPO_PUSH_TOKEN, payload: token});
 

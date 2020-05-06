@@ -8,6 +8,7 @@ import * as Icon from 'react-native-vector-icons';
 import API_URL from '../firebase/apiLinks';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import {BlurView} from 'expo-blur';
 
 const QRScanner = ({navigation, User}) => {
     const refRBSheet = useRef();
@@ -72,19 +73,18 @@ const QRScanner = ({navigation, User}) => {
             <View style={{position: 'absolute', top: 30, left: 20}}>
                 <CancelButton navigation={navigation}/>
             </View>
-            <View style={{
+            <BlurView intensity={100} tint={'dark'} style={{
                 position: 'absolute',
                 width: '100%',
                 justifyContent: 'center',
-                height: 50,
+                height: 70,
                 bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.5)',
                 alignItems: 'center'
             }}>
                 <Text style={[MainStyles.bodyText, {textAlign: 'center', color: isLoading ? color.blue : 'white'}]}>
                     {isLoading ? ('Loading... Please Wait') : ('Scan QR code to pay')}
                 </Text>
-            </View>
+            </BlurView>
             <RBSheet
                 ref={refRBSheet}
                 animationType={'fade'}
@@ -144,25 +144,18 @@ const CancelButton = ({navigation}) => {
         <TouchableOpacity
             style={{alignItems: 'center', justifyContent: 'center'}}
             onPress={() => {
-                navigation.replace('MainApp');
+                navigation.navigate('MainApp');
             }}
         >
-            <Icon.AntDesign
-                name={'closecircle'}
-                size={30}
-                color={'white'}
-                style={{
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 4,
-                    },
-                    shadowOpacity: 0.32,
-                    shadowRadius: 5.46,
-
-                    elevation: 9,
-                }}
-            />
+            <BlurView intensity={100}
+                      style={{width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}>
+                <Icon.AntDesign
+                    name={'close'}
+                    size={25}
+                    color={'rgba(255,255,255,0.7)'}
+                    style={{}}
+                />
+            </BlurView>
         </TouchableOpacity>
     )
 };
