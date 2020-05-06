@@ -10,6 +10,7 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import axios from 'axios';
 import API_URL from '../firebase/apiLinks';
 import store from '../store';
+import {getAllUserData} from "../firebase/functions";
 
 const PaymentInfo = ({navigation, balance}) => {
     const shopInfo = navigation.getParam('shopInfo', {});
@@ -25,6 +26,9 @@ const PaymentInfo = ({navigation, balance}) => {
             setPayValueError('');
         }
     });
+    useEffect(() => {
+        getAllUserData().then(null);
+    }, []);
     return (
         <>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
