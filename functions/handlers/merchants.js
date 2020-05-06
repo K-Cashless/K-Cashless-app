@@ -295,8 +295,7 @@ exports.moneyRequest = (req, res) => {
         db.doc("/requestToAdmins/" + req.merchant.handle)
           .get()
           .then((doc) => {
-            if (!doc.exists)
-            {
+            if (!doc.exists) {
               db.doc("/requestToAdmins/" + req.merchant.handle)
                 .set(newRequest)
                 .then(() => {
@@ -306,8 +305,7 @@ exports.moneyRequest = (req, res) => {
                   console.error(err);
                   res.status(500).json({ error: err.code });
                 });
-            }
-            else if (
+            } else if (
               doc.data().accept === false &&
               doc.data().status === "Pending"
             ) {
