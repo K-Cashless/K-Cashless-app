@@ -34,7 +34,7 @@ exports.getOneUserTransaction = (req, res) => {
     .then((data) => {
       let userData = [];
       data.forEach((doc) => {
-        if (doc.data().from === req.user.handle) {
+        if (doc.data().from === req.user.handle || (doc.data().to === req.user.handle && doc.data().info === "Top-Up Money")) {
           userData.push({
             createdAt: doc.data().createdAt,
             from: doc.data().from,

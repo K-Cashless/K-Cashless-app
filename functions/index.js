@@ -5,6 +5,9 @@ const app = express();
 //const app = require('express')();
 
 const FBAuth = require("./utility/fbAuth");
+const FBAuthUser = require("./utility/fbAuthUser");
+const FBAuthMerchant = require("./utility/fbAuthMerchant");
+const FBAuthAdmin = require("./utility/fbAuthAdmin");
 
 const cors = require("cors");
 app.use(cors());
@@ -19,7 +22,9 @@ const {
   acceptRequest,
   createPromotion,
   getAllPromotions,
-  genaratePrepaidCard,
+  generatePrepaidCard,
+  getAllPrepaidCard,
+  deleteOnePrepaidCards,
 } = require("./handlers/admins");
 const {
   signup,
@@ -56,47 +61,58 @@ const {
 } = require("./handlers/transaction");
 
 //Transaction route
-app.get("/getAllTransactions", getAllTransactions);
-app.get("/getOneUserTransaction", FBAuth, getOneUserTransaction);
+app.get("/getAllTransactions", FBAuthAdmin, getAllTransactions);
+app.get("/getOneUserTransaction", FBAuthUser, getOneUserTransaction);
 app.get(
   "/merchant/getOneMerchantTransaction",
-  FBAuth,
+  FBAuthMerchant,
   getOneMerchantTransaction
 );
+//All user
+app.get("/getAllPromotions", getAllPromotions);
 //Admin route
 app.post("/adminSignup", adminSignup);
 app.post("/adminLogin", adminLogin);
-app.get("/getAdminData", FBAuth, getAdminData);
-app.get("/getAllMerchantData", getAllMerchantData);
-app.get("/getAllUserData", getAllUserData);
-app.get("/merchant/getRequest", getRequest);
-app.post("/merchant/acceptRequest", acceptRequest);
-app.post("/admin/createPromotion",createPromotion);
-app.get("/getAllPromotions",getAllPromotions);
-app.post("/admin/genaratePrepaidCard", genaratePrepaidCard);
+app.get("/getAdminData", FBAuthAdmin, getAdminData);
+app.get("/getAllMerchantData", FBAuthAdmin, getAllMerchantData);
+app.get("/getAllUserData", FBAuthAdmin, getAllUserData);
+app.get("/merchant/getRequest", FBAuthAdmin, getRequest);
+app.post("/merchant/acceptRequest", FBAuthAdmin, acceptRequest);
+app.post("/admin/createPromotion", FBAuthAdmin, createPromotion);
+app.post("/admin/generatePrepaidCard", FBAuthAdmin, generatePrepaidCard);
+app.get("/admin/getAllPrepaidCard", FBAuthAdmin, getAllPrepaidCard);
+app.post(
+  "/admin/deleteOnePrepaidCards/:cardID",
+  FBAuthAdmin,
+  deleteOnePrepaidCards
+);
 //Merchants route
 app.post("/merchantSignup", merchantSignup);
 app.post("/merchantLogin", merchantLogin);
-app.get("/getMerchantData", FBAuth, getMerchantData);
-app.post("/merchant/moneyRequest", FBAuth, moneyRequest);
-app.post("/merchant/updateMerchantData", FBAuth, updateMerchantDetails);
-app.post("/merchant/pushMerchantDeviceToken", FBAuth, pushMerchantDeviceToken);
-app.post("/merchant/image", FBAuth, uploadMerchantImage);
+app.get("/getMerchantData", FBAuthMerchant, getMerchantData);
+app.post("/merchant/moneyRequest", FBAuthMerchant, moneyRequest);
+app.post("/merchant/updateMerchantData", FBAuthMerchant, updateMerchantDetails);
+app.post(
+  "/merchant/pushMerchantDeviceToken",
+  FBAuthMerchant,
+  pushMerchantDeviceToken
+);
+app.post("/merchant/image", FBAuthMerchant, uploadMerchantImage);
 //Users route
 app.post("/signup", signup);
 app.post("/login", login);
 app.post("/logout", FBAuth, logout);
-app.get("/getUserData", FBAuth, getUserData);
+app.get("/getUserData", FBAuthUser, getUserData);
 app.post("/resetPass", resetPass);
-app.post("/user/image", FBAuth, uploadUserImage);
-app.post("/user", FBAuth, addUserDetails);
-app.get("/user", FBAuth, getAuthenticatedUser);
-app.post("/prepaidCard/:cardID", FBAuth, topup);
-app.post("/paid/:merchantID", FBAuth, transfer);
-app.post("/user/updateData", FBAuth, updateUserDetails);
-app.post("/user/redeemPoint", FBAuth, redeemPoint);
-app.get("/user/getMerchant/:merchantID", FBAuth, userGetMerchant);
-app.post("/user/pushUserDeviceToken", FBAuth, pushUserDeviceToken);
+app.post("/user/image", FBAuthUser, uploadUserImage);
+app.post("/user", FBAuthUser, addUserDetails);
+app.get("/user", FBAuthUser, getAuthenticatedUser);
+app.post("/prepaidCard/:cardID", FBAuthUser, topup);
+app.post("/paid/:merchantID", FBAuthUser, transfer);
+app.post("/user/updateData", FBAuthUser, updateUserDetails);
+app.post("/user/redeemPoint", FBAuthUser, redeemPoint);
+app.get("/user/getMerchant/:merchantID", FBAuthUser, userGetMerchant);
+app.post("/user/pushUserDeviceToken", FBAuthUser, pushUserDeviceToken);
 
 exports.api = functions.region("asia-east2").https.onRequest(app);
 /*
