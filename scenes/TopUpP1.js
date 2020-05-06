@@ -17,6 +17,7 @@ const TopUpP1 = ({navigation, User}) => {
     const [scanned, setScanned] = useState(false);
     const [confirm, setConfirm] = useState(false);
     const [topUpInfo, setTopUpInfo] = useState({});
+
     useEffect(() => {
         (async () => {
             const {status} = await BarCodeScanner.requestPermissionsAsync();
@@ -38,7 +39,14 @@ const TopUpP1 = ({navigation, User}) => {
             setTopUpInfo(data);
             refRBSheet.current.open();
         } catch (error) {
-            Alert.alert('Error');
+            Alert.alert('Error', 'Please Try Again',
+                [
+                    {
+                        text: 'OK', onPress: () => {
+                            setScanned(false);
+                        }
+                    }
+                ]);
         }
     };
     if (!hasCameraPermission) {
@@ -101,7 +109,7 @@ const TopUpP1 = ({navigation, User}) => {
     )
 };
 
-const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setScanned}) => {
+const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setScanned, setConfirm}) => {
     const logo = require('../assets/logo.png');
     const gradient = require('../assets/13561.png');
     const TopUpCard = () => {
@@ -155,7 +163,10 @@ const TopUpInfoCard = ({navigation, refRBSheet, topUpInfo, token, setScanned}) =
             await axios.post(API_URL.TOP_UP + '/' + topUpInfo.cardId, tempData, {'headers': {'Authorization': 'Bearer ' + token}})
                 .then(async (res) => {
                     console.log(res);
+                    setConfirm(true);
                     await refRBSheet.current.close();
+                })
+                .then(() => {
                     navigation.replace('TopUpComplete', {topUpValue: tempData.value});
                 })
                 .catch(error => {

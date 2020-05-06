@@ -17,6 +17,7 @@ const QRScanner = ({navigation, User}) => {
     const [shopInfo, setShopInfo] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [confirmResult, setConfirmResult] = useState(false);
+
     useEffect(() => {
         (async () => {
             const {status} = await BarCodeScanner.requestPermissionsAsync();
